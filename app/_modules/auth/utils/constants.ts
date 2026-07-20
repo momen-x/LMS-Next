@@ -4,6 +4,8 @@ export const AUTH_ROUTES = {
   forgotPassword: "/forgot-password",
   resetPassword: "/reset-password",
   verifyEmail: "/verify-email",
+  checkYourEmail: "/check-your-email",
+  resendVerification: "/resend-verification",
   terms: "/terms",
   privacy: "/privacy",
 } as const;

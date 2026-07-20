@@ -37,16 +37,16 @@ export function RegisterForm() {
   });
   const { mutate: submitRegister, isPending } = useRegister();
 
-  const onSubmit = ({ name, email, password }: RegisterData) => {
+  const onSubmit = async ({ name, email, password }: RegisterData) => {
     submitRegister(
       { name, email, password },
       {
         onSuccess: () => {
-          toast.success("Registration successful! Please log in.");
-          setTimeout(() => {
-            router.push(AUTH_ROUTES.login);
-            router.refresh();
-          }, 500);
+          toast.success("Check your email. and verification it to continue");
+          router.push(
+            `${AUTH_ROUTES.checkYourEmail}?email=${encodeURIComponent(email)}`,
+          );
+          router.refresh();
         },
         onError: (error) => {
           console.error("Registration failed:", error);
@@ -91,7 +91,9 @@ export function RegisterForm() {
                             <span className="text-muted-foreground">
                               <Icon className="h-4 w-4" />
                             </span>
-                            <span className="text-black">{title}</span>
+                            <span className="text-gray-700 dark:text-gray-200">
+                              {title}
+                            </span>
                           </>
                         }
                         nameInSchema={name as keyof RegisterData}
@@ -132,6 +134,8 @@ export function RegisterForm() {
                   form="register-form"
                   disabled={isPending}
                   className="mt-2 h-10 w-full bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 font-medium"
+                  onClick={() => {
+                  }}
                 >
                   Sign up
                 </Button>

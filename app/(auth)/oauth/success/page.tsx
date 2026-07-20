@@ -8,11 +8,8 @@ export default function OAuthSuccessPage() {
         credentials: "include",
       });
       const data = await response.json();
-      console.log(data);
       if (data.success) {
-        console.log("success", data);
       } else {
-        console.log("error", data);
       }
     };
     getDataForCurrentUser();

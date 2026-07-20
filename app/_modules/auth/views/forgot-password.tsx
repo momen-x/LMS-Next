@@ -83,9 +83,11 @@ export function ForgotPasswordForm() {
                         fieldTitle={
                           <>
                             <span className="text-muted-foreground">
-                              <Icon  className="h-4 w-4"/>
+                              <Icon className="h-4 w-4" />
                             </span>
-                            <span className="text-black">{title}</span>
+                            <span className="text-gray-700 dark:text-gray-200">
+                              {title}
+                            </span>
                           </>
                         }
                         nameInSchema={name as keyof ForgotPasswordData}
@@ -112,7 +114,7 @@ export function ForgotPasswordForm() {
             <div className="text-center text-sm text-muted-foreground mt-8">
               Remember your password?{" "}
               <Link href={`${AUTH_ROUTES.login}`} className="font-medium">
-                <Button className="font-medium text-blue-600 hover:underline dark:text-blue-400">
+                <Button className="font-medium text-blue-600 hover:underline dark:text-blue-400 bg-transparent border-none">
                   Sign in
                 </Button>
               </Link>

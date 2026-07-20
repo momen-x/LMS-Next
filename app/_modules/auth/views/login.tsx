@@ -39,10 +39,8 @@ export function LoginForm() {
     submitLogin(data, {
       onSuccess: () => {
         toast.success("Welcome back!.");
-        setTimeout(() => {
-          router.push("/");
-          router.refresh();
-        }, 500);
+        router.push("/");
+        router.refresh();
       },
       onError: (error) => {
         console.error("Login failed:", error);
@@ -84,7 +82,7 @@ export function LoginForm() {
                             <span className="text-muted-foreground">
                               <Icon className="h-4 w-4" />
                             </span>
-                            <span className="text-black">{title}</span>
+                            <span className="text-gray-700 dark:text-gray-200">{title}</span>
                           </>
                         }
                         nameInSchema={name as keyof LoginData}

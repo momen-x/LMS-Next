@@ -90,7 +90,9 @@ export function ResetPasswordForm() {
                             <span className="text-muted-foreground">
                               <Icon className="h-4 w-4" />
                             </span>
-                            <span className="text-black">{title}</span>
+                            <span className="text-gray-700 dark:text-gray-200">
+                              {title}
+                            </span>
                           </>
                         }
                         nameInSchema={name as keyof ResetPasswordData}
