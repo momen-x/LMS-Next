@@ -1,15 +1,60 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
-import { GraduationCap, Eye, EyeOff } from "lucide-react";
+import { GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+
 import resetPasswordImage from "@/public/assets/reset-password.png";
+import { useResetPassword } from "../hooks/useResetpassword";
+import { ResetPasswordData, resetPasswordSchema } from "../dto/reset-password";
+import { FormProvider, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "react-toastify";
+import getErrorMessage from "@/utils/get-axios-error-message";
+import { resetPasswordFields as fields } from "./fields";
+import { CardContent, CardFooter } from "@/components/ui/card";
+import ValidationInput from "@/components/inputs/validation-input";
+import { AUTH_ROUTES } from "../utils/constants";
 
 export function ResetPasswordForm() {
-  const [showPassword, setShowPassword] = useState(false);
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
+  const router = useRouter();
+  const form = useForm<ResetPasswordData>({
+    resolver: zodResolver(resetPasswordSchema as any),
+    defaultValues: {
+      password: "",
+      confirmPassword: "",
+    },
+    mode: "onChange",
+  });
+  const { mutate: submitResetPassword, isPending } = useResetPassword();
+
+  const onSubmit = (data: ResetPasswordData) => {
+    if (!token || typeof token !== "string") {
+      toast.error("Invalid token");
+      return;
+    }
+    submitResetPassword(
+      { data, token },
+      {
+        onSuccess: () => {
+          toast.success("Welcome back!.");
+          router.push(AUTH_ROUTES.login);
+          router.refresh();
+        },
+        onError: (error) => {
+          console.error("Reset password failed:", error);
+          const errorMessage = getErrorMessage(error);
+          toast.error(
+            errorMessage ?? "Reset password failed. Please try again.",
+          );
+        },
+      },
+    );
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4 sm:p-6">
@@ -30,83 +75,56 @@ export function ResetPasswordForm() {
               Enter your new password below.
             </p>
 
-            <form
-              className="mt-8 space-y-4"
-              onSubmit={(e) => e.preventDefault()}
-            >
-              <div className="space-y-1.5">
-                <Label
-                  htmlFor="password"
-                  className="text-sm font-semibold text-foreground"
-                >
-                  Password
-                </Label>
-                <div className="relative">
-                  <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Enter your password"
-                    required
-                    className="h-10 pr-10 border-border bg-background placeholder:text-muted-foreground/50 focus-visible:ring-1 focus-visible:ring-ring"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                  </button>
-                </div>
-              </div>
-              <div className="space-y-1.5">
-                <Label
-                  htmlFor="confirmPassword"
-                  className="text-sm font-semibold text-foreground"
-                >
-                  Confirm new password
-                </Label>
-                <div className="relative">
-                  <Input
-                    id="confirmPassword"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Enter your password"
-                    required
-                    className="h-10 pr-10 border-border bg-background placeholder:text-muted-foreground/50 focus-visible:ring-1 focus-visible:ring-ring"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              <div className="space-y-2 text-muted-foreground">
-                <p className="text-sm">Password must contain:</p>
-                <p className="text-xs">✅ At lest 8 characters</p>
-                <p className="text-xs">✅ At lest one Uppercase character</p>
-                <p className="text-xs">✅ At lest one Lowercase character</p>
-                <p className="text-xs">✅ At lest one Number</p>
-                <p className="text-xs">✅ At lest one Special character</p>
-              </div>
-
-              <Button
-                type="submit"
-                className="mt-2 h-10 w-full bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 font-medium"
+            <FormProvider {...form}>
+              <form
+                id="reset-password-form"
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-6"
               >
-                Reset password
-              </Button>
-            </form>
+                <CardContent>
+                  {fields.map(({ name, title, placeholder, Icon, type }) => (
+                    <div key={name} className="space-y-3 mt-5 mb-5">
+                      <ValidationInput<ResetPasswordData>
+                        fieldTitle={
+                          <>
+                            <span className="text-muted-foreground">
+                              <Icon className="h-4 w-4" />
+                            </span>
+                            <span className="text-black">{title}</span>
+                          </>
+                        }
+                        nameInSchema={name as keyof ResetPasswordData}
+                        placeholder={placeholder}
+                        className="h-10 rounded-xl"
+                        type={type}
+                      />
+                    </div>
+                  ))}
+                  <div className="space-y-2 text-muted-foreground mb-3">
+                    <p className="text-sm">Password must contain:</p>
+                    <p className="text-xs">✅ At lest 8 characters</p>
+                    <p className="text-xs">
+                      ✅ At lest one Uppercase character
+                    </p>
+                    <p className="text-xs">
+                      ✅ At lest one Lowercase character
+                    </p>
+                    <p className="text-xs">✅ At lest one Number</p>
+                    <p className="text-xs">✅ At lest one Special character</p>
+                  </div>
+                </CardContent>
+              </form>
+              <CardFooter className="flex-col gap-2">
+                <Button
+                  type="submit"
+                  form="reset-password-form"
+                  disabled={isPending}
+                  className="mt-2 h-10 w-full bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 font-medium"
+                >
+                  Reset password
+                </Button>
+              </CardFooter>
+            </FormProvider>
           </div>
         </div>
 
@@ -119,7 +137,6 @@ export function ResetPasswordForm() {
             className="object-cover object-center"
             sizes="(max-width: 768px) 0vw, 50vw"
           />
-    
         </div>
       </div>
     </div>

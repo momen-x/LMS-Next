@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ModeToggle } from "./mode-toggle";
 import { useRouter } from "next/navigation";
+import { AUTH_ROUTES } from "@/app/_modules/auth/utils/constants";
 
 const navLinks = [
   { href: "/services", label: "Services" },
@@ -66,12 +67,15 @@ const Headers = () => {
           <div className="flex items-center gap-2">
             <ModeToggle />
             <div className="w-75 flex gap-4">
-              <Button variant="outline" onClick={() => router.push("/login")}>
+              <Button
+                variant="outline"
+                onClick={() => router.push(AUTH_ROUTES.login)}
+              >
                 Login
               </Button>
               <Button
                 variant="default"
-                onClick={() => router.push("/register")}
+                onClick={() => router.push(AUTH_ROUTES.register)}
               >
                 Register
               </Button>

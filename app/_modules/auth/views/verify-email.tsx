@@ -5,6 +5,7 @@ import { GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import verification from "@/public/assets/verification1.png";
 import woman from "@/public/assets/verification2.png";
+import { AUTH_ROUTES } from "../utils/constants";
 
 export default function EmailVerificationCard() {
   return (
@@ -56,7 +57,7 @@ export default function EmailVerificationCard() {
           {/* Bottom Link */}
           <div className="mt-4 text-center md:text-left">
             <Link
-              href="/signin"
+              href={AUTH_ROUTES.login}
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               Back to sign in

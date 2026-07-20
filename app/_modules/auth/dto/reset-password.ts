@@ -1,8 +1,9 @@
 import z from "zod";
+import { passwordSchema } from "./register";
 
 export const resetPasswordSchema = z
   .object({
-    password: z.string().min(8, "Password must be at least 8 characters long"),
+    password: passwordSchema,
     confirmPassword: z
       .string()
       .min(8, "Confirm Password must be at least 8 characters long"),

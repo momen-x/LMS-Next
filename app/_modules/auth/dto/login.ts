@@ -1,8 +1,8 @@
 import z from "zod";
 
 export const loginSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string(),
+  email: z.string().trim().min(1).toLowerCase().email("Invalid email address"),
+  password: z.string().min(1, `Password can't be empty`),
 });
 
 export type LoginData = z.infer<typeof loginSchema>;

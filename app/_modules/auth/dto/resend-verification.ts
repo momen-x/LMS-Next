@@ -1,7 +1,7 @@
 import z from "zod";
 
 export const resendVerificationSchema = z.object({
-  email: z.string().email("Invalid email address"),
+  email: z.string().trim().min(1).email("Invalid email address").toLowerCase(),
 });
 
 export type ResendVerificationData = z.infer<typeof resendVerificationSchema>;
