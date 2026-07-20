@@ -44,7 +44,7 @@ export function RegisterForm() {
         onSuccess: () => {
           toast.success("Check your email. and verification it to continue");
           router.push(
-            `${AUTH_ROUTES.checkYourEmail}?email=${encodeURIComponent(email)}`,
+            `${AUTH_ROUTES.checkYourEmail}?email=${encodeURIComponent(email)}&verify=true`,
           );
           router.refresh();
         },
@@ -110,14 +110,14 @@ export function RegisterForm() {
                         I agree to the{" "}
                         <Link
                           href={AUTH_ROUTES.terms}
-                          className="text-blue-600 hover:underline"
+                          className="font-medium text-blue-600 hover:underline dark:text-blue-400"
                         >
                           Terms of Service
                         </Link>{" "}
                         and{" "}
                         <Link
                           href={AUTH_ROUTES.privacy}
-                          className="text-blue-600 hover:underline"
+                          className="font-medium text-blue-600 hover:underline dark:text-blue-400"
                         >
                           Privacy Policy
                         </Link>
@@ -134,8 +134,6 @@ export function RegisterForm() {
                   form="register-form"
                   disabled={isPending}
                   className="mt-2 h-10 w-full bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 font-medium"
-                  onClick={() => {
-                  }}
                 >
                   Sign up
                 </Button>

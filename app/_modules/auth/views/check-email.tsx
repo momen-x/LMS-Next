@@ -8,7 +8,14 @@ import woman from "@/public/assets/verification2.png";
 import { AUTH_ROUTES } from "../utils/constants";
 import { useSearchParams } from "next/navigation";
 
-export default function CheckYourEmail() {
+export default function CheckYourEmail({
+  fun,
+}: {
+  fun: (
+    { email }: { email: string },
+    { onSuccess, onError }: { onSuccess: () => void; onError: () => void },
+  ) => void;
+}) {
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
   if (!email) return <></>;
@@ -46,6 +53,15 @@ export default function CheckYourEmail() {
               <Button
                 variant="link"
                 className="h-auto p-0 px-1 font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400"
+                onClick={() =>
+                  fun(
+                    { email },
+                    {
+                      onSuccess: () => {},
+                      onError: () => {},
+                    },
+                  )
+                }
               >
                 Resend verification email
               </Button>

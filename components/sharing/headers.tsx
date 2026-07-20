@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { ModeToggle } from "./mode-toggle";
 import { useRouter } from "next/navigation";
 import { AUTH_ROUTES } from "@/app/_modules/auth/utils/constants";
+import LogoutBtn from "@/app/_modules/auth/views/logout-btn";
 
 const navLinks = [
   { href: "/services", label: "Services" },
@@ -79,6 +80,7 @@ const Headers = () => {
               >
                 Register
               </Button>
+              <LogoutBtn />
             </div>
 
             {/* Mobile hamburger */}

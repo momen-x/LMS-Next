@@ -40,7 +40,9 @@ export function ForgotPasswordForm() {
       onSuccess: () => {
         toast.success("Email sent successfully! Please check your inbox.");
         setTimeout(() => {
-          router.push(AUTH_ROUTES.login);
+          router.push(
+            `${AUTH_ROUTES.checkYourEmail}?email=${encodeURIComponent(data.email)}&forgot=true`,
+          );
           router.refresh();
         }, 500);
       },
