@@ -105,7 +105,7 @@ export function ForgotPasswordForm() {
                 <Button
                   type="submit"
                   form="forgot-password-form"
-                  disabled={isPending}
+                  disabled={isPending || !form.formState.isValid}
                   className="mt-2 h-10 w-full bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 font-medium"
                 >
                   {isPending ? "Sending..." : "Send reset link"}

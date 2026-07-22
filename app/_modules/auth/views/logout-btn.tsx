@@ -26,10 +26,10 @@ const LogoutBtn = () => {
           },
         });
       }}
-      className=""
-      variant={"destructive"}
+      className="text-red-500"
+      variant={"ghost"}
     >
-      Logout
+      Sign out
     </Button>
   );
 };

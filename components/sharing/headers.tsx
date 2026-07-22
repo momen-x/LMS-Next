@@ -4,10 +4,9 @@ import { GraduationCap, Menu, X } from "lucide-react";
 import Link from "next/link";
 
 import { useEffect, useState } from "react";
-import { ModeToggle } from "./mode-toggle";
 import { useRouter } from "next/navigation";
 import { AUTH_ROUTES } from "@/app/_modules/auth/utils/constants";
-import LogoutBtn from "@/app/_modules/auth/views/logout-btn";
+import { ProfileDropdown } from "@/app/_modules/user/views/dropdown-user-menu";
 
 const navLinks = [
   { href: "/services", label: "Services" },
@@ -66,7 +65,6 @@ const Headers = () => {
 
           {/* Right side actions */}
           <div className="flex items-center gap-2">
-            <ModeToggle />
             <div className="w-75 flex gap-4">
               <Button
                 variant="outline"
@@ -80,7 +78,7 @@ const Headers = () => {
               >
                 Register
               </Button>
-              <LogoutBtn />
+              <ProfileDropdown />{" "}
             </div>
 
             {/* Mobile hamburger */}

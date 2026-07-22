@@ -1,7 +1,9 @@
+import DeleteUserAccount from "./_modules/user/views/delete-user-account";
+
 export default function Home() {
   return (
     <div>
-      <h1>Hello world</h1>
+      <DeleteUserAccount/>
     </div>
   );
 }

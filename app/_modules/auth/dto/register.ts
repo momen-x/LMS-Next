@@ -32,5 +32,12 @@ export const RegisterDataAPI = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters long"),
 });
+export type TRegisterForm = {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  isAgree: boolean;
+};
 
 export type RegisterDataAPI = z.infer<typeof RegisterDataAPI>;

@@ -82,7 +82,9 @@ export function LoginForm() {
                             <span className="text-muted-foreground">
                               <Icon className="h-4 w-4" />
                             </span>
-                            <span className="text-gray-700 dark:text-gray-200">{title}</span>
+                            <span className="text-gray-700 dark:text-gray-200">
+                              {title}
+                            </span>
                           </>
                         }
                         nameInSchema={name as keyof LoginData}
@@ -120,7 +122,7 @@ export function LoginForm() {
                 <Button
                   type="submit"
                   form="login-form"
-                  disabled={isPending}
+                  disabled={isPending || !form.formState.isValid}
                   className="mt-2 h-10 w-full bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 font-medium"
                 >
                   Sign in

@@ -13,7 +13,7 @@ import registerImage from "@/public/assets/register.png";
 import LoginByGoogleOrGithub from "./login-by-google-or-github";
 import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
-import { RegisterData, registerSchema } from "../dto/register";
+import { RegisterData, registerSchema, TRegisterForm } from "../dto/register";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRegister } from "../hooks/useRegister";
 import { toast } from "react-toastify";
@@ -24,20 +24,29 @@ import { AUTH_ROUTES } from "../utils/constants";
 
 export function RegisterForm() {
   const router = useRouter();
-  const form = useForm<RegisterData>({
+  const form = useForm<TRegisterForm>({
     resolver: zodResolver(registerSchema as any),
     defaultValues: {
       name: "",
       email: "",
       password: "",
       confirmPassword: "",
-      isAgree: true,
+      isAgree: false,
     },
     mode: "onChange",
   });
   const { mutate: submitRegister, isPending } = useRegister();
 
-  const onSubmit = async ({ name, email, password }: RegisterData) => {
+  const onSubmit = async ({
+    name,
+    email,
+    password,
+    isAgree,
+  }: TRegisterForm) => {
+    if (!isAgree) {
+      toast.error("Please agree to the terms and conditions");
+      return;
+    }
     submitRegister(
       { name, email, password },
       {
@@ -132,7 +141,7 @@ export function RegisterForm() {
                 <Button
                   type="submit"
                   form="register-form"
-                  disabled={isPending}
+                  disabled={isPending || !form.formState.isValid}
                   className="mt-2 h-10 w-full bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 font-medium"
                 >
                   Sign up

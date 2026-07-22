@@ -1,16 +1,11 @@
-import { Lock, LucideIcon, Mail, User } from "lucide-react";
+import { Lock, Mail, User } from "lucide-react";
 import { RegisterData } from "../dto/register";
 import { LoginData } from "../dto/login";
 import { ForgotPasswordData } from "../dto/forgot-password";
 import { ResetPasswordData } from "../dto/reset-password";
+import { FormField } from "@/types/form-fields";
 
-type FormField<T extends string> = {
-  name: T;
-  title: string;
-  placeholder: string;
-  Icon: LucideIcon;
-  type: "text" | "email" | "password";
-};
+
 export const registerFields = [
   {
     name: "name",
@@ -29,14 +24,14 @@ export const registerFields = [
   {
     name: "password",
     title: "Enter the password",
-    placeholder: "*********",
+    placeholder: "••••••••",
     Icon: Lock,
     type: "password",
   },
   {
     name: "confirmPassword",
     title: "Confirm the password",
-    placeholder: "*********",
+    placeholder: "••••••••",
     Icon: Lock,
     type: "password",
   },
@@ -71,14 +66,14 @@ export const resetPasswordFields = [
   {
     name: "password",
     title: "Enter new password",
-    placeholder: "*********",
+    placeholder: "••••••••",
     Icon: Lock,
     type: "password",
   },
   {
     name: "confirmPassword",
     title: "Confirm the new password",
-    placeholder: "*********",
+    placeholder: "••••••••",
     Icon: Lock,
     type: "password",
   },
