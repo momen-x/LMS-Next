@@ -5,7 +5,8 @@ import {
   TUploadUserAvatar,
 } from "../dto/update-user-profile";
 
-import { User } from "../entity/user";
+import { User, UserRole } from "../entity/user";
+import { GetAllUsersResponse } from "../utile/type";
 
 export interface IUserAPI {
   getCurrentUser: () => Promise<User>;
@@ -13,7 +14,11 @@ export interface IUserAPI {
   updatePassword: (dtp: TUpdatePasswordAPI) => Promise<User>;
   deleteUser: () => Promise<User>;
   deleteUserAvatar: () => Promise<User>;
-  getAll: () => Promise<User[]>;
+  getAll: (
+    page?: number,
+    limit?: number,
+    userRole?: UserRole
+  ) => Promise<GetAllUsersResponse>;
   getById: (id: string) => Promise<User>;
   deleteUserAccountByAdmin: (userId: string) => Promise<User>;
   uploadAvatar: (dto: TUploadUserAvatar) => Promise<User>;

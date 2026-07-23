@@ -1,9 +1,9 @@
-import DeleteUserAccount from "./_modules/user/views/delete-user-account";
+import UsersTable from "./_modules/user/views/users-table";
 
 export default function Home() {
   return (
     <div>
-      <DeleteUserAccount/>
+      <UsersTable/>
     </div>
   );
 }

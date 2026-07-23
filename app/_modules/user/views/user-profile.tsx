@@ -249,7 +249,6 @@ export default function UserProfile() {
                     onClick={() => {
                       setIsAvatarMenuOpen(false);
 
-                      // ننتظر حتى تُغلق القائمة، ثم نفتح نافذة الملفات.
                       window.setTimeout(() => {
                         openFilePicker();
                       }, 0);

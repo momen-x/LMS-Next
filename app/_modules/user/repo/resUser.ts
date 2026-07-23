@@ -2,11 +2,12 @@ import api from "@/utils/axiosInstance";
 import {
   TUpdatePasswordAPI,
   TUpdateUsername,
-  TUploadUserAvatar
+  TUploadUserAvatar,
 } from "../dto/update-user-profile";
 import { IUserAPI } from "./user";
 import { User } from "../entity/user";
 import { TUpdateUserPasswordByAdmin } from "../dto/update-user-by-admin";
+import { GetAllUsersResponse } from "../utile/type";
 
 const BASE_URL = "/api/users";
 
@@ -31,8 +32,11 @@ export const resUserAPI: IUserAPI = {
     const user = await api.delete<User>(`${BASE_URL}/me/avatar`);
     return user.data;
   },
-  getAll: async () => {
-    const users = await api.get<User[]>(`${BASE_URL}`);
+  getAll: async (page: number = 1, limit: number = 10, userRole?: string) => {
+    const userRoleFilter = userRole ? `&role=${userRole}` : "";
+    const users = await api.get<GetAllUsersResponse>(
+      `${BASE_URL}?page=${page}&limit=${limit}${userRoleFilter}`,
+    );
     return users.data;
   },
   getById: async (id: string) => {
@@ -56,4 +60,3 @@ export const resUserAPI: IUserAPI = {
     return updateUser.data;
   },
 };
-
