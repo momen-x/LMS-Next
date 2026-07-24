@@ -27,7 +27,7 @@ import {
   UpdateUsernameSchema,
 } from "../dto/update-user-profile";
 
-import getAxiosErrorMessage from "@/utils/get-axios-error-message";
+import {getErrorMessage} from "@/utils/get-axios-error-message";
 import default_user_image from "@/public/assets/default-user1.png";
 export default function UpdateUserProfile() {
   const router = useRouter();
@@ -52,7 +52,7 @@ export default function UpdateUserProfile() {
         router.refresh();
       },
       onError: (error) => {
-        const errMessage = getAxiosErrorMessage(error);
+        const errMessage = getErrorMessage(error);
         toast.error(errMessage ?? "Profile update failed");
       },
     });

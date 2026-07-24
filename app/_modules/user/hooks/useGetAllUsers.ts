@@ -1,12 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { resUserAPI } from "../repo/resUser";
+import { UserRole } from "../entity/user";
 
 export const USERS_KEY = "users";
 
 type UseGetUsersParams = {
   page?: number;
   limit?: number;
-  userRole?: "student" | "admin" | "instructor";
+  userRole?: UserRole;
 };
 
 export const useGetUsers = ({

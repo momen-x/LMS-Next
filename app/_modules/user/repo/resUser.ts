@@ -1,4 +1,4 @@
-import api from "@/utils/axiosInstance";
+import { api } from "@/utils/axiosInstance";
 import {
   TUpdatePasswordAPI,
   TUpdateUsername,
@@ -6,7 +6,6 @@ import {
 } from "../dto/update-user-profile";
 import { IUserAPI } from "./user";
 import { User } from "../entity/user";
-import { TUpdateUserPasswordByAdmin } from "../dto/update-user-by-admin";
 import { GetAllUsersResponse } from "../utile/type";
 
 const BASE_URL = "/api/users";
@@ -55,8 +54,5 @@ export const resUserAPI: IUserAPI = {
     return user.data;
   },
 
-  updatePasswordByAdmin: async (dto: TUpdateUserPasswordByAdmin) => {
-    const updateUser = await api.put<User>(`${BASE_URL}/admin/password`, dto);
-    return updateUser.data;
-  },
+
 };

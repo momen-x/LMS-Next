@@ -28,12 +28,12 @@ import { useGetCurrentUser } from "../hooks/useGetCurrentUser";
 import default_user_image from "@/public/assets/default-user1.png";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import getErrorMessage from "@/utils/get-axios-error-message";
+import { getErrorMessage } from "@/utils/get-axios-error-message";
 import { AUTH_ROUTES } from "../../auth/utils/constants";
 
 export function ProfileDropdown() {
   //todo add is loading and compleat the logic
-  const { data: user,  } = useGetCurrentUser();
+  const { data: user } = useGetCurrentUser();
   const { theme, setTheme } = useTheme();
   const { mutate: logout } = useLogout();
   const router = useRouter();

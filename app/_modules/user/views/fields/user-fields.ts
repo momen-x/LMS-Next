@@ -1,10 +1,9 @@
 import { FormField } from "@/types/form-fields";
-import { Delete, Lock, User } from "lucide-react";
+import { Lock, User } from "lucide-react";
 import {
   TUpdateUsername,
   TUpdatePassword,
 } from "../../dto/update-user-profile";
-import { TDeleteUserAccount } from "../../dto/delete-user-account";
 
 export const updateUserNameFields = [
   {
@@ -38,13 +37,3 @@ export const updateUserPasswordFields = [
     type: "password",
   },
 ] satisfies FormField<keyof TUpdatePassword & string>[];
-
-export const deleteUserAccountFields = [
-  {
-    name: "delete",
-    title: 'To confirm, type "DELETE" in the box below:',
-    placeholder: "DELETE",
-    Icon: Delete,
-    type: "text",
-  },
-] satisfies FormField<keyof TDeleteUserAccount & string>[];

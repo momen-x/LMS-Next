@@ -21,7 +21,7 @@ import {
   UpdatePasswordSchema,
 } from "../dto/update-user-profile";
 
-import getAxiosErrorMessage from "@/utils/get-axios-error-message";
+import {getErrorMessage} from "@/utils/get-axios-error-message";
 
 export default function UpdateUserPassword() {
   const router = useRouter();
@@ -45,7 +45,7 @@ export default function UpdateUserPassword() {
           router.refresh();
         },
         onError: (error) => {
-          const errMessage = getAxiosErrorMessage(error);
+          const errMessage = getErrorMessage(error);
           toast.error(errMessage ?? "Password update failed");
         },
       },

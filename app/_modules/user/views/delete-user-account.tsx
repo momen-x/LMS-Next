@@ -15,21 +15,17 @@ import ValidationInput from "@/components/inputs/validation-input";
 
 import { useDeleteUser } from "../hooks/useDeleteUser";
 
-import { deleteUserAccountFields as fields } from "./fields/user-fields";
+import { deleteFields as fields } from "@/components/sharing/fields/delete";
 import { AUTH_ROUTES } from "@/app/_modules/auth/utils/constants";
 
-import {
-  DeleteUserAccountSchema,
-  TDeleteUserAccount,
-  TDeleteUserAccountForm,
-} from "../dto/delete-user-account";
+import { DeleteSchema, TDelete, TDeleteForm } from "@/dto/delete";
 
-import getAxiosErrorMessage from "@/utils/get-axios-error-message";
+import { getErrorMessage } from "@/utils/get-axios-error-message";
 
 export default function DeleteUserAccount() {
   const router = useRouter();
-  const form = useForm<TDeleteUserAccountForm>({
-    resolver: zodResolver(DeleteUserAccountSchema as any),
+  const form = useForm<TDeleteForm>({
+    resolver: zodResolver(DeleteSchema as any),
     defaultValues: {
       delete: "",
     },
@@ -45,7 +41,7 @@ export default function DeleteUserAccount() {
       },
       onError: (error) => {
         console.error("Account deletion failed:", error);
-        const errMessage = getAxiosErrorMessage(error);
+        const errMessage = getErrorMessage(error);
         toast.error(errMessage ?? "Account deletion failed. Please try again.");
       },
     });
@@ -87,7 +83,7 @@ export default function DeleteUserAccount() {
             >
               {fields.map(({ name, title, placeholder, Icon, type }) => (
                 <div key={name} className="space-y-3 mt-5 mb-5">
-                  <ValidationInput<TDeleteUserAccount>
+                  <ValidationInput<TDelete>
                     fieldTitle={
                       <>
                         <span className="text-muted-foreground">
@@ -98,7 +94,7 @@ export default function DeleteUserAccount() {
                         </span>
                       </>
                     }
-                    nameInSchema={name}
+                    nameInSchema={name as keyof TDelete}
                     placeholder={placeholder}
                     className="h-10 rounded-xl"
                     type={type}

@@ -1,4 +1,3 @@
-import { TUpdateUserPasswordByAdmin } from "../dto/update-user-by-admin";
 import {
   TUpdatePasswordAPI,
   TUpdateUsername,
@@ -22,5 +21,5 @@ export interface IUserAPI {
   getById: (id: string) => Promise<User>;
   deleteUserAccountByAdmin: (userId: string) => Promise<User>;
   uploadAvatar: (dto: TUploadUserAvatar) => Promise<User>;
-  updatePasswordByAdmin: (dto: TUpdateUserPasswordByAdmin) => Promise<User>;
+  // updatePasswordByAdmin: (dto: TUpdateUserPasswordByAdmin) => Promise<User>;
 }
