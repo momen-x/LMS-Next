@@ -17,8 +17,8 @@ export const useUpdateCourse = (): UseMutationResult<
 
   return useMutation({
     mutationFn: ({ id, data }) => resCourse.update(id, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [COURSE_KEY] });
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [COURSE_KEY, data.id] });
     },
   });
 };

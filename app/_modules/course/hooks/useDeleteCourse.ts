@@ -6,8 +6,8 @@ export const useDeleteCourse = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => resCourse.delete(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [COURSE_KEY] });
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [COURSE_KEY, data.id] });
     },
   });
 };
