@@ -1,7 +1,7 @@
 "use client";
 
-import api from "@/utils/axiosInstance";
-import getErrorMessage from "@/utils/get-axios-error-message";
+import { api } from "@/utils/axiosInstance";
+import { getErrorMessage } from "@/utils/get-axios-error-message";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";

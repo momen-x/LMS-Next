@@ -17,7 +17,7 @@ import { RegisterData, registerSchema, TRegisterForm } from "../dto/register";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRegister } from "../hooks/useRegister";
 import { toast } from "react-toastify";
-import getErrorMessage from "@/utils/get-axios-error-message";
+import { getErrorMessage } from "@/utils/get-axios-error-message";
 import { CardContent, CardFooter } from "@/components/ui/card";
 import ValidationCheckbox from "@/components/inputs/validation-checkbox";
 import { AUTH_ROUTES } from "../utils/constants";

@@ -2,7 +2,7 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 
 import { API_DOMAIN } from "./constance";
 
-const api = axios.create({
+export const api = axios.create({
   baseURL: API_DOMAIN,
   withCredentials: true,
 });
@@ -316,4 +316,3 @@ api.interceptors.response.use(
   },
 );
 
-export default api;

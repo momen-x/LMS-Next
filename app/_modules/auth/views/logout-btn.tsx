@@ -4,7 +4,7 @@ import { useLogout } from "../hooks/useLogout";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import getErrorMessage from "@/utils/get-axios-error-message";
+import { getErrorMessage } from "@/utils/get-axios-error-message";
 import { AUTH_ROUTES } from "../utils/constants";
 
 const LogoutBtn = () => {

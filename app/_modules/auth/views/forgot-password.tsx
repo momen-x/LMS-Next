@@ -9,7 +9,7 @@ import forgotPasswordImage from "@/public/assets/forgot-password.png";
 import { useRouter, useSearchParams } from "next/navigation";
 import { forgotPasswordFields as fields } from "./fields";
 import { toast } from "react-toastify";
-import getErrorMessage from "@/utils/get-axios-error-message";
+import { getErrorMessage } from "@/utils/get-axios-error-message";
 import { CardContent, CardFooter } from "@/components/ui/card";
 import ValidationInput from "@/components/inputs/validation-input";
 import { FormProvider, useForm } from "react-hook-form";

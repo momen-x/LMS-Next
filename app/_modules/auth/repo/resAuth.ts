@@ -1,4 +1,4 @@
-import api, { clearCsrfToken } from "@/utils/axiosInstance";
+import { api, clearCsrfToken } from "@/utils/axiosInstance";
 
 import { LoginData } from "../dto/login";
 import { RegisterDataAPI } from "../dto/register";

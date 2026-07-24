@@ -12,7 +12,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
-import getErrorMessage from "@/utils/get-axios-error-message";
+import { getErrorMessage } from "@/utils/get-axios-error-message";
 import { resetPasswordFields as fields } from "./fields";
 import { CardContent, CardFooter } from "@/components/ui/card";
 import ValidationInput from "@/components/inputs/validation-input";

@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 
-const getErrorMessage = (error: unknown) => {
+export const getErrorMessage = (error: unknown) => {
   if (error instanceof AxiosError) {
     const responseData = error.response?.data;
     if (responseData) {
@@ -13,4 +13,3 @@ const getErrorMessage = (error: unknown) => {
     }
   }
 };
-export default getErrorMessage;

@@ -13,7 +13,7 @@ import { loginFields as fields } from "./fields";
 import { useLogin } from "../hooks/useLogin";
 import { LoginData, loginSchema } from "../dto/login";
 import { toast } from "react-toastify";
-import getErrorMessage from "@/utils/get-axios-error-message";
+import { getErrorMessage } from "@/utils/get-axios-error-message";
 import { CardContent, CardFooter } from "@/components/ui/card";
 import ValidationInput from "@/components/inputs/validation-input";
 import { FormProvider, useForm } from "react-hook-form";
