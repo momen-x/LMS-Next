@@ -16,6 +16,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import SectionLessons from "../../lesson/views/section-lessons";
 
 import { Section } from "../entity/section";
 
@@ -27,6 +28,9 @@ export default function SectionCard({ section }: SectionItemProps) {
   return (
     <div className="overflow-hidden rounded-xl border bg-background">
       <div className="flex items-center gap-3 p-4">
+        <div className="border-t px-4 py-5">
+          <SectionLessons sectionId={section.id} />
+        </div>
         <GripVertical className="size-5 shrink-0 cursor-grab text-muted-foreground" />
 
         <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted text-sm font-medium">

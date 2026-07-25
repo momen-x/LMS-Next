@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  CircleHelp,
-  MoreHorizontal,
-  RotateCcw,
-  Target,
-} from "lucide-react";
+import { CircleHelp, MoreHorizontal, RotateCcw, Target } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -19,6 +14,7 @@ import { Quiz } from "../entity/quiz";
 
 import DeleteQuiz from "./delete-quiz";
 import UpdateQuiz from "./update-quiz";
+import QuizQuestions from "@/app/_modules/question/views/quiz-questions";
 
 interface QuizItemProps {
   quiz: Quiz;
@@ -81,12 +77,12 @@ export default function QuizCard({ quiz }: QuizItemProps) {
           <DropdownMenuContent align="end">
             <UpdateQuiz quiz={quiz} />
 
-            <DeleteQuiz
-              quizId={quiz.id}
-              lessonId={quiz.lessonId}
-            />
+            <DeleteQuiz quizId={quiz.id} lessonId={quiz.lessonId} />
           </DropdownMenuContent>
         </DropdownMenu>
+      </div>
+      <div className="mt-5 border-t pt-5">
+        <QuizQuestions quizId={quiz.id} />
       </div>
     </article>
   );

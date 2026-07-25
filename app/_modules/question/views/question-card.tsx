@@ -14,6 +14,7 @@ import { Question } from "../entity/question";
 
 import DeleteQuestion from "./delete-question";
 import UpdateQuestion from "./update-question";
+import QuestionChoices from "@/app/_modules/choice/views/question-choices";
 
 interface QuestionCardProps {
   question: Question;
@@ -60,6 +61,9 @@ export default function QuestionCard({ question, index }: QuestionCardProps) {
             <DeleteQuestion questionId={question.id} quizId={question.quizId} />
           </DropdownMenuContent>
         </DropdownMenu>
+      </div>
+      <div className="mt-4 border-t pt-4">
+        <QuestionChoices questionId={question.id} />
       </div>
     </article>
   );

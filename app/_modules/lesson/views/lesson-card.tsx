@@ -14,6 +14,8 @@ import {
 import { Lesson } from "../entity/lesson";
 
 import UpdateLesson from "./update-lesson";
+import LessonQuizzes from "@/app/_modules/quiz/views/lesson-quizzes";
+import LessonMedia from "../../media/views/lesson-media";
 
 interface LessonItemProps {
   lesson: Lesson;
@@ -110,6 +112,12 @@ export default function LessonCard({ lesson, position }: LessonItemProps) {
             </span>
           </div>
         </div>
+      </div>
+      <div className="mt-5 border-t pt-5">
+        <LessonMedia lessonId={lesson.id} />
+      </div>
+      <div className="mt-5 border-t pt-5">
+        <LessonQuizzes lessonId={lesson.id} />
       </div>
     </article>
   );
