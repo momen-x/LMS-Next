@@ -25,19 +25,19 @@ export const resQuiz: IQuizAPI = {
   },
 
   getById: async function (quizId: string): Promise<Quiz> {
-    const response = await api.get<Quiz>(`/${BASE_URL}/${quizId}`);
+    const response = await api.get<Quiz>(`${BASE_URL}/${quizId}`);
 
     return response.data;
   },
 
   update: async function (quizId: string, data: UpdateQuizData): Promise<Quiz> {
-    const response = await api.patch<Quiz>(`/${BASE_URL}/${quizId}`, data);
+    const response = await api.patch<Quiz>(`${BASE_URL}/${quizId}`, data);
 
     return response.data;
   },
 
   delete: async function (quizId: string): Promise<Quiz> {
-    const response = await api.delete<Quiz>(`/${BASE_URL}/${quizId}`);
+    const response = await api.delete<Quiz>(`${BASE_URL}/${quizId}`);
 
     return response.data;
   },
