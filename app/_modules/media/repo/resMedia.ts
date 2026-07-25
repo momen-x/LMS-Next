@@ -26,12 +26,12 @@ export const resMedia: IMediaAPI = {
     return data;
   },
   getLessonMedia: async function (lessonId: string): Promise<Media[]> {
-    const { data } = await api.get<Media[]>(`/lessons/${lessonId}/media`);
+    const { data } = await api.get<Media[]>(`/api/lessons/${lessonId}/media`);
 
     return data;
   },
   getById: async function (id: string): Promise<Media> {
-    const { data } = await api.get<Media>(`/media/${id}`);
+    const { data } = await api.get<Media>(`${BASE_URL}/${id}`);
 
     return data;
   },
