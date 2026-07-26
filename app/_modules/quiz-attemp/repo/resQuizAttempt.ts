@@ -8,7 +8,7 @@ import { SavedAttemptAnswer } from "../entity/saved-attempt-answer";
 
 export const resQuizAttempt: IQuizAttemptAPI = {
   startAttempt: async function (quizId: string): Promise<QuizAttempt> {
-    const { data } = await api.post<QuizAttempt>(`/quizzes/${quizId}/attempts`);
+    const { data } = await api.post<QuizAttempt>(`/api/quizzes/${quizId}/attempts`);
 
     return data;
   },
@@ -44,7 +44,7 @@ export const resQuizAttempt: IQuizAttemptAPI = {
     attemptId: string,
   ): Promise<SavedAttemptAnswer[]> {
     const response = await api.get<SavedAttemptAnswer[]>(
-      `/quiz-attempts/${attemptId}/answers`,
+      `/api/quiz-attempts/${attemptId}/answers`,
     );
 
     return response.data;
