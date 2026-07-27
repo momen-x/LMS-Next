@@ -33,7 +33,7 @@ import { useGetUsers } from "../hooks/useGetAllUsers";
 import defaultUserImage from "@/public/assets/default-user1.png";
 import transformingTheDateToATextString from "@/utils/from-date-to-string";
 import { UserRole } from "../entity/user";
-
+import Link from "next/link";
 
 const ROLE_OPTIONS: { label: string; value: UserRole | undefined }[] = [
   { label: "All Roles", value: undefined },
@@ -218,11 +218,15 @@ export default function UsersTable() {
                         <MoreVertical className="w-4 h-4 text-muted-foreground" />
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem>View Profile</DropdownMenuItem>
-                        <DropdownMenuItem>Edit User</DropdownMenuItem>
-                        <DropdownMenuItem className="text-destructive">
-                          Delete
-                        </DropdownMenuItem>
+                        <Link href={`users/${user.id}`}>
+                          <DropdownMenuItem>View Profile</DropdownMenuItem>
+                        </Link>
+                        {/* <DropdownMenuItem>Edit User</DropdownMenuItem> */}
+                        <Link href={`users/${user.id}/delete`}>
+                          <DropdownMenuItem className="text-destructive">
+                            Delete
+                          </DropdownMenuItem>
+                        </Link>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>

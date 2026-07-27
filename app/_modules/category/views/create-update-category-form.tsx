@@ -21,6 +21,8 @@ import { useUpdateCategory } from "../hooks/useUpdateCategory";
 
 import { getErrorMessage } from "@/utils/get-axios-error-message";
 import { useRouter } from "next/navigation";
+import BackBtn from "@/components/sharing/back-btn";
+import Link from "next/link";
 
 interface CategoryFormProps {
   mode?: "create" | "edit";
@@ -33,7 +35,6 @@ export default function CategoryForm({
   mode = "create",
   id = "",
   initialData,
-  onCancel,
 }: CategoryFormProps) {
   const router = useRouter();
   const isEditMode = mode === "edit";
@@ -89,6 +90,7 @@ export default function CategoryForm({
   };
   return (
     <div className="w-full max-w-2xl mx-auto p-6 space-y-6">
+      <BackBtn />
       <div>
         <h2 className="text-2xl font-bold tracking-tight">
           {isEditMode ? "Edit Category" : "Create New Category"}
@@ -117,9 +119,11 @@ export default function CategoryForm({
           </div>
 
           <div className="flex justify-end gap-4 pt-4 border-t">
-            <Button type="button" variant="outline" onClick={onCancel}>
-              Cancel
-            </Button>
+            <Link href="/categories">
+              <Button type="button" variant="outline">
+                Cancel
+              </Button>
+            </Link>
             <Button
               type="submit"
               disabled={isUpdating || isCreating || !form.formState.isValid}

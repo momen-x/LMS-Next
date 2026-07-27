@@ -1,20 +1,35 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { GraduationCap, Menu, X } from "lucide-react";
+import { Calendar, GraduationCap, Menu, X } from "lucide-react";
 import Link from "next/link";
-
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { AUTH_ROUTES } from "@/app/_modules/auth/utils/constants";
 import { ProfileDropdown } from "@/app/_modules/user/views/dropdown-user-menu";
+import NotificationButton from "@/app/_modules/notifications/views/notification-button";
+import { useGetCurrentUser } from "@/app/_modules/user/hooks/useGetCurrentUser";
+import { useEffect, useState } from "react";
 
 const navLinks = [
-  { href: "/services", label: "Services" },
-  { href: "/providers", label: "Providers" },
+  { href: "/", label: "Home" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
 ];
+const studentDashboardLink = {
+  href: "/student-dashboard",
+  label: "Student Dashboard",
+};
+const adminDashboardLink = {
+  href: "/admin-dashboard",
+  label: "Admin Dashboard",
+};
+const instructorDashboardLink = {
+  href: "/instructor-dashboard",
+  label: "Instructor Dashboard",
+};
+
 const Headers = () => {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { data: user, isLoading } = useGetCurrentUser();
 
   useEffect(() => {
     const handleResize = () => {
@@ -37,20 +52,14 @@ const Headers = () => {
     <div>
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
         <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-8">
-          {/* Logo */}
           <Link
             href="/"
             className="flex items-center gap-2 transition-opacity hover:opacity-80 shrink-0"
           >
-            <GraduationCap
-              size={256}
-              strokeWidth={3}
-              className="h-5 w-5 text-sky-300"
-            />
+            <GraduationCap className="h-5 w-5 text-sky-500" />
             <span className="font-bold text-foreground">LMS</span>
           </Link>
 
-          {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-6">
             {navLinks.map(({ href, label }) => (
               <Link
@@ -61,25 +70,58 @@ const Headers = () => {
                 {label}
               </Link>
             ))}
+            {user && user.role === "student" && (
+              <Link
+                href={studentDashboardLink.href}
+                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              >
+                {studentDashboardLink.label}
+              </Link>
+            )}
+            {user?.role === "admin" && (
+              <Link
+                href={adminDashboardLink.href}
+                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              >
+                {adminDashboardLink.label}
+              </Link>
+            )}
+            {user?.role === "instructor" && (
+              <Link
+                href={instructorDashboardLink.href}
+                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              >
+                {instructorDashboardLink.label}
+              </Link>
+            )}
           </nav>
 
-          {/* Right side actions */}
           <div className="flex items-center gap-2">
-            <div className="w-75 flex gap-4">
-              <Button
-                variant="outline"
-                onClick={() => router.push(AUTH_ROUTES.login)}
-              >
-                Login
-              </Button>
-              <Button
-                variant="default"
-                onClick={() => router.push(AUTH_ROUTES.register)}
-              >
-                Register
-              </Button>
-              <ProfileDropdown />{" "}
-            </div>
+            {isLoading ? (
+              <div className="h-8 w-8 rounded-full bg-muted animate-pulse" />
+            ) : user ? (
+              <>
+                <ProfileDropdown />
+                <NotificationButton />
+              </>
+            ) : (
+              <div className="hidden md:flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => router.push("/login")}
+                >
+                  Sign In
+                </Button>
+                <Button
+                  variant="default"
+                  size="sm"
+                  onClick={() => router.push("/register")}
+                >
+                  Sign Up
+                </Button>
+              </div>
+            )}
 
             {/* Mobile hamburger */}
             <Button
@@ -102,13 +144,11 @@ const Headers = () => {
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="fixed inset-0 z-40 md:hidden">
-          {/* Backdrop */}
           <div
             className="fixed inset-0 bg-black/50 backdrop-blur-sm"
             onClick={closeMenu}
           />
 
-          {/* Menu Panel — slides in from left, starts below the header (top-16) */}
           <div className="fixed left-0 top-16 bottom-0 w-72 bg-background shadow-xl animate-in slide-in-from-left overflow-y-auto">
             <div className="flex flex-col p-6 space-y-6">
               {/* Nav links */}
@@ -123,9 +163,58 @@ const Headers = () => {
                     {label}
                   </Link>
                 ))}
+                {user && user.role === "student" && (
+                  <Link
+                    href={studentDashboardLink.href}
+                    className="text-base font-medium text-muted-foreground transition-colors hover:text-foreground px-4 py-3 rounded-lg hover:bg-accent"
+                    onClick={closeMenu}
+                  >
+                    {studentDashboardLink.label}
+                  </Link>
+                )}
+                {user?.role === "admin" && (
+                  <Link
+                    href={adminDashboardLink.href}
+                    className="text-base font-medium text-muted-foreground transition-colors hover:text-foreground px-4 py-3 rounded-lg hover:bg-accent"
+                    onClick={closeMenu}
+                  >
+                    {adminDashboardLink.label}
+                  </Link>
+                )}
+                {user?.role === "instructor" && (
+                  <Link
+                    href={instructorDashboardLink.href}
+                    className="text-base font-medium text-muted-foreground transition-colors hover:text-foreground px-4 py-3 rounded-lg hover:bg-accent"
+                    onClick={closeMenu}
+                  >
+                    {instructorDashboardLink.label}
+                  </Link>
+                )}
               </nav>
 
               {/* Auth buttons for unauthenticated users on mobile */}
+              {!isLoading && !user && (
+                <div className="flex flex-col gap-3 pt-4 border-t">
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      router.push("/login");
+                      closeMenu();
+                    }}
+                  >
+                    Sign In
+                  </Button>
+                  <Button
+                    variant="default"
+                    onClick={() => {
+                      router.push("/register");
+                      closeMenu();
+                    }}
+                  >
+                    Sign Up
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         </div>

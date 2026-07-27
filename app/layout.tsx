@@ -5,6 +5,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import Headers from "@/components/sharing/headers";
 import ReactQueryProviders from "@/providers/react-query-provider";
 import ToasterProvider from "@/providers/toast-provider";
+import { Footer } from "@/components/sharing/footer";
+import { childrenPropsType } from "@/types/children-type";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,11 +23,7 @@ export const metadata: Metadata = {
   description: "Learning Management System",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<childrenPropsType>) {
   return (
     <html
       lang="en"
@@ -44,6 +42,7 @@ export default function RootLayout({
 
             <Headers />
             {children}
+            <Footer />
           </ThemeProvider>
         </ReactQueryProviders>
       </body>

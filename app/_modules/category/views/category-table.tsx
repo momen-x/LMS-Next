@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { useGetAllCategories } from "../hooks/useGetAllCategories";
+import Link from "next/link";
 
 export default function CategoriesTable() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -57,10 +58,12 @@ export default function CategoriesTable() {
             <Download className="w-4 h-4" />
             Export
           </Button>
-          <Button size="sm" className="gap-2">
-            <Plus className="w-4 h-4" />
-            Add Category
-          </Button>
+          <Link href={"categories/add"}>
+            <Button size="sm" className="gap-2">
+              <Plus className="w-4 h-4" />
+              Add Category
+            </Button>
+          </Link>
         </div>
       </div>
 
@@ -117,10 +120,14 @@ export default function CategoriesTable() {
                         <MoreVertical className="w-4 h-4 text-muted-foreground" />
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem>Edit Category</DropdownMenuItem>
-                        <DropdownMenuItem className="text-destructive">
-                          Delete
-                        </DropdownMenuItem>
+                        <Link href={`categories/${category.id}/edit`}>
+                          <DropdownMenuItem>Edit Category</DropdownMenuItem>
+                        </Link>
+                        <Link href={`categories/${category.id}/delete`}>
+                          <DropdownMenuItem className="text-destructive">
+                            Delete
+                          </DropdownMenuItem>
+                        </Link>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
