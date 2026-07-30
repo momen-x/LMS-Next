@@ -22,8 +22,10 @@ import {
 
 import { useSearchCourses } from "../hooks/useSearchCourses";
 import { useGetAllCategories } from "../../category/hooks/useGetAllCategories";
-import { CourseLevel } from "../entity/course";
+import { Course, CourseLevel } from "../entity/course";
 import { CoursesTableView } from "./course-table-view";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const LEVEL_OPTIONS: { label: string; value: CourseLevel | undefined }[] = [
   { label: "All Levels", value: undefined },
@@ -33,6 +35,7 @@ const LEVEL_OPTIONS: { label: string; value: CourseLevel | undefined }[] = [
 ];
 
 export default function AdminCoursesTable() {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
 
@@ -52,7 +55,6 @@ export default function AdminCoursesTable() {
     category: appliedCategory,
     level: appliedLevel,
   });
-  console.log("the data is : ", data);
 
   const courses = data?.courses ?? [];
   const meta = data?.meta;
@@ -94,10 +96,12 @@ export default function AdminCoursesTable() {
             <Download className="w-4 h-4" />
             Export
           </Button>
-          <Button size="sm" className="gap-2">
-            <Plus className="w-4 h-4" />
-            Add Course
-          </Button>
+          <Link href="/admin-dashboard/courses/create">
+            <Button size="sm" className="gap-2">
+              <Plus className="w-4 h-4" />
+              Add Course
+            </Button>
+          </Link>
         </div>
       </div>
 
@@ -181,6 +185,11 @@ export default function AdminCoursesTable() {
         isLoading={isLoading}
         showInstructorColumn
         emptyMessage="No courses found."
+        onView={(course: Course) => router.push(`courses/${course.id}/course`)}
+        onEdit={(course: Course) => router.push(`courses/${course.id}/update`)}
+        onDelete={(course: Course) =>
+          router.push(`courses/${course.id}/delete`)
+        }
       />
 
       {meta && (

@@ -71,7 +71,7 @@ export default function UsersTable() {
     return <TableSkeleton />;
   }
 
-  if (!isError) {
+  if (isError) {
     return (
       <QueryErrorState
         title="Failed to load users"

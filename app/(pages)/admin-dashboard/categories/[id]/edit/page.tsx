@@ -4,7 +4,6 @@ import React from "react";
 
 const EditCategoryPage = async ({ params }: TParams) => {
   const { id } = await params;
-  console.log(params);
   return (
     <div>
       <EditCategory categoryId={id} />

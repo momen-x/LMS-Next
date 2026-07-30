@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
 import { ReviewWithStudent } from "../entity/review-with-student";
+import transformingTheDateToATextString from "@/utils/from-date-to-string";
 
 interface ReviewCardProps {
   review: ReviewWithStudent;
@@ -26,11 +27,7 @@ export default function ReviewCard({
   const studentInitial =
     review.student.name.trim().charAt(0).toUpperCase() || "U";
 
-  const formattedDate = new Intl.DateTimeFormat("en", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  }).format(new Date(review.createdAt));
+  const formattedDate = transformingTheDateToATextString(review.createdAt);
 
   return (
     <Card>

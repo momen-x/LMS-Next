@@ -14,6 +14,7 @@ import { deleteFields as fields } from "@/components/sharing/fields/delete";
 
 import { getErrorMessage } from "@/utils/get-axios-error-message";
 import { DeleteSchema, TDeleteForm } from "../../dto/delete";
+import BackBtn from "./back-btn";
 
 interface DeleteEntityCardProps {
   id: string;
@@ -67,9 +68,12 @@ export default function DeleteEntityCard({
 
   return (
     <div className="p-8 max-w-xl mx-auto font-sans min-h-screen bg-background text-foreground transition-colors">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
-        <p className="text-sm text-muted-foreground">{description}</p>
+      <div className="flex w-full items-center justify-between">
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
+          <p className="text-sm text-muted-foreground">{description}</p>
+        </div>
+        <BackBtn />
       </div>
 
       <Card className="shadow-sm border border-border bg-card text-card-foreground">

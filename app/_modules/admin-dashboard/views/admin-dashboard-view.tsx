@@ -15,20 +15,44 @@ import { useGetAllCategories } from "@/app/_modules/category/hooks/useGetAllCate
 
 import defaultUserImage from "@/public/assets/default-user1.png";
 import transformingTheDateToATextString from "@/utils/from-date-to-string";
+import { useGetCurrentUser } from "../../user/hooks/useGetCurrentUser";
+import { ListSkeleton } from "@/components/skeletons/list-skeleton";
+import QueryErrorState from "@/components/sharing/query-error-state";
 
 function StatCard({
   icon: Icon,
   label,
   value,
   isLoading,
+  isError,
   isPlaceholder = false,
+  title,
+  description,
+  isRetrying,
+  onRetry,
 }: {
   icon: React.ElementType;
   label: string;
   value: string | number;
   isLoading?: boolean;
   isPlaceholder?: boolean;
+  isError?: boolean;
+  isRetrying?: boolean;
+  onRetry?: () => void;
+  title?: string;
+  description?: string;
 }) {
+  if (isError) {
+    return (
+      <QueryErrorState
+        title={title}
+        description={description}
+        isRetrying={isRetrying}
+        onRetry={onRetry} // Pass onRetry directly, it can be undefined
+      />
+    );
+  }
+
   return (
     <Card className="border-border bg-card text-card-foreground shadow-sm hover:scale-105 hover:shadow-lg transition-transform duration-300 ease-in-out">
       <CardContent className="flex items-center gap-4 pt-6">
@@ -58,10 +82,29 @@ export default function DashboardPage() {
     limit: 5,
   });
 
-  const { data: coursesData, isLoading: isLoadingCourses } = useGetAllCourses();
+  const {
+    data: coursesData,
+    isLoading: isLoadingCourses,
+    refetch: refetchCourses,
+    isFetching: isCoursesFetching,
+    isError: isCoursesError,
+  } = useGetAllCourses();
 
-  const { data: categoriesData, isLoading: isLoadingCategories } =
-    useGetAllCategories();
+  const {
+    data: currentUser,
+    isLoading: isLoadingCurrentUser,
+    isError: isCurrentUserError,
+    refetch: refetchCurrentUser,
+    isFetching: isCurrentUserFetching,
+  } = useGetCurrentUser();
+
+  const {
+    data: categoriesData,
+    isLoading: isLoadingCategories,
+    isError: isCategoriesError,
+    refetch: refetchCategories,
+    isFetching: isCategoriesFetching,
+  } = useGetAllCategories();
 
   const recentUsers = usersData?.users ?? [];
   const totalUsers = usersData?.meta.total ?? 0;
@@ -71,13 +114,28 @@ export default function DashboardPage() {
 
   const totalCategories = categoriesData?.length ?? 0;
 
+  if (isLoadingCurrentUser || isLoadingCategories) {
+    return <ListSkeleton />;
+  }
+
+  if (isCurrentUserError) {
+    return (
+      <QueryErrorState
+        title="Failed to load your data, please try again"
+        description="We couldn’t load load your data."
+        isRetrying={isCurrentUserFetching}
+        onRetry={() => refetchCurrentUser()}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background p-6 text-foreground transition-colors sm:p-8">
       <div className="mx-auto max-w-7xl space-y-8">
         {/* Header */}
         <div>
           <h1 className="text-2xl font-bold tracking-tight">
-            Welcome back, Mazen 👋
+            Welcome back, {currentUser?.name} 👋
           </h1>
           <p className="text-sm text-muted-foreground">
             Here&apos;s what&apos;s happening with your platform today.
@@ -91,13 +149,17 @@ export default function DashboardPage() {
             label="Total Users"
             value={totalUsers}
             isLoading={isLoadingUsers}
-          
           />
           <StatCard
             icon={BookOpen}
             label="Total Courses"
             value={totalCourses}
             isLoading={isLoadingCourses}
+            isError={isCoursesError}
+            isRetrying={isCoursesFetching}
+            onRetry={() => refetchCourses()}
+            title="can't load the courses"
+            description="some thing went wrong with load the course"
           />
           <StatCard
             icon={GraduationCap}
@@ -110,6 +172,11 @@ export default function DashboardPage() {
             label="Total Categories"
             value={totalCategories}
             isLoading={isLoadingCategories}
+            isError={isCategoriesError}
+            isRetrying={isCategoriesFetching}
+            onRetry={() => refetchCategories()}
+            title="can't load the categories"
+            description="some thing went wrong with load the categories"
           />
         </div>
 

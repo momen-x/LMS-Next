@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 import { Review } from "../entity/review";
+import transformingTheDateToATextString from "@/utils/from-date-to-string";
 
 interface MyReviewCardProps {
   review: Review;
@@ -20,11 +21,7 @@ export default function MyReviewCard({
   onDelete,
   isDeleting = false,
 }: MyReviewCardProps) {
-  const formattedDate = new Intl.DateTimeFormat("en", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  }).format(new Date(review.createdAt));
+  const formattedDate =transformingTheDateToATextString(review.createdAt);
 
   return (
     <Card>

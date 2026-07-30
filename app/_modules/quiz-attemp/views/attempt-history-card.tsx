@@ -7,23 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
 import { QuizAttempt } from "../entity/quiz-attempt";
+import transformingTheDateToATextString from "@/utils/from-date-to-string";
 
 type AttemptHistoryCardProps = {
   attempt: QuizAttempt;
   passingScore: number;
   onContinue: (attempt: QuizAttempt) => void;
 };
-
-function formatDate(date: string | null) {
-  if (!date) {
-    return "—";
-  }
-
-  return new Intl.DateTimeFormat("en", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(new Date(date));
-}
 
 export default function AttemptHistoryCard({
   attempt,
@@ -59,12 +49,18 @@ export default function AttemptHistoryCard({
             <div className="mt-2 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground">
               <span className="flex items-center gap-1.5">
                 <CalendarClock className="size-4" />
-                Started: {formatDate(attempt.startedAt)}
+                Started:{" "}
+                {attempt.startedAt
+                  ? transformingTheDateToATextString(attempt.startedAt)
+                  : ""}
               </span>
 
               <span className="flex items-center gap-1.5">
                 <Clock3 className="size-4" />
-                Submitted: {formatDate(attempt.submittedAt)}
+                Submitted:{" "}
+                {attempt.submittedAt
+                  ? transformingTheDateToATextString(attempt.submittedAt)
+                  : "Not submitted"}
               </span>
             </div>
           </div>

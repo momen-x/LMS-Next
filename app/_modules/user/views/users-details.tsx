@@ -1,8 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import {
-  ArrowLeft,
   Mail,
   Shield,
   Calendar,
@@ -25,9 +23,9 @@ import Link from "next/link";
 import { CardSkeleton } from "@/components/skeletons/card-skeleton";
 import QueryErrorState from "@/components/sharing/query-error-state";
 import NoData from "@/components/sharing/no-data";
+import BackBtn from "@/components/sharing/back-btn";
 
 const UsersDetails = ({ userId }: { userId: string }) => {
-  const router = useRouter();
   const {
     data: user,
     isLoading,
@@ -58,15 +56,7 @@ const UsersDetails = ({ userId }: { userId: string }) => {
   return (
     <div className="mx-auto max-w-4xl space-y-6 p-6">
       <div className="flex items-center justify-between">
-        <Button
-          variant="ghost"
-          size="sm"
-          className="gap-1.5 text-muted-foreground"
-          onClick={() => router.back()}
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to users
-        </Button>
+        <BackBtn />
         <Link href={`/admin-dashboard/users/${user.id}/delete`}>
           <Button variant={"destructive"}>
             <Trash className="h-4 w-4" />

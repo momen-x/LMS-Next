@@ -10,7 +10,6 @@ const CheckYourEmailPage = () => {
   const searchParams = useSearchParams();
   const verify = searchParams.get("verify") ?? "";
   const forgot = searchParams.get("forgot") ?? "";
-console.log("=================== what happens", Boolean(forgot));
   return (
     <div>
 

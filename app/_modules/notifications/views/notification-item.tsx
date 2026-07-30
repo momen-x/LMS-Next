@@ -14,6 +14,7 @@ import {getErrorMessage} from "@/utils/get-axios-error-message";
 
 import { Notification, NotificationType } from "../entity/notification";
 import { useDeleteNotification } from "../hooks/useDeleteNotification";
+import transformingTheDateToATextString from "@/utils/from-date-to-string";
 
 type NotificationItemProps = {
   notification: Notification;
@@ -26,14 +27,7 @@ const notificationIcons: Record<NotificationType, typeof Info> = {
   error: AlertCircle,
 };
 
-function formatNotificationDate(date: string): string {
-  return new Intl.DateTimeFormat("en", {
-    month: "short",
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-  }).format(new Date(date));
-}
+
 
 export default function NotificationItem({
   notification,
@@ -89,7 +83,7 @@ export default function NotificationItem({
         </p>
 
         <p className="mt-2 text-xs text-muted-foreground">
-          {formatNotificationDate(notification.createdAt)}
+          {transformingTheDateToATextString(notification.createdAt)}
         </p>
       </div>
 

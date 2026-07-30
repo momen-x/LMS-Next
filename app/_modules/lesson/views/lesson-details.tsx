@@ -22,6 +22,7 @@ import BackBtn from "@/components/sharing/back-btn";
 import { CardSkeleton } from "@/components/skeletons/card-skeleton";
 import QueryErrorState from "@/components/sharing/query-error-state";
 import NoData from "@/components/sharing/no-data";
+import transformingTheDateToATextString from "@/utils/from-date-to-string";
 
 function formatDuration(duration: number): string {
   const hours = Math.floor(duration / 3600);
@@ -39,13 +40,7 @@ function formatDuration(duration: number): string {
   return `${seconds}s`;
 }
 
-function formatDate(date: string): string {
-  return new Intl.DateTimeFormat("en", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  }).format(new Date(date));
-}
+
 
 export default function LessonDetails({
   manageMedia,
@@ -191,7 +186,7 @@ export default function LessonDetails({
 
               <div>
                 <p className="text-xs text-muted-foreground">Created</p>
-                <p className="font-semibold">{formatDate(lesson.createdAt)}</p>
+                <p className="font-semibold">{transformingTheDateToATextString(lesson.createdAt)}</p>
               </div>
             </div>
           </div>
