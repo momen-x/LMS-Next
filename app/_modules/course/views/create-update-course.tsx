@@ -20,6 +20,8 @@ import { useGetAllCategories } from "../../category/hooks/useGetAllCategories";
 import { useCreateCourse } from "../hooks/useCreateCourse";
 import { useUpdateCourse } from "../hooks/useUpdateCourse";
 import { getErrorMessage } from "@/utils/get-axios-error-message";
+import BackBtn from "@/components/sharing/back-btn";
+import Link from "next/link";
 
 const LEVEL_OPTIONS = [
   { id: "beginner", description: "Beginner" },
@@ -37,7 +39,7 @@ interface CourseFormProps {
   mode?: "create" | "edit";
   id?: string;
   initialData?: CreateCourseData | UpdateCourseData;
-  onCancel?: () => void;
+  onCancel: string;
 }
 
 export default function CourseForm({
@@ -104,9 +106,12 @@ export default function CourseForm({
     }
   };
   if (isLoading) return null;
-
+console.log("the init values are", initialData);
   return (
     <div className="w-full max-w-5xl mx-auto p-6 space-y-6">
+      <div>
+        <BackBtn />
+      </div>
       <div>
         <h2 className="text-2xl font-bold tracking-tight">
           {isEditMode ? "Edit Course" : "Create New Course"}
@@ -204,9 +209,11 @@ export default function CourseForm({
           </div>
 
           <div className="flex justify-end gap-4 pt-4 border-t">
-            <Button type="button" variant="outline" onClick={onCancel}>
-              Cancel
-            </Button>
+            <Link href={onCancel}>
+              <Button type="button" variant="outline">
+                Cancel
+              </Button>
+            </Link>
             <Button
               type="submit"
               disabled={isUpdating || isCreating || !form.formState.isValid}

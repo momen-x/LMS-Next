@@ -1,17 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import { Plus } from "lucide-react";
 import { toast } from "react-toastify";
 
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 
 import { CreateQuestionData } from "../dto/create-question";
@@ -20,15 +16,23 @@ import { useCreateQuestion } from "../hooks/useCreateQuestion";
 import QuestionForm from "./question-form";
 
 interface CreateQuestionProps {
-  quizId: string;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  quizId: string | null;
 }
 
-export default function CreateQuestion({ quizId }: CreateQuestionProps) {
-  const [open, setOpen] = useState(false);
-
+export default function CreateQuestion({
+  open,
+  onOpenChange,
+  quizId,
+}: CreateQuestionProps) {
   const { mutateAsync: createQuestion, isPending } = useCreateQuestion();
 
   const handleSubmit = async (data: CreateQuestionData) => {
+    if (!quizId) {
+      return;
+    }
+
     try {
       await createQuestion({
         quizId,
@@ -36,7 +40,7 @@ export default function CreateQuestion({ quizId }: CreateQuestionProps) {
       });
 
       toast.success("Question created successfully");
-      setOpen(false);
+      onOpenChange(false);
     } catch {
       toast.error("Failed to create question");
     }
@@ -47,20 +51,11 @@ export default function CreateQuestion({ quizId }: CreateQuestionProps) {
       open={open}
       onOpenChange={(value) => {
         if (!isPending) {
-          setOpen(value);
+          onOpenChange(value);
         }
       }}
     >
-      <DialogTrigger
-        render={
-          <Button type="button" variant="outline" size="sm">
-            <Plus className="size-4" />
-            Add question
-          </Button>
-        }
-      />
-
-      <DialogContent className="sm:max-w-xl">
+      <DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-xl">
         <DialogHeader>
           <DialogTitle>Create question</DialogTitle>
 
@@ -69,11 +64,14 @@ export default function CreateQuestion({ quizId }: CreateQuestionProps) {
           </DialogDescription>
         </DialogHeader>
 
-        <QuestionForm
-          submitLabel="Create question"
-          isPending={isPending}
-          onSubmit={handleSubmit}
-        />
+        {quizId && (
+          <QuestionForm
+            key={quizId}
+            submitLabel="Create question"
+            isPending={isPending}
+            onSubmit={handleSubmit}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );

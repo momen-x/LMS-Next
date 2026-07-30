@@ -22,18 +22,30 @@ import {
 
 import { useGetAllCategories } from "../hooks/useGetAllCategories";
 import Link from "next/link";
+import { TableSkeleton } from "@/components/skeletons/table-skeleton";
+import QueryErrorState from "@/components/sharing/query-error-state";
 
 export default function CategoriesTable() {
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { data: categories, isLoading, isError } = useGetAllCategories();
+  const { data: categories, isLoading, isError, refetch, isFetching} = useGetAllCategories();
 
   if (isLoading) {
-    // todo create skeleton component
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <TableSkeleton />
+      </div>
+    );
   }
   if (isError) {
-    return <div>Failed to load categories.</div>;
+    return (
+      <QueryErrorState
+        title="Failed to load categories"
+        description="We couldn’t load the categories."
+        isRetrying={isFetching}
+        onRetry={() => refetch()}
+      />
+    );
   }
   if (!categories) {
     return <div>No categories found</div>;

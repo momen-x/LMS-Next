@@ -1,6 +1,7 @@
 import DeleteUserByAdmin from "@/app/_modules/user/views/delete-user-by-admin";
+import { TParams } from "@/types/params";
 
-const DeleteUserPage = async ({ params }: { params: { id: string } }) => {
+const DeleteUserPage = async ({ params }: TParams) => {
   const { id } = await params;
 
   return (

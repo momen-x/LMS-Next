@@ -49,7 +49,7 @@ export default function UpdateSection({ section }: UpdateSectionProps) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
         render={
-          <Button type="button" variant="ghost" size="sm">
+          <Button type="button" variant="default" size="sm">
             <Pencil className="size-4" />
             Edit
           </Button>

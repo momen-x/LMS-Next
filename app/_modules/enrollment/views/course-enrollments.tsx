@@ -17,14 +17,14 @@ type CourseEnrollmentsProps = {
 export default function CourseEnrollments({
   courseId,
 }: CourseEnrollmentsProps) {
-
-
   const {
     data: enrollments,
     isPending,
     isError,
     error,
   } = useGetCourseEnrollments(courseId);
+
+
 
   return (
     <section className="space-y-6">
@@ -74,10 +74,7 @@ export default function CourseEnrollments({
         {!isPending && !isError && Boolean(enrollments?.length) && (
           <div className="space-y-3">
             {enrollments?.map((enrollment) => (
-              <EnrollmentListItem
-                key={enrollment.id}
-                enrollment={enrollment}
-              />
+              <EnrollmentListItem key={enrollment.id} enrollment={enrollment} />
             ))}
           </div>
         )}

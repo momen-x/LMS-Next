@@ -1,13 +1,16 @@
 "use client";
 
-import { AlertCircle, Loader2, FolderOpen } from "lucide-react";
+import { FolderOpen, Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
 import { useGetLessonMedia } from "../hooks/useGetLessonMedia";
+import { useMediaDialog } from "../context/media-dialog-context";
 
-import CreateMedia from "./create-media";
 import MediaCard from "./media-card";
+import BackBtn from "@/components/sharing/back-btn";
+import { ListSkeleton } from "@/components/skeletons/list-skeleton";
+import QueryErrorState from "@/components/sharing/query-error-state";
 
 interface LessonMediaProps {
   lessonId: string;
@@ -19,38 +22,29 @@ export default function LessonMedia({ lessonId }: LessonMediaProps) {
     isLoading,
     isError,
     refetch,
+    isFetching,
   } = useGetLessonMedia(lessonId);
 
+  const { openCreateMedia } = useMediaDialog();
+
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center rounded-lg border border-dashed py-10">
-        <Loader2 className="size-5 animate-spin text-muted-foreground" />
-      </div>
-    );
+    return <ListSkeleton />;
   }
 
   if (isError) {
     return (
-      <div className="rounded-lg border border-destructive/40 bg-destructive/5 p-5 text-center">
-        <AlertCircle className="mx-auto mb-2 size-5 text-destructive" />
-
-        <p className="font-medium">Failed to load media</p>
-
-        <Button
-          className="mt-4"
-          variant="outline"
-          size="sm"
-          onClick={() => refetch()}
-        >
-          Try again
-        </Button>
-      </div>
+      <QueryErrorState
+        title="Failed to load media"
+        description="We couldn’t load the media for this lesson."
+        isRetrying={isFetching}
+        onRetry={() => refetch()}
+      />
     );
   }
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-4">
         <div>
           <h3 className="font-medium">Lesson Media</h3>
 
@@ -58,8 +52,13 @@ export default function LessonMedia({ lessonId }: LessonMediaProps) {
             {media?.length ?? 0} {(media?.length ?? 0) === 1 ? "file" : "files"}
           </p>
         </div>
-
-        <CreateMedia lessonId={lessonId} />
+        <div className="flex items-center gap-3">
+          <BackBtn />
+          <Button type="button" onClick={() => openCreateMedia(lessonId)}>
+            <Plus className="size-4" />
+            Upload media
+          </Button>
+        </div>
       </div>
 
       {!media?.length ? (
@@ -72,14 +71,26 @@ export default function LessonMedia({ lessonId }: LessonMediaProps) {
             Upload the first media file for this lesson.
           </p>
 
-          <div className="mt-4 flex justify-center">
-            <CreateMedia lessonId={lessonId} />
-          </div>
+          <Button
+            type="button"
+            className="mt-4"
+            onClick={() => openCreateMedia(lessonId)}
+          >
+            <Plus className="size-4" />
+            Upload media
+          </Button>
         </div>
       ) : (
         <div className="space-y-3">
           {media.map((item) => (
-            <MediaCard key={item.id} media={item} />
+            <MediaCard
+              key={item.id}
+              media={item}
+              onView={item.url}
+              onDelete={(selectedMedia) => {
+                console.log("Delete media:", selectedMedia.id);
+              }}
+            />
           ))}
         </div>
       )}

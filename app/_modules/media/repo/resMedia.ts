@@ -14,7 +14,7 @@ export const resMedia: IMediaAPI = {
     formData.append("file", dto.file);
     formData.append("type", dto.type);
 
-    if (dto.duration !== undefined) {
+    if (dto.duration != null) {
       formData.append("duration", dto.duration.toString());
     }
 

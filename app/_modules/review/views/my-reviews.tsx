@@ -11,6 +11,8 @@ import { useDeleteReview } from "../hooks/useDeleteReview";
 
 import MyReviewCard from "./my-review-card";
 import ReviewForm from "./review-form";
+import { ListSkeleton } from "@/components/skeletons/list-skeleton";
+import QueryErrorState from "@/components/sharing/query-error-state";
 
 interface MyReviewsProps {
   limit?: number;
@@ -25,6 +27,7 @@ export default function MyReviews({ limit = 10 }: MyReviewsProps) {
     isLoading,
     isError,
     refetch,
+    isFetching,
   } = useGetMyReviews({
     page,
     limit,
@@ -53,22 +56,17 @@ export default function MyReviews({ limit = 10 }: MyReviewsProps) {
   };
 
   if (isLoading) {
-    return (
-      <div className="py-8 text-center text-sm text-muted-foreground">
-        Loading your reviews...
-      </div>
-    );
+    return <ListSkeleton />;
   }
 
   if (isError) {
     return (
-      <div className="space-y-3 py-8 text-center">
-        <p className="text-sm text-destructive">Failed to load your reviews.</p>
-
-        <Button type="button" variant="outline" onClick={() => refetch()}>
-          Try again
-        </Button>
-      </div>
+      <QueryErrorState
+        title="Failed to load your reviews"
+        description="We couldn’t load your reviews, please try again."
+        isRetrying={isFetching}
+        onRetry={() => refetch()}
+      />
     );
   }
 

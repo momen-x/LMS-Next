@@ -16,6 +16,7 @@ import {
   type CreateEnrollmentInput,
 } from "../dto/create-enrollment";
 import { useCreateEnrollment } from "../hooks/useCreateEnrollment";
+import BackBtn from "@/components/sharing/back-btn";
 
 type CreateEnrollmentFormProps = {
   courseId: string;
@@ -53,36 +54,41 @@ export default function CreateEnrollmentForm({
   }
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="space-y-4 rounded-xl border p-5"
-    >
-      <div>
-        <h2 className="text-lg font-semibold">Add enrollment</h2>
-
-        <p className="mt-1 text-sm text-muted-foreground">
-          Enter the user ID to enroll them in this course.
-        </p>
+    <div>
+      <div className="flex items-center justify-end">
+        <BackBtn className="mb-4" />
       </div>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="space-y-4 rounded-xl border p-5"
+      >
+        <div>
+          <h2 className="text-lg font-semibold">Add enrollment</h2>
 
-      <div className="space-y-2">
-        <Label htmlFor="enrollment-user-id">User ID</Label>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Enter the user ID to enroll them in this course.
+          </p>
+        </div>
 
-        <Input
-          id="enrollment-user-id"
-          placeholder="Enter user ID"
-          disabled={isPending}
-          {...register("userId")}
-        />
+        <div className="space-y-2">
+          <Label htmlFor="enrollment-user-id">User ID</Label>
 
-        {errors.userId?.message && (
-          <p className="text-sm text-destructive">{errors.userId.message}</p>
-        )}
-      </div>
+          <Input
+            id="enrollment-user-id"
+            placeholder="Enter user ID"
+            disabled={isPending}
+            {...register("userId")}
+          />
 
-      <Button type="submit" disabled={isPending || !courseId}>
-        {isPending ? "Enrolling..." : "Enroll user"}
-      </Button>
-    </form>
+          {errors.userId?.message && (
+            <p className="text-sm text-destructive">{errors.userId.message}</p>
+          )}
+        </div>
+
+        <Button type="submit" disabled={isPending || !courseId}>
+          {isPending ? "Enrolling..." : "Enroll user"}
+        </Button>
+      </form>
+    </div>
   );
 }

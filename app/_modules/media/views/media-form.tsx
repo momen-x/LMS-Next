@@ -40,7 +40,7 @@ export default function MediaForm({
     resolver: zodResolver(createMediaSchema as any),
     mode: "onChange",
     defaultValues: {
-      type: defaultValues?.type ?? "VIDEO",
+      type: defaultValues?.type ?? "video",
       duration: defaultValues?.duration,
     },
   });

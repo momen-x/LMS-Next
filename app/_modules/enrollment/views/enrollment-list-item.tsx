@@ -5,10 +5,11 @@ import { CalendarDays, CheckCircle2, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 
-import type { Enrollment } from "../entity/enrollment";
+import type { EnrollmentWithStudent } from "../entity/enrollment-student";
+import transformingTheDateToATextString from "@/utils/from-date-to-string";
 
 type EnrollmentListItemProps = {
-  enrollment: Enrollment;
+  enrollment: EnrollmentWithStudent;
 };
 
 export default function EnrollmentListItem({
@@ -20,9 +21,7 @@ export default function EnrollmentListItem({
     <div className="flex flex-col gap-4 rounded-xl border p-4 lg:flex-row lg:items-center">
       <div className="min-w-0 flex-1 space-y-2">
         <div className="flex flex-wrap items-center gap-2">
-          <h3 className="truncate font-medium">
-            User ID: {enrollment.studentId}
-          </h3>
+          <h3 className="truncate font-medium">{enrollment.student.name}</h3>
 
           {enrollment.completed && (
             <span className="flex items-center gap-1 rounded-full bg-green-100 px-2.5 py-1 text-xs font-medium text-green-700">
@@ -32,11 +31,16 @@ export default function EnrollmentListItem({
           )}
         </div>
 
+        <p className="truncate text-sm text-muted-foreground">
+          {enrollment.student.email}
+        </p>
+
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <CalendarDays className="size-4" />
 
           <span>
-            Enrolled on {new Date(enrollment.enrolledAt).toLocaleDateString()}
+            Enrolled on{" "}
+            {transformingTheDateToATextString(enrollment.enrolledAt)}
           </span>
         </div>
 

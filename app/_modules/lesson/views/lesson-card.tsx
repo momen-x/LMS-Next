@@ -1,25 +1,36 @@
 "use client";
 
-import { Clock3, Eye, FileText, Link2, MoreVertical } from "lucide-react";
+import {
+  Clock3,
+  Eye,
+  FileText,
+  GripVertical,
+  Link2,
+  MoreHorizontal,
+  Pencil,
+  ReceiptText,
+  Trash2,
+} from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLinkItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
 import { Lesson } from "../entity/lesson";
-
-import UpdateLesson from "./update-lesson";
-import LessonQuizzes from "@/app/_modules/quiz/views/lesson-quizzes";
-import LessonMedia from "../../media/views/lesson-media";
+import { useLessonDialog } from "../context/lesson-dialog-context";
 
 interface LessonItemProps {
   lesson: Lesson;
   position: number;
+  onView?: string;
+  onDelete?: (lesson: Lesson) => void;
 }
 
 function formatDuration(duration: number): string {
@@ -38,87 +49,122 @@ function formatDuration(duration: number): string {
   return `${seconds}s`;
 }
 
-export default function LessonCard({ lesson, position }: LessonItemProps) {
+export default function LessonCard({
+  lesson,
+  position,
+  onView,
+  onDelete,
+}: LessonItemProps) {
+  const { openUpdateLesson } = useLessonDialog();
+
   const resourcesCount = lesson.resources?.length ?? 0;
 
   return (
-    <article className="group rounded-lg border bg-background p-4 transition-colors hover:bg-muted/30">
-      <div className="flex items-start gap-3">
-        <div className="flex size-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-sm font-semibold text-primary">
-          {position}
+    <article className="group relative flex items-center gap-3 rounded-xl border bg-card/60 p-3.5 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-primary/40 hover:bg-card hover:shadow-md">
+      <div className="cursor-grab text-muted-foreground/40 transition-colors group-hover:text-muted-foreground active:cursor-grabbing">
+        <GripVertical className="size-4" />
+      </div>
+
+      <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-xs font-semibold text-primary">
+        {position}
+      </div>
+
+      <div className="min-w-0 flex-1 space-y-1.5">
+        <div className="flex items-center gap-2">
+          <h4 className="truncate text-sm font-semibold text-foreground transition-colors group-hover:text-primary">
+            {lesson.title}
+          </h4>
+
+          {lesson.isPreview && (
+            <Badge
+              variant="secondary"
+              className="gap-1 border border-emerald-500/20 bg-emerald-500/10 px-1.5 py-0 text-[10px] font-medium text-emerald-600 dark:text-emerald-400"
+            >
+              <Eye className="size-3" />
+              Preview
+            </Badge>
+          )}
         </div>
 
-        <div className="min-w-0 flex-1">
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0 space-y-1">
-              <div className="flex flex-wrap items-center gap-2">
-                <h4 className="truncate font-medium">{lesson.title}</h4>
+        {lesson.description && (
+          <p className="line-clamp-1 text-xs text-muted-foreground/80">
+            {lesson.description}
+          </p>
+        )}
 
-                {lesson.isPreview && (
-                  <Badge variant="secondary">
-                    <Eye className="size-3" />
-                    Preview
-                  </Badge>
-                )}
-              </div>
+        <div className="flex flex-wrap items-center gap-3 pt-1 text-[11px] text-muted-foreground">
+          <span className="flex items-center gap-1 font-medium">
+            <Clock3 className="size-3.5 text-muted-foreground/70" />
+            {formatDuration(lesson.duration)}
+          </span>
 
-              {lesson.description && (
-                <p className="line-clamp-2 text-sm text-muted-foreground">
-                  {lesson.description}
-                </p>
-              )}
-            </div>
+          <span className="size-1 rounded-full bg-border" />
 
-            <DropdownMenu>
-              <DropdownMenuTrigger
-                render={
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    aria-label={`Actions for ${lesson.title}`}
-                  >
-                    <MoreVertical className="size-4" />
-                  </Button>
-                }
-              />
+          <span className="flex items-center gap-1 font-medium">
+            <Link2 className="size-3.5 text-muted-foreground/70" />
+            {resourcesCount} {resourcesCount === 1 ? "resource" : "resources"}
+          </span>
 
-              <DropdownMenuContent align="end">
-                <UpdateLesson lesson={lesson} />
+          <span className="size-1 rounded-full bg-border" />
 
-                <DropdownMenuSeparator />
-                {/* todo this button will go to delete lesson page */}
-                <Button onClick={() => {}} variant="destructive">
-                  Delete
-                </Button>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-
-          <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1.5">
-              <Clock3 className="size-3.5" />
-              {formatDuration(lesson.duration)}
-            </span>
-
-            <span className="flex items-center gap-1.5">
-              <Link2 className="size-3.5" />
-              {resourcesCount} {resourcesCount === 1 ? "resource" : "resources"}
-            </span>
-
-            <span className="flex items-center gap-1.5">
-              <FileText className="size-3.5" />
-              Lesson {position}
-            </span>
-          </div>
+          <span className="flex items-center gap-1 font-medium">
+            <FileText className="size-3.5 text-muted-foreground/70" />
+            Lesson {position}
+          </span>
         </div>
       </div>
-      <div className="mt-5 border-t pt-5">
-        <LessonMedia lessonId={lesson.id} />
-      </div>
-      <div className="mt-5 border-t pt-5">
-        <LessonQuizzes lessonId={lesson.id} />
-      </div>
+
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          render={
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              className="size-8"
+              aria-label="Media options"
+            >
+              <MoreHorizontal className="size-4" />
+            </Button>
+          }
+        />
+
+        <DropdownMenuContent align="end" className="z-50 w-40">
+          <>
+            <DropdownMenuLinkItem href={onView}>
+              <ReceiptText className="mr-2 size-3.5" />
+              View
+            </DropdownMenuLinkItem>
+
+            <DropdownMenuSeparator />
+          </>
+
+          <DropdownMenuItem
+            onClick={() => {
+              openUpdateLesson(lesson.id);
+            }}
+          >
+            <Pencil className="mr-2 size-3.5" />
+            Edit
+          </DropdownMenuItem>
+
+          {onDelete && (
+            <>
+              <DropdownMenuSeparator />
+
+              <DropdownMenuItem
+                onClick={() => {
+                  onDelete(lesson);
+                }}
+                className="text-destructive focus:text-destructive"
+              >
+                <Trash2 className="mr-2 size-3.5" />
+                Delete
+              </DropdownMenuItem>
+            </>
+          )}
+        </DropdownMenuContent>
+      </DropdownMenu>
     </article>
   );
 }

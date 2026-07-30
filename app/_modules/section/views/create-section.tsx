@@ -23,9 +23,10 @@ import { CreateSectionData } from "../dto/create-section";
 
 interface CreateSectionProps {
   courseId: string;
+  title?: string;
 }
 
-export default function CreateSection({ courseId }: CreateSectionProps) {
+export default function CreateSection({ courseId, title }: CreateSectionProps) {
   const [open, setOpen] = useState(false);
 
   const { mutateAsync: createSection, isPending } = useCreateSection();
@@ -48,9 +49,9 @@ export default function CreateSection({ courseId }: CreateSectionProps) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
         render={
-          <Button type="button">
+          <Button type="button" className="w-fit mt-2 ">
             <Plus className="size-4" />
-            Add Section
+            {title ? title : "Create Section"}
           </Button>
         }
       />

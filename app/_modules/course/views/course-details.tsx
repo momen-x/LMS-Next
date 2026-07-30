@@ -16,26 +16,33 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
+  DropdownMenuLinkItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
 import defaultCourseImage from "@/public/assets/default-course.png";
-import { useSearchParams } from "next/navigation";
 import { useGetCourse } from "../hooks/useGetCourse";
+import BackBtn from "@/components/sharing/back-btn";
+import Link from "next/link";
+import { CardSkeleton } from "@/components/skeletons/card-skeleton";
+import QueryErrorState from "@/components/sharing/query-error-state";
+import NoData from "@/components/sharing/no-data";
 
 interface CourseDetailsProps {
-  onEdit?: () => void;
-  onDelete?: () => void;
+  onEdit: string;
+  onDelete: string;
+  courseId: string;
+  manageSections: string;
+  viewStudents: string;
 }
 
 export default function CourseDetails({
   onEdit,
   onDelete,
+  courseId,
+  manageSections,
+  viewStudents,
 }: CourseDetailsProps) {
-  const param = useSearchParams();
-  const courseId = param.get("id");
-
   const formatDuration = (minutes: number = 0) => {
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
@@ -44,29 +51,40 @@ export default function CourseDetails({
 
   const capitalize = (str: string) =>
     str ? str.charAt(0).toUpperCase() + str.slice(1) : "";
-  const { data: course, isLoading, isError } = useGetCourse(courseId ?? "");
-  if (!courseId) {
-    //todo create error page
-    return <> error</>;
-  }
+  const {
+    data: course,
+    isLoading,
+    isError,
+    refetch,
+    isFetching,
+  } = useGetCourse(courseId);
+
   if (isLoading) {
-    //todo create skeleton component
-    return <div>Loading...</div>;
+    return <CardSkeleton />;
   }
   if (isError) {
-    return <div>Failed to load course.</div>;
+    return (
+      <QueryErrorState
+        title="Failed to load Course Details"
+        description="We couldn’t load the course details. Please try again"
+        isRetrying={isFetching}
+        onRetry={() => refetch()}
+      />
+    );
   }
   if (!course) {
-    //todo create not found course, lesson act... page
-    return <> course </>;
+    return <NoData/>;
   }
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6 bg-background text-foreground min-h-screen">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <span>Courses</span>
-          <ChevronRight className="w-4 h-4" />
-          <span className="font-medium text-foreground">{course.title}</span>
+        <div className="flex justify-between w-full">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <span>Courses</span>
+            <ChevronRight className="w-4 h-4" />
+            <span className="font-medium text-foreground">{course.title}</span>
+          </div>
+          <BackBtn />
         </div>
 
         <DropdownMenu>
@@ -79,10 +97,12 @@ export default function CourseDetails({
             }
           />
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={onEdit}>Edit Course</DropdownMenuItem>
-            <DropdownMenuItem className="text-destructive" onClick={onDelete}>
+            <DropdownMenuLinkItem className="text-primary" href={onEdit}>
+              Edit Course
+            </DropdownMenuLinkItem>
+            <DropdownMenuLinkItem className="text-destructive" href={onDelete}>
               Delete Course
-            </DropdownMenuItem>
+            </DropdownMenuLinkItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -246,13 +266,17 @@ export default function CourseDetails({
 
             <div className="bg-card border rounded-2xl p-6 shadow-sm space-y-4">
               <h3 className="text-lg font-semibold">Quick Actions</h3>
-              <div className="space-y-2">
-                <Button className="w-full justify-start" variant="outline">
-                  Manage Lessons
-                </Button>
-                <Button className="w-full justify-start" variant="outline">
-                  View Student List
-                </Button>
+              <div className="h-32 flex flex-col justify-center items-center rounded-xl shadow-sm">
+                <Link href={manageSections} className="mb-5">
+                  <Button className="w-full justify-start" variant="outline">
+                    Manage Sections
+                  </Button>
+                </Link>
+                <Link href={viewStudents}>
+                  <Button className="w-full justify-start" variant="outline">
+                    View Student List
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>

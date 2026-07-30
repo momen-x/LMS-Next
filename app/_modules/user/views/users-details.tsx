@@ -22,45 +22,37 @@ import { useGetUserById } from "../hooks/useGetUserById";
 import defaultUserImage from "@/public/assets/default-user1.png";
 import transformingTheDateToATextString from "@/utils/from-date-to-string";
 import Link from "next/link";
+import { CardSkeleton } from "@/components/skeletons/card-skeleton";
+import QueryErrorState from "@/components/sharing/query-error-state";
+import NoData from "@/components/sharing/no-data";
 
 const UsersDetails = ({ userId }: { userId: string }) => {
   const router = useRouter();
-  const { data: user, isLoading, isError } = useGetUserById(userId);
+  const {
+    data: user,
+    isLoading,
+    isError,
+    refetch,
+    isFetching,
+  } = useGetUserById(userId);
 
   if (isLoading) {
-    //todo
-    return (
-      <div className="mx-auto max-w-4xl space-y-6 p-6">
-        <div className="h-8 w-40 animate-pulse rounded bg-muted" />
-        <div className="h-64 animate-pulse rounded-xl bg-muted" />
-      </div>
-    );
+    return <CardSkeleton />;
   }
 
   if (isError) {
-    //todo
     return (
-      <div className="flex min-h-[50vh] flex-col items-center justify-center gap-3 text-center">
-        <p className="text-sm text-muted-foreground">
-          Something went wrong while loading this user.
-        </p>
-        <Button variant="outline" onClick={() => router.back()}>
-          Go back
-        </Button>
-      </div>
+      <QueryErrorState
+        title="Failed to load user details"
+        description="We couldn’t load the user details. Please try again"
+        isRetrying={isFetching}
+        onRetry={() => refetch()}
+      />
     );
   }
 
   if (!user) {
-    //todo
-    return (
-      <div className="flex min-h-[50vh] flex-col items-center justify-center gap-3 text-center">
-        <p className="text-sm text-muted-foreground">User not found.</p>
-        <Button variant="outline" onClick={() => router.back()}>
-          Go back
-        </Button>
-      </div>
-    );
+    return <NoData />;
   }
 
   return (

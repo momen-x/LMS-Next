@@ -1,13 +1,15 @@
 "use client";
 
-import { AlertCircle, CircleHelp, Loader2 } from "lucide-react";
+import { AlertCircle, CircleHelp, Loader2, Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
 import { useGetLessonQuizzes } from "../hooks/useGetLessonQuizzes";
+import { useQuizDialog } from "../context/quiz-dialog-context";
 
-import CreateQuiz from "./create-quiz";
 import QuizCard from "./quiz-card";
+import BackBtn from "@/components/sharing/back-btn";
+import { ListSkeleton } from "@/components/skeletons/list-skeleton";
 
 interface LessonQuizzesProps {
   lessonId: string;
@@ -17,10 +19,14 @@ export default function LessonQuizzes({ lessonId }: LessonQuizzesProps) {
   const {
     data: quizzes,
     isPending,
+    isLoading,
     isError,
     refetch,
     isFetching,
   } = useGetLessonQuizzes(lessonId);
+
+  const { openCreateQuiz } = useQuizDialog();
+  if (isLoading) return <ListSkeleton />;
 
   return (
     <section className="space-y-4">
@@ -32,8 +38,18 @@ export default function LessonQuizzes({ lessonId }: LessonQuizzesProps) {
             Manage quizzes attached to this lesson.
           </p>
         </div>
-
-        <CreateQuiz lessonId={lessonId} />
+        <div className="flex items-center gap-3">
+          <BackBtn />
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => openCreateQuiz(lessonId)}
+          >
+            <Plus className="size-4" />
+            Add quiz
+          </Button>
+        </div>
       </div>
 
       {isPending && (
@@ -79,13 +95,28 @@ export default function LessonQuizzes({ lessonId }: LessonQuizzesProps) {
             This lesson does not contain any quizzes. Create the first quiz to
             start adding questions.
           </p>
+
+          <Button
+            type="button"
+            size="sm"
+            className="mt-4"
+            onClick={() => openCreateQuiz(lessonId)}
+          >
+            <Plus className="size-4" />
+            Add quiz
+          </Button>
         </div>
       )}
 
       {!isPending && !isError && Boolean(quizzes?.length) && (
         <div className="space-y-3">
           {quizzes?.map((quiz) => (
-            <QuizCard key={quiz.id} quiz={quiz} />
+            <QuizCard
+              key={quiz.id}
+              quiz={quiz}
+              onView={`/instructor-dashboard/quizzes/${quiz.id}/details`}
+              onDelete={`/instructor-dashboard/quizzes/${quiz.id}/delete`}
+            />
           ))}
         </div>
       )}

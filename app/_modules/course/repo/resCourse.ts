@@ -73,4 +73,14 @@ export const resCourse: ICourseAPI = {
     const res = await api.patch<Course>(`${BASE_URL}/${id}`, formData);
     return res.data;
   },
+  getInstructorCourses: async function (): Promise<Course[]> {
+    const res = await api.get<Course[]>(`${BASE_URL}/instructor/my-courses`);
+    return res.data;
+  },
+  getInstructorCoursesByAdmin: async function (
+    instructorId: string,
+  ): Promise<Course[]> {
+    const res = await api.get<Course[]>(`${BASE_URL}/${instructorId}/courses`);
+    return res.data;
+  },
 };

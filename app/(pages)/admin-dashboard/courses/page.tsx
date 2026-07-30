@@ -1,8 +1,8 @@
-import CourseTable from "@/app/_modules/course/views/course-table";
+import AdminCoursesTable from "@/app/_modules/course/views/admin-courses-table";
 const CoursesTablePage = () => {
   return (
     <>
-      <CourseTable />
+      <AdminCoursesTable />
     </>
   );
 };

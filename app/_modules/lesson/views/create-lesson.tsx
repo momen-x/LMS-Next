@@ -1,79 +1,75 @@
 "use client";
 
-import { useState } from "react";
-import { Plus } from "lucide-react";
 import { toast } from "react-toastify";
 
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogClose,
 } from "@/components/ui/dialog";
-
-import { CreateLessonData } from "../dto/create-lesson";
-import { useCreateLesson } from "../hooks/useCreateLesson";
+import { Button } from "@/components/ui/button";
 
 import LessonForm from "./lesson-form";
+import { useCreateLesson } from "../hooks/useCreateLesson";
+import { CreateLessonData } from "../dto/create-lesson";
 
-interface CreateLessonProps {
-  sectionId: string;
+interface CreateLessonDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  sectionId: string | null;
 }
 
-export default function CreateLesson({ sectionId }: CreateLessonProps) {
-  const [open, setOpen] = useState(false);
-
+export default function CreateLessonDialog({
+  open,
+  onOpenChange,
+  sectionId,
+}: CreateLessonDialogProps) {
   const { mutateAsync: createLesson, isPending } = useCreateLesson();
 
   const handleSubmit = async (data: CreateLessonData) => {
-    try {
-      await createLesson({
-        sectionId,
-        data,
-      });
+    if (!sectionId) return;
 
+    try {
+      await createLesson({ sectionId, data });
       toast.success("Lesson created successfully");
-      setOpen(false);
+      onOpenChange(false);
     } catch {
       toast.error("Failed to create lesson");
     }
   };
 
   return (
-    <Dialog
-      open={open}
-      onOpenChange={(value) => {
-        if (!isPending) {
-          setOpen(value);
-        }
-      }}
-    >
-      <DialogTrigger
-        render={
-          <Button type="button" variant="outline" size="sm">
-            <Plus className="size-4" />
-            Add lesson
-          </Button>
-        }
-      />
-
-      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-h-[90dvh] overflow-y-auto overscroll-contain sm:max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Create lesson</DialogTitle>
-
+          <DialogTitle>Add Lesson</DialogTitle>
           <DialogDescription>
             Add a new lesson to this section.
           </DialogDescription>
         </DialogHeader>
 
+        {/* Key forces a clean form remount per section, resetting fields
+            when switching from one section's dialog to another's */}
         <LessonForm
-          submitLabel="Create lesson"
+          key={sectionId}
+          submitLabel="Create Lesson"
           isPending={isPending}
           onSubmit={handleSubmit}
         />
+
+        <DialogFooter>
+          <DialogClose
+            render={
+              <Button type="button" variant="outline" disabled={isPending} />
+            }
+          >
+            Cancel
+          </DialogClose>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

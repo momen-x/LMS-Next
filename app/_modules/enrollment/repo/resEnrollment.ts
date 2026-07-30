@@ -1,6 +1,7 @@
 import { CreateEnrollmentInput } from "../dto/create-enrollment";
 import { Enrollment } from "../entity/enrollment";
 import { EnrollmentWithCourse } from "../entity/enrollment-course";
+import type { EnrollmentWithStudent } from "../entity/enrollment-student";
 import { GetMyEnrollmentsParams } from "../types/get-my-enrollments";
 import { IEnrollmentAPI } from "./enrollment";
 import { api } from "@/utils/axiosInstance";
@@ -13,7 +14,7 @@ export const resEnrollment: IEnrollmentAPI = {
     input: CreateEnrollmentInput,
   ): Promise<Enrollment> {
     const res = await api.post<Enrollment>(
-      `courses/${courseId}/enrollments`,
+      `/api/courses/${courseId}/enrollments`,
       input,
     );
     return res.data;
@@ -28,8 +29,10 @@ export const resEnrollment: IEnrollmentAPI = {
   },
   getCourseEnrollments: async function (
     courseId: string,
-  ): Promise<Enrollment[]> {
-    const res = await api.get<Enrollment[]>(`/courses/${courseId}/enrollments`);
+  ): Promise<EnrollmentWithStudent[]> {
+    const res = await api.get<EnrollmentWithStudent[]>(
+      `/api/courses/${courseId}/enrollments`,
+    );
     return res.data;
   },
   getEnrollmentById: async function (

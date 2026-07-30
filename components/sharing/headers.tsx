@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Calendar, GraduationCap, Menu, X } from "lucide-react";
+import { GraduationCap, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ProfileDropdown } from "@/app/_modules/user/views/dropdown-user-menu";
@@ -12,6 +12,7 @@ const navLinks = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
+  { href: "/courses", label: "courses" },
 ];
 const studentDashboardLink = {
   href: "/student-dashboard",

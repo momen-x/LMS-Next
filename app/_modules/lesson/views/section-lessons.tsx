@@ -1,13 +1,13 @@
 "use client";
 
-import { AlertCircle, BookOpen, Loader2 } from "lucide-react";
+import { AlertCircle, BookOpen, Loader2, Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
 import { useGetSectionLessons } from "../hooks/useGetSectionLessons";
 
-import CreateLesson from "./create-lesson";
 import LessonCard from "./lesson-card";
+import { useLessonDialog } from "../context/lesson-dialog-context";
 
 interface SectionLessonsProps {
   sectionId: string;
@@ -20,6 +20,7 @@ export default function SectionLessons({ sectionId }: SectionLessonsProps) {
     isError,
     refetch,
   } = useGetSectionLessons(sectionId);
+  const { openCreateLesson } = useLessonDialog();
 
   if (isLoading) {
     return (
@@ -60,16 +61,24 @@ export default function SectionLessons({ sectionId }: SectionLessonsProps) {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h3 className="font-medium">Lessons</h3>
+        <div className="flex items-center justify-between w-[65vw]">
+          <div>
+            <h3 className="font-medium">Lessons</h3>
 
-          <p className="text-sm text-muted-foreground">
-            {sortedLessons.length}{" "}
-            {sortedLessons.length === 1 ? "lesson" : "lessons"} in this section
-          </p>
+            <p className="text-sm text-muted-foreground">
+              {sortedLessons.length}{" "}
+              {sortedLessons.length === 1 ? "lesson" : "lessons"} in this
+              section
+            </p>
+          </div>
+          <div className="mt-4 flex justify-center">
+            <Button onClick={() => openCreateLesson(sectionId)}>
+              {" "}
+              <Plus className="w-4 h-4" />
+              create lesson
+            </Button>
+          </div>
         </div>
-
-        <CreateLesson sectionId={sectionId} />
       </div>
 
       {sortedLessons.length === 0 ? (
@@ -85,13 +94,25 @@ export default function SectionLessons({ sectionId }: SectionLessonsProps) {
           </p>
 
           <div className="mt-4 flex justify-center">
-            <CreateLesson sectionId={sectionId} />
+            <Button onClick={() => openCreateLesson(sectionId)}>
+              {" "}
+              <Plus className="w-4 h-4" />
+              create lesson
+            </Button>
           </div>
         </div>
       ) : (
         <div className="space-y-3">
           {sortedLessons.map((lesson, index) => (
-            <LessonCard key={lesson.id} lesson={lesson} position={index + 1} />
+            <LessonCard
+              key={lesson.id}
+              lesson={lesson}
+              position={index + 1}
+              onView={`/instructor-dashboard/lessons/${lesson.id}/details`}
+              onDelete={(selectedLesson) => {
+                console.log("Delete lesson:", selectedLesson.id);
+              }}
+            />
           ))}
         </div>
       )}

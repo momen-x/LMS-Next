@@ -1,27 +1,39 @@
 "use client";
 
-import { CheckCircle2, Circle, MoreHorizontal } from "lucide-react";
+import {
+  CheckCircle2,
+  Circle,
+  MoreHorizontal,
+  Pencil,
+  Trash2,
+} from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLinkItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
 import { Choice } from "../entity/choice";
 
-import DeleteChoice from "./delete-choice";
-import UpdateChoice from "./update-choice";
+
+import { useChoiceDialog } from "../context/choice-dialog-context";
 
 interface ChoiceCardProps {
   choice: Choice;
   index: number;
+  onDelete?: string;
 }
 
-export default function ChoiceCard({ choice, index }: ChoiceCardProps) {
+export default function ChoiceCard({ choice, index, onDelete }: ChoiceCardProps) {
   const canSeeCorrectState = typeof choice.isCorrect === "boolean";
+
+  const { openUpdateChoice } = useChoiceDialog();
 
   return (
     <article className="rounded-lg border bg-background p-3">
@@ -62,20 +74,37 @@ export default function ChoiceCard({ choice, index }: ChoiceCardProps) {
                   type="button"
                   variant="ghost"
                   size="icon"
-                  aria-label={`Open actions for choice ${index + 1}`}
+                  className="size-8 "
+                  aria-label="Lesson options"
                 >
                   <MoreHorizontal className="size-4" />
                 </Button>
               }
             />
 
-            <DropdownMenuContent align="end">
-              <UpdateChoice choice={choice} />
+            <DropdownMenuContent align="end" className="z-50 w-40">
+         
 
-              <DeleteChoice
-                choiceId={choice.id}
-                questionId={choice.questionId}
-              />
+              <DropdownMenuItem
+                onClick={() => {
+                  openUpdateChoice(choice);
+                }}
+              >
+                <Pencil className="mr-2 size-3.5" />
+                Edit
+              </DropdownMenuItem>
+
+              <>
+                <DropdownMenuSeparator />
+
+                <DropdownMenuLinkItem
+                  href={onDelete}
+                  className="text-destructive focus:text-destructive"
+                >
+                  <Trash2 className="mr-2 size-3.5" />
+                  Delete
+                </DropdownMenuLinkItem>
+              </>
             </DropdownMenuContent>
           </DropdownMenu>
         )}

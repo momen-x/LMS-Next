@@ -7,8 +7,8 @@ export interface Course {
   instructorId: string;
   title: string;
   description: string;
-  thumbnail?: string;
-  thumbnailPublicId?: string;
+  thumbnail: string | null;
+  thumbnailPublicId: string | null;
   price: number;
   level: CourseLevel;
   status: CourseStatus;
@@ -17,7 +17,7 @@ export interface Course {
   totalStudents: number;
   duration: number;
   lessonsCount: number;
-  publishedAt?: string;
+  publishedAt: string | null;
   createdAt: string;
   updatedAt: string;
 }

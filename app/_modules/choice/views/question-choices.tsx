@@ -1,13 +1,14 @@
 "use client";
 
-import { AlertCircle, ListChecks, Loader2 } from "lucide-react";
+import { AlertCircle, ListChecks, Loader2, Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
+import { useChoiceDialog } from "../context/choice-dialog-context";
 import { useGetQuestionChoices } from "../hooks/useGetQuestionChoices";
 
 import ChoiceCard from "./choice-card";
-import CreateChoice from "./create-choice";
+import { ListSkeleton } from "@/components/skeletons/list-skeleton";
 
 interface QuestionChoicesProps {
   questionId: string;
@@ -17,10 +18,20 @@ export default function QuestionChoices({ questionId }: QuestionChoicesProps) {
   const {
     data: choices,
     isPending,
+    isLoading,
     isError,
     isFetching,
     refetch,
   } = useGetQuestionChoices(questionId);
+
+  const { openCreateChoice } = useChoiceDialog();
+
+  const choicesCount = choices?.length ?? 0;
+  const reachedLimit = choicesCount >= 5;
+
+  if (isLoading) {
+    return <ListSkeleton />;
+  }
 
   return (
     <section className="space-y-3">
@@ -34,10 +45,21 @@ export default function QuestionChoices({ questionId }: QuestionChoicesProps) {
         </div>
 
         {!isPending && !isError && (
-          <CreateChoice
-            questionId={questionId}
-            choicesCount={choices?.length ?? 0}
-          />
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            disabled={reachedLimit}
+            title={
+              reachedLimit
+                ? "A question cannot have more than 5 choices"
+                : undefined
+            }
+            onClick={() => openCreateChoice(questionId, choicesCount)}
+          >
+            <Plus className="size-4" />
+            Add choice
+          </Button>
         )}
       </div>
 
@@ -72,7 +94,7 @@ export default function QuestionChoices({ questionId }: QuestionChoicesProps) {
         </div>
       )}
 
-      {!isPending && !isError && choices?.length === 0 && (
+      {!isPending && !isError && choicesCount === 0 && (
         <div className="flex min-h-28 flex-col items-center justify-center rounded-lg border border-dashed p-4 text-center">
           <div className="mb-2 flex size-9 items-center justify-center rounded-full bg-muted">
             <ListChecks className="size-4 text-muted-foreground" />
@@ -83,10 +105,20 @@ export default function QuestionChoices({ questionId }: QuestionChoicesProps) {
           <p className="mt-1 text-xs text-muted-foreground">
             Add answer choices for this question.
           </p>
+
+          <Button
+            type="button"
+            size="sm"
+            className="mt-4"
+            onClick={() => openCreateChoice(questionId, choicesCount)}
+          >
+            <Plus className="size-4" />
+            Add choice
+          </Button>
         </div>
       )}
 
-      {!isPending && !isError && Boolean(choices?.length) && (
+      {!isPending && !isError && choicesCount > 0 && (
         <div className="space-y-2">
           {choices?.map((choice, index) => (
             <ChoiceCard key={choice.id} choice={choice} index={index} />
@@ -94,9 +126,9 @@ export default function QuestionChoices({ questionId }: QuestionChoicesProps) {
         </div>
       )}
 
-      {!isPending && !isError && Boolean(choices?.length) && (
+      {!isPending && !isError && choicesCount > 0 && (
         <div className="flex items-center justify-between text-xs text-muted-foreground">
-          <span>{choices?.length ?? 0} of 5 choices</span>
+          <span>{choicesCount} of 5 choices</span>
 
           {!choices?.some((choice) => choice.isCorrect === true) && (
             <span className="text-destructive">No correct answer selected</span>

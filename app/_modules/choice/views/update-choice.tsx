@@ -1,7 +1,5 @@
 "use client";
 
-import { Pencil } from "lucide-react";
-import { useState } from "react";
 import { toast } from "react-toastify";
 
 import {
@@ -10,9 +8,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
 import { CreateChoiceData } from "../dto/create-choice";
 import { Choice } from "../entity/choice";
@@ -21,15 +17,23 @@ import { useUpdateChoice } from "../hooks/useUpdateChoice";
 import ChoiceForm from "./choice-form";
 
 interface UpdateChoiceProps {
-  choice: Choice;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  choice: Choice | null;
 }
 
-export default function UpdateChoice({ choice }: UpdateChoiceProps) {
-  const [open, setOpen] = useState(false);
-
+export default function UpdateChoice({
+  open,
+  onOpenChange,
+  choice,
+}: UpdateChoiceProps) {
   const { mutateAsync: updateChoice, isPending } = useUpdateChoice();
 
   const handleSubmit = async (data: CreateChoiceData) => {
+    if (!choice) {
+      return;
+    }
+
     try {
       await updateChoice({
         choiceId: choice.id,
@@ -38,7 +42,7 @@ export default function UpdateChoice({ choice }: UpdateChoiceProps) {
       });
 
       toast.success("Choice updated successfully");
-      setOpen(false);
+      onOpenChange(false);
     } catch {
       toast.error("Failed to update choice");
     }
@@ -49,25 +53,11 @@ export default function UpdateChoice({ choice }: UpdateChoiceProps) {
       open={open}
       onOpenChange={(value) => {
         if (!isPending) {
-          setOpen(value);
+          onOpenChange(value);
         }
       }}
     >
-      <DialogTrigger
-        render={
-          <DropdownMenuItem
-            onSelect={(event) => {
-              event.preventDefault();
-              setOpen(true);
-            }}
-          >
-            <Pencil className="size-4" />
-            Edit choice
-          </DropdownMenuItem>
-        }
-      />
-
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>Update choice</DialogTitle>
 
@@ -76,15 +66,18 @@ export default function UpdateChoice({ choice }: UpdateChoiceProps) {
           </DialogDescription>
         </DialogHeader>
 
-        <ChoiceForm
-          defaultValues={{
-            text: choice.text,
-            isCorrect: choice.isCorrect ?? false,
-          }}
-          submitLabel="Update choice"
-          isPending={isPending}
-          onSubmit={handleSubmit}
-        />
+        {choice && (
+          <ChoiceForm
+            key={choice.id}
+            defaultValues={{
+              text: choice.text,
+              isCorrect: choice.isCorrect ?? false,
+            }}
+            submitLabel="Update choice"
+            isPending={isPending}
+            onSubmit={handleSubmit}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );

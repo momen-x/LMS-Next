@@ -1,27 +1,35 @@
 "use client";
 
-import { CircleHelp, MoreHorizontal } from "lucide-react";
+import { CircleHelp, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { Question } from "../entity/question";
-
-import DeleteQuestion from "./delete-question";
-import UpdateQuestion from "./update-question";
 import QuestionChoices from "@/app/_modules/choice/views/question-choices";
+
+import { Question } from "../entity/question";
+import { useQuestionDialog } from "../context/question-dialog-context";
 
 interface QuestionCardProps {
   question: Question;
   index: number;
+  onDelete?: (question: Question) => void;
 }
 
-export default function QuestionCard({ question, index }: QuestionCardProps) {
+export default function QuestionCard({
+  question,
+  index,
+  onDelete,
+}: QuestionCardProps) {
+  const { openUpdateQuestion } = useQuestionDialog();
+
   return (
     <article className="rounded-xl border bg-card p-4 shadow-sm">
       <div className="flex items-start justify-between gap-4">
@@ -48,6 +56,7 @@ export default function QuestionCard({ question, index }: QuestionCardProps) {
                 type="button"
                 variant="ghost"
                 size="icon"
+                className="size-8"
                 aria-label={`Open actions for question ${index + 1}`}
               >
                 <MoreHorizontal className="size-4" />
@@ -55,13 +64,29 @@ export default function QuestionCard({ question, index }: QuestionCardProps) {
             }
           />
 
-          <DropdownMenuContent align="end">
-            <UpdateQuestion question={question} />
+          <DropdownMenuContent align="end" className="z-50 w-40">
+            <DropdownMenuItem onClick={() => openUpdateQuestion(question)}>
+              <Pencil className="mr-2 size-3.5" />
+              Edit question
+            </DropdownMenuItem>
 
-            <DeleteQuestion questionId={question.id} quizId={question.quizId} />
+            {onDelete && (
+              <>
+                <DropdownMenuSeparator />
+
+                <DropdownMenuItem
+                  onClick={() => onDelete(question)}
+                  className="text-destructive focus:text-destructive"
+                >
+                  <Trash2 className="mr-2 size-3.5" />
+                  Delete question
+                </DropdownMenuItem>
+              </>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
       <div className="mt-4 border-t pt-4">
         <QuestionChoices questionId={question.id} />
       </div>

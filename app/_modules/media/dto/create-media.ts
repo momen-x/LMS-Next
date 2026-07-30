@@ -1,12 +1,12 @@
 import { z } from "zod";
 
-export const mediaTypes = ["VIDEO", "AUDIO", "PDF", "DOCUMENT"] as const;
+export const mediaTypes = ["video", "audio", "document"] as const;
 
 export type MediaType = (typeof mediaTypes)[number];
 
 export const createMediaSchema = z.object({
   type: z.enum(mediaTypes),
-  duration: z.coerce.number().min(0).optional(),
+  duration: z.coerce.number().min(0).nullable().optional(),
   file: z
     .instanceof(File, {
       message: "Media file is required",

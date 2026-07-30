@@ -1,13 +1,14 @@
 "use client";
 
-import { AlertCircle, CircleHelp, Loader2 } from "lucide-react";
+import { AlertCircle, CircleHelp, Loader2, Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
 import { useGetQuizQuestions } from "../hooks/useGetQuizQuestions";
+import { useQuestionDialog } from "../context/question-dialog-context";
 
-import CreateQuestion from "./create-question";
 import QuestionCard from "./question-card";
+import { ListSkeleton } from "@/components/skeletons/list-skeleton";
 
 interface QuizQuestionsProps {
   quizId: string;
@@ -17,10 +18,15 @@ export default function QuizQuestions({ quizId }: QuizQuestionsProps) {
   const {
     data: questions,
     isPending,
+    isLoading,
     isError,
     isFetching,
     refetch,
   } = useGetQuizQuestions(quizId);
+
+  const { openCreateQuestion } = useQuestionDialog();
+
+  if (isLoading) return <ListSkeleton />;
 
   return (
     <section className="space-y-4">
@@ -33,7 +39,15 @@ export default function QuizQuestions({ quizId }: QuizQuestionsProps) {
           </p>
         </div>
 
-        <CreateQuestion quizId={quizId} />
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => openCreateQuestion(quizId)}
+        >
+          <Plus className="size-4" />
+          Add question
+        </Button>
       </div>
 
       {isPending && (
@@ -79,13 +93,30 @@ export default function QuizQuestions({ quizId }: QuizQuestionsProps) {
             This quiz does not contain any questions. Add the first question to
             begin building the quiz.
           </p>
+
+          <Button
+            type="button"
+            size="sm"
+            className="mt-4"
+            onClick={() => openCreateQuestion(quizId)}
+          >
+            <Plus className="size-4" />
+            Add question
+          </Button>
         </div>
       )}
 
       {!isPending && !isError && Boolean(questions?.length) && (
         <div className="space-y-3">
           {questions?.map((question, index) => (
-            <QuestionCard key={question.id} question={question} index={index} />
+            <QuestionCard
+              key={question.id}
+              question={question}
+              index={index}
+              onDelete={(selectedQuestion) => {
+                console.log("Delete question:", selectedQuestion.id);
+              }}
+            />
           ))}
         </div>
       )}

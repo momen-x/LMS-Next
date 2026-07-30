@@ -1,12 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { resLesson } from "../repo/resLesson";
-import { Lesson_KEYS } from "./useGetSectionLessons";
 
-export const useGetLesson = (lessonId: string) => {
+export const LESSON_KEY = "lesson";
+
+export const useGetLesson = (
+  lessonId: string,
+  enabled: boolean = true,
+) => {
   return useQuery({
-    queryKey: Lesson_KEYS.detail(lessonId),
+    queryKey: [LESSON_KEY, lessonId],
     queryFn: () => resLesson.getLesson(lessonId),
-    enabled: !!lessonId,
+    enabled: enabled && Boolean(lessonId),
   });
 };

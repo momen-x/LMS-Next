@@ -1,43 +1,59 @@
 "use client";
 
-import { useState } from "react";
-import { Pencil } from "lucide-react";
+import { AlertCircle, Loader2 } from "lucide-react";
 import { toast } from "react-toastify";
 
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
-import { CreateLessonData } from "../dto/create-lesson";
-import { Lesson } from "../entity/lesson";
+import { UpdateLessonData } from "../dto/update-lesson";
+import { useGetLesson } from "../hooks/useGetLesson";
 import { useUpdateLesson } from "../hooks/useUpdateLesson";
 
 import LessonForm from "./lesson-form";
 
-interface UpdateLessonProps {
-  lesson: Lesson;
+interface UpdateLessonDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  lessonId: string | null;
 }
 
-export default function UpdateLesson({ lesson }: UpdateLessonProps) {
-  const [open, setOpen] = useState(false);
+export default function UpdateLessonDialog({
+  open,
+  onOpenChange,
+  lessonId,
+}: UpdateLessonDialogProps) {
+  const { mutateAsync: updateLesson, isPending } =
+    useUpdateLesson();
 
-  const { mutateAsync: updateLesson, isPending } = useUpdateLesson();
+  const {
+    data: lesson,
+    isLoading,
+    isError,
+    refetch,
+  } = useGetLesson(lessonId ?? "", open && Boolean(lessonId));
 
-  const handleSubmit = async (data: CreateLessonData) => {
+  const handleSubmit = async (data: UpdateLessonData) => {
+    if (!lessonId) {
+      return;
+    }
+
     try {
       await updateLesson({
-        lessonId: lesson.id,
+        lessonId,
         data,
       });
 
       toast.success("Lesson updated successfully");
-      setOpen(false);
+      onOpenChange(false);
     } catch {
       toast.error("Failed to update lesson");
     }
@@ -48,24 +64,11 @@ export default function UpdateLesson({ lesson }: UpdateLessonProps) {
       open={open}
       onOpenChange={(value) => {
         if (!isPending) {
-          setOpen(value);
+          onOpenChange(value);
         }
       }}
     >
-      <DialogTrigger
-        render={
-          <DropdownMenuItem
-            onSelect={(event) => {
-              event.preventDefault();
-            }}
-          >
-            <Pencil className="size-4" />
-            Edit lesson
-          </DropdownMenuItem>
-        }
-      />
-
-      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
+      <DialogContent className="max-h-[90dvh] overflow-y-auto overscroll-contain sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>Update lesson</DialogTitle>
 
@@ -74,18 +77,67 @@ export default function UpdateLesson({ lesson }: UpdateLessonProps) {
           </DialogDescription>
         </DialogHeader>
 
-        <LessonForm
-          defaultValues={{
-            title: lesson.title,
-            description: lesson.description ?? "",
-            duration: lesson.duration,
-            isPreview: lesson.isPreview,
-            resources: lesson.resources ?? [],
-          }}
-          submitLabel="Save changes"
-          isPending={isPending}
-          onSubmit={handleSubmit}
-        />
+        {isLoading && (
+          <div className="flex min-h-52 items-center justify-center">
+            <Loader2 className="size-6 animate-spin text-muted-foreground" />
+          </div>
+        )}
+
+        {isError && (
+          <div className="rounded-lg border border-destructive/40 bg-destructive/5 p-6 text-center">
+            <AlertCircle className="mx-auto mb-3 size-6 text-destructive" />
+
+            <p className="font-medium">
+              Failed to load lesson
+            </p>
+
+            <p className="mt-1 text-sm text-muted-foreground">
+              Something went wrong while loading this lesson.
+            </p>
+
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="mt-4"
+              onClick={() => refetch()}
+            >
+              Try again
+            </Button>
+          </div>
+        )}
+
+        {!isLoading && !isError && lesson && (
+          <>
+            <LessonForm
+              key={lesson.id}
+              defaultValues={{
+                title: lesson.title,
+                description: lesson.description ?? "",
+                duration: lesson.duration,
+                isPreview: lesson.isPreview,
+                resources: lesson.resources ?? [],
+              }}
+              submitLabel="Save changes"
+              isPending={isPending}
+              onSubmit={handleSubmit}
+            />
+
+            <DialogFooter>
+              <DialogClose
+                render={
+                  <Button
+                    type="button"
+                    variant="outline"
+                    disabled={isPending}
+                  />
+                }
+              >
+                Cancel
+              </DialogClose>
+            </DialogFooter>
+          </>
+        )}
       </DialogContent>
     </Dialog>
   );

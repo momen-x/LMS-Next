@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { Pencil } from "lucide-react";
 import { toast } from "react-toastify";
 
 import {
@@ -10,36 +8,42 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-
-import { Media } from "../entity/media";
-import { TUpdateMedia } from "../dto/update-media";
+import { TCreateMedia } from "../dto/create-media";
+import { useGetMedia } from "../hooks/useGetMedia";
 import { useUpdateMedia } from "../hooks/useUpdateMedia";
 
 import MediaForm from "./media-form";
 
 interface UpdateMediaProps {
-  media: Media;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  mediaId: string;
 }
 
-export default function UpdateMedia({ media }: UpdateMediaProps) {
-  const [open, setOpen] = useState(false);
-
+export default function UpdateMedia({
+  open,
+  onOpenChange,
+  mediaId,
+}: UpdateMediaProps) {
+  const { data: media, isLoading, isError } = useGetMedia(mediaId);
   const { mutateAsync: updateMedia, isPending } = useUpdateMedia();
 
-  const handleSubmit = async (data: TUpdateMedia) => {
+  const handleSubmit = async (data: TCreateMedia) => {
+    if (!media) return;
+
     try {
       await updateMedia({
         id: media.id,
-        dto: data,
+        dto: {
+          ...data,
+          duration: data.duration ?? undefined,
+        },
       });
 
       toast.success("Media updated successfully");
-
-      setOpen(false);
+      onOpenChange(false);
     } catch {
       toast.error("Failed to update media");
     }
@@ -50,23 +54,10 @@ export default function UpdateMedia({ media }: UpdateMediaProps) {
       open={open}
       onOpenChange={(value) => {
         if (!isPending) {
-          setOpen(value);
+          onOpenChange(value);
         }
       }}
     >
-      <DialogTrigger
-        render={
-          <DropdownMenuItem
-            onSelect={(event) => {
-              event.preventDefault();
-            }}
-          >
-            <Pencil className="size-4" />
-            Edit media
-          </DropdownMenuItem>
-        }
-      />
-
       <DialogContent className="sm:max-w-xl">
         <DialogHeader>
           <DialogTitle>Update media</DialogTitle>
@@ -74,15 +65,26 @@ export default function UpdateMedia({ media }: UpdateMediaProps) {
           <DialogDescription>Update media information.</DialogDescription>
         </DialogHeader>
 
-        <MediaForm
-          defaultValues={{
-            type: media.type,
-            duration: media.duration ?? undefined,
-          }}
-          submitLabel="Save changes"
-          isPending={isPending}
-          onSubmit={handleSubmit}
-        />
+        {isLoading && (
+          <p className="text-sm text-muted-foreground">Loading media...</p>
+        )}
+
+        {isError && (
+          <p className="text-sm text-destructive">Failed to load media.</p>
+        )}
+
+        {media && (
+          <MediaForm
+            key={media.id}
+            defaultValues={{
+              type: media.type,
+              duration: media.duration ?? undefined,
+            }}
+            submitLabel="Save changes"
+            isPending={isPending}
+            onSubmit={handleSubmit}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );

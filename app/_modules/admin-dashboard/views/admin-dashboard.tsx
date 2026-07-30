@@ -11,12 +11,9 @@ import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import NavButton from "@/components/sharing/nav-btn";
 import { dashboardNaves } from "../utils/const";
+import { childrenPropsType } from "@/types/children-type";
 
-interface DashboardLayoutProps {
-  children: React.ReactNode;
-}
-
-const AdminDashboard = ({ children }: DashboardLayoutProps) => {
+const AdminDashboard = ({ children }: childrenPropsType) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const toggleSidebar = () => {

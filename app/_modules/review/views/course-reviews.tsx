@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 
 import { useGetCourseReviews } from "../hooks/useGetCourseReviews";
 import ReviewCard from "./review-card";
+import { ListSkeleton } from "@/components/skeletons/list-skeleton";
+import QueryErrorState from "@/components/sharing/query-error-state";
 
 interface CourseReviewsProps {
   courseId: string;
@@ -21,28 +23,24 @@ export default function CourseReviews({ courseId }: CourseReviewsProps) {
     isLoading,
     isError,
     refetch,
+    isFetching,
   } = useGetCourseReviews(courseId, {
     page,
     limit: REVIEWS_LIMIT,
   });
 
   if (isLoading) {
-    return (
-      <div className="py-8 text-center text-sm text-muted-foreground">
-        Loading reviews...
-      </div>
-    );
+    return <ListSkeleton />;
   }
 
   if (isError) {
     return (
-      <div className="space-y-3 py-8 text-center">
-        <p className="text-sm text-destructive">Failed to load reviews.</p>
-
-        <Button type="button" variant="outline" onClick={() => refetch()}>
-          Try again
-        </Button>
-      </div>
+      <QueryErrorState
+        title="Failed to load reviews"
+        description="We couldn’t load the reviews for  this course."
+        isRetrying={isFetching}
+        onRetry={() => refetch()}
+      />
     );
   }
 

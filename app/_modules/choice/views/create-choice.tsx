@@ -1,17 +1,13 @@
 "use client";
 
-import { Plus } from "lucide-react";
-import { useState } from "react";
 import { toast } from "react-toastify";
 
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 
 import { CreateChoiceData } from "../dto/create-choice";
@@ -20,21 +16,27 @@ import { useCreateChoice } from "../hooks/useCreateChoice";
 import ChoiceForm from "./choice-form";
 
 interface CreateChoiceProps {
-  questionId: string;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  questionId: string | null;
   choicesCount: number;
 }
 
 export default function CreateChoice({
+  open,
+  onOpenChange,
   questionId,
   choicesCount,
 }: CreateChoiceProps) {
-  const [open, setOpen] = useState(false);
-
   const { mutateAsync: createChoice, isPending } = useCreateChoice();
 
   const reachedLimit = choicesCount >= 5;
 
   const handleSubmit = async (data: CreateChoiceData) => {
+    if (!questionId || reachedLimit) {
+      return;
+    }
+
     try {
       await createChoice({
         questionId,
@@ -42,7 +44,7 @@ export default function CreateChoice({
       });
 
       toast.success("Choice created successfully");
-      setOpen(false);
+      onOpenChange(false);
     } catch {
       toast.error("Failed to create choice");
     }
@@ -52,31 +54,12 @@ export default function CreateChoice({
     <Dialog
       open={open}
       onOpenChange={(value) => {
-        if (!isPending && !reachedLimit) {
-          setOpen(value);
+        if (!isPending) {
+          onOpenChange(value);
         }
       }}
     >
-      <DialogTrigger
-        render={
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            disabled={reachedLimit}
-            title={
-              reachedLimit
-                ? "A question cannot have more than 5 choices"
-                : undefined
-            }
-          >
-            <Plus className="size-4" />
-            Add choice
-          </Button>
-        }
-      />
-
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>Create choice</DialogTitle>
 
@@ -85,11 +68,14 @@ export default function CreateChoice({
           </DialogDescription>
         </DialogHeader>
 
-        <ChoiceForm
-          submitLabel="Create choice"
-          isPending={isPending}
-          onSubmit={handleSubmit}
-        />
+        {questionId && !reachedLimit && (
+          <ChoiceForm
+            key={`${questionId}-${choicesCount}`}
+            submitLabel="Create choice"
+            isPending={isPending}
+            onSubmit={handleSubmit}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );

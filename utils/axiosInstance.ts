@@ -17,7 +17,7 @@ type CsrfResponse = {
 
 type ApiErrorResponse = {
   code?: string;
-  message?: string;
+  message?: string | string[];
 };
 
 type RetryableRequestConfig = InternalAxiosRequestConfig & {
@@ -36,12 +36,6 @@ let refreshRequest: Promise<void> | null = null;
 
 const unsafeMethods = new Set(["post", "put", "patch", "delete"]);
 
-/**
- * These routes may legitimately return 401.
- * A failed login, for example, must not trigger token refresh.
- *
- * Update the route names if your backend uses different paths.
- */
 const refreshExcludedRoutes = [
   "/api/auth/login",
   "/api/auth/register",
@@ -60,23 +54,50 @@ function shouldSkipRefresh(url?: string): boolean {
   return refreshExcludedRoutes.some((route) => url.includes(route));
 }
 
+function getErrorMessage(error: AxiosError<ApiErrorResponse>): string {
+  const message = error.response?.data?.message;
+
+  if (Array.isArray(message)) {
+    return message.join(" ");
+  }
+
+  return message ?? "";
+}
+
 function isInvalidCsrfError(
   error: unknown,
 ): error is AxiosError<ApiErrorResponse> {
+  if (!axios.isAxiosError<ApiErrorResponse>(error)) {
+    return false;
+  }
+
+  if (error.response?.status !== 403) {
+    return false;
+  }
+
+  const code = error.response.data?.code;
+  const message = getErrorMessage(error).toLowerCase();
+
   return (
-    axios.isAxiosError<ApiErrorResponse>(error) &&
-    error.response?.status === 403 &&
-    error.response.data?.code === "INVALID_CSRF_TOKEN"
+    code === "INVALID_CSRF_TOKEN" ||
+    message.includes("invalid csrf token") ||
+    message.includes("csrf token is invalid")
   );
 }
 
-/**
- * Notify the React application that the authentication session has expired.
- *
- * Later, a client component can listen to this event and:
- * - clear authenticated queries
- * - redirect the user to /login
- */
+function isAuthenticationMutation(url?: string): boolean {
+  if (!url) {
+    return false;
+  }
+
+  return (
+    url.includes("/api/auth/login") ||
+    url.includes("/api/auth/register") ||
+    url.includes("/api/auth/logout") ||
+    url.includes("/api/auth/refresh")
+  );
+}
+
 function notifySessionExpired(): void {
   if (typeof window === "undefined") {
     return;
@@ -90,17 +111,10 @@ function notifySessionExpired(): void {
 /* -------------------------------------------------------------------------- */
 
 async function requestCsrfToken(): Promise<string> {
-  /*
-   * Reuse the token already stored in memory.
-   */
   if (csrfToken) {
     return csrfToken;
   }
 
-  /*
-   * If another request is currently getting a CSRF token,
-   * wait for the same request instead of sending another one.
-   */
   if (csrfRequest) {
     return csrfRequest;
   }
@@ -136,13 +150,6 @@ export function clearCsrfToken(): void {
 /*                              Refresh Handling                              */
 /* -------------------------------------------------------------------------- */
 
-/**
- * Sends the real refresh request.
- *
- * We deliberately use the default Axios client instead of `api`.
- * This prevents the refresh request from entering the same response
- * interceptor and creating a refresh loop.
- */
 async function executeRefreshRequest(token: string): Promise<void> {
   await axios.post(
     `${API_DOMAIN}/api/auth/refresh`,
@@ -154,14 +161,14 @@ async function executeRefreshRequest(token: string): Promise<void> {
       },
     },
   );
+
+  /*
+   * Refresh may rotate cookies.
+   * Do not reuse the CSRF token that existed before refresh.
+   */
+  clearCsrfToken();
 }
 
-/**
- * Refreshes the access-token cookie.
- *
- * Only one refresh request is allowed at a time. If several protected
- * requests receive 401 together, all of them wait for the same Promise.
- */
 async function refreshAccessToken(): Promise<void> {
   if (refreshRequest) {
     return refreshRequest;
@@ -173,15 +180,6 @@ async function refreshAccessToken(): Promise<void> {
 
       await executeRefreshRequest(token);
     } catch (error: unknown) {
-      /*
-       * The access token may expire while the CSRF token cached in memory
-       * has also become invalid.
-       *
-       * In that case:
-       * 1. Clear the old CSRF token.
-       * 2. Get a fresh CSRF token.
-       * 3. Retry refresh once.
-       */
       if (!isInvalidCsrfError(error)) {
         throw error;
       }
@@ -209,12 +207,6 @@ api.interceptors.request.use(
   ): Promise<InternalAxiosRequestConfig> => {
     const method = config.method?.toLowerCase() ?? "get";
 
-    /*
-     * The backend ignores CSRF validation for:
-     * GET, HEAD and OPTIONS.
-     *
-     * Therefore, we add the header only to unsafe methods.
-     */
     if (unsafeMethods.has(method)) {
       const token = await requestCsrfToken();
 
@@ -232,7 +224,20 @@ api.interceptors.request.use(
 /* -------------------------------------------------------------------------- */
 
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    /*
+     * Login, register, logout and refresh may change the cookies
+     * associated with the current session.
+     *
+     * Remove the old in-memory token so the next POST/PATCH/DELETE
+     * receives a CSRF token matching the new session.
+     */
+    if (isAuthenticationMutation(response.config.url)) {
+      clearCsrfToken();
+    }
+
+    return response;
+  },
 
   async (error: AxiosError<ApiErrorResponse>) => {
     const originalRequest = error.config as RetryableRequestConfig | undefined;
@@ -245,11 +250,7 @@ api.interceptors.response.use(
     /*                         Invalid CSRF Token                              */
     /* ---------------------------------------------------------------------- */
 
-    const isInvalidCsrf =
-      error.response?.status === 403 &&
-      error.response.data?.code === "INVALID_CSRF_TOKEN";
-
-    if (isInvalidCsrf && !originalRequest._csrfRetry) {
+    if (isInvalidCsrfError(error) && !originalRequest._csrfRetry) {
       originalRequest._csrfRetry = true;
 
       try {
@@ -269,10 +270,8 @@ api.interceptors.response.use(
     /*                         Expired Access Token                            */
     /* ---------------------------------------------------------------------- */
 
-    const isUnauthorized = error.response?.status === 401;
-
     const canAttemptRefresh =
-      isUnauthorized &&
+      error.response?.status === 401 &&
       !originalRequest._authRetry &&
       !shouldSkipRefresh(originalRequest.url);
 
@@ -280,32 +279,19 @@ api.interceptors.response.use(
       originalRequest._authRetry = true;
 
       try {
-        /*
-         * POST /api/auth/refresh:
-         *
-         * - sends refresh_token automatically through cookies
-         * - sends X-CSRF-Token manually
-         * - receives a new access_token cookie
-         */
         await refreshAccessToken();
 
-        /*
-         * Retry the original failed request.
-         *
-         * The browser automatically attaches the new access-token cookie.
-         */
+        const method = originalRequest.method?.toLowerCase() ?? "get";
+
+        if (unsafeMethods.has(method)) {
+          const freshToken = await requestCsrfToken();
+
+          originalRequest.headers.set("X-CSRF-Token", freshToken);
+        }
+
         return api(originalRequest);
       } catch (refreshError: unknown) {
-        /*
-         * The refresh token may be:
-         * - expired
-         * - missing
-         * - revoked
-         * - invalid
-         *
-         * The React application should now clear authenticated state
-         * and redirect the user to the login page.
-         */
+        clearCsrfToken();
         notifySessionExpired();
 
         return Promise.reject(refreshError);
@@ -315,4 +301,3 @@ api.interceptors.response.use(
     return Promise.reject(error);
   },
 );
-

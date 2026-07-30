@@ -34,6 +34,8 @@ import defaultUserImage from "@/public/assets/default-user1.png";
 import transformingTheDateToATextString from "@/utils/from-date-to-string";
 import { UserRole } from "../entity/user";
 import Link from "next/link";
+import { TableSkeleton } from "@/components/skeletons/table-skeleton";
+import QueryErrorState from "@/components/sharing/query-error-state";
 
 const ROLE_OPTIONS: { label: string; value: UserRole | undefined }[] = [
   { label: "All Roles", value: undefined },
@@ -48,7 +50,7 @@ export default function UsersTable() {
   const [selectedRole, setSelectedRole] = useState<UserRole | undefined>();
   const [appliedRole, setAppliedRole] = useState<UserRole | undefined>();
 
-  const { data, isLoading } = useGetUsers({
+  const { data, isLoading, isError, refetch, isFetching} = useGetUsers({
     page,
     limit: 10,
     userRole: appliedRole,
@@ -66,12 +68,18 @@ export default function UsersTable() {
   };
 
   if (isLoading) {
-    //todo create skeleton component
-    return <div>Loading...</div>;
+    return <TableSkeleton />;
   }
 
-  if (!data) {
-    return <div>No users found</div>;
+  if (!isError) {
+    return (
+      <QueryErrorState
+        title="Failed to load users"
+        description="We couldn’t load the users. Please try again"
+        isRetrying={isFetching}
+        onRetry={() => refetch()}
+      />
+    );
   }
 
   const goToPreviousPage = () => {

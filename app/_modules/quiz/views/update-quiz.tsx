@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { Pencil } from "lucide-react";
 import { toast } from "react-toastify";
 
 import {
@@ -10,9 +8,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
 import { CreateQuizData } from "../dto/create-quiz";
 import { Quiz } from "../entity/quiz";
@@ -21,15 +17,23 @@ import { useUpdateQuiz } from "../hooks/useUpdateQuiz";
 import QuizForm from "./quiz-form";
 
 interface UpdateQuizProps {
-  quiz: Quiz;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  quiz: Quiz | null;
 }
 
-export default function UpdateQuiz({ quiz }: UpdateQuizProps) {
-  const [open, setOpen] = useState(false);
-
+export default function UpdateQuiz({
+  open,
+  onOpenChange,
+  quiz,
+}: UpdateQuizProps) {
   const { mutateAsync: updateQuiz, isPending } = useUpdateQuiz();
 
   const handleSubmit = async (data: CreateQuizData) => {
+    if (!quiz) {
+      return;
+    }
+
     try {
       await updateQuiz({
         quizId: quiz.id,
@@ -38,7 +42,7 @@ export default function UpdateQuiz({ quiz }: UpdateQuizProps) {
       });
 
       toast.success("Quiz updated successfully");
-      setOpen(false);
+      onOpenChange(false);
     } catch {
       toast.error("Failed to update quiz");
     }
@@ -49,25 +53,11 @@ export default function UpdateQuiz({ quiz }: UpdateQuizProps) {
       open={open}
       onOpenChange={(value) => {
         if (!isPending) {
-          setOpen(value);
+          onOpenChange(value);
         }
       }}
     >
-      <DialogTrigger
-        render={
-          <DropdownMenuItem
-            onSelect={(event) => {
-              event.preventDefault();
-              setOpen(true);
-            }}
-          >
-            <Pencil className="size-4" />
-            Edit quiz
-          </DropdownMenuItem>
-        }
-      />
-
-      <DialogContent className="sm:max-w-xl">
+      <DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-xl">
         <DialogHeader>
           <DialogTitle>Update quiz</DialogTitle>
 
@@ -76,16 +66,19 @@ export default function UpdateQuiz({ quiz }: UpdateQuizProps) {
           </DialogDescription>
         </DialogHeader>
 
-        <QuizForm
-          defaultValues={{
-            title: quiz.title,
-            passingScore: quiz.passingScore,
-            maxAttempts: quiz.maxAttempts,
-          }}
-          submitLabel="Update quiz"
-          isPending={isPending}
-          onSubmit={handleSubmit}
-        />
+        {quiz && (
+          <QuizForm
+            key={quiz.id}
+            defaultValues={{
+              title: quiz.title,
+              passingScore: quiz.passingScore,
+              maxAttempts: quiz.maxAttempts,
+            }}
+            submitLabel="Update quiz"
+            isPending={isPending}
+            onSubmit={handleSubmit}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );

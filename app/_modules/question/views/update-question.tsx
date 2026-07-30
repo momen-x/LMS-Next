@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { Pencil } from "lucide-react";
 import { toast } from "react-toastify";
 
 import {
@@ -10,9 +8,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
 import { CreateQuestionData } from "../dto/create-question";
 import { Question } from "../entity/question";
@@ -21,15 +17,23 @@ import { useUpdateQuestion } from "../hooks/useUpdateQuestion";
 import QuestionForm from "./question-form";
 
 interface UpdateQuestionProps {
-  question: Question;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  question: Question | null;
 }
 
-export default function UpdateQuestion({ question }: UpdateQuestionProps) {
-  const [open, setOpen] = useState(false);
-
+export default function UpdateQuestion({
+  open,
+  onOpenChange,
+  question,
+}: UpdateQuestionProps) {
   const { mutateAsync: updateQuestion, isPending } = useUpdateQuestion();
 
   const handleSubmit = async (data: CreateQuestionData) => {
+    if (!question) {
+      return;
+    }
+
     try {
       await updateQuestion({
         questionId: question.id,
@@ -38,7 +42,7 @@ export default function UpdateQuestion({ question }: UpdateQuestionProps) {
       });
 
       toast.success("Question updated successfully");
-      setOpen(false);
+      onOpenChange(false);
     } catch {
       toast.error("Failed to update question");
     }
@@ -49,25 +53,11 @@ export default function UpdateQuestion({ question }: UpdateQuestionProps) {
       open={open}
       onOpenChange={(value) => {
         if (!isPending) {
-          setOpen(value);
+          onOpenChange(value);
         }
       }}
     >
-      <DialogTrigger
-        render={
-          <DropdownMenuItem
-            onSelect={(event) => {
-              event.preventDefault();
-              setOpen(true);
-            }}
-          >
-            <Pencil className="size-4" />
-            Edit question
-          </DropdownMenuItem>
-        }
-      />
-
-      <DialogContent className="sm:max-w-xl">
+      <DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-xl">
         <DialogHeader>
           <DialogTitle>Update question</DialogTitle>
 
@@ -76,14 +66,17 @@ export default function UpdateQuestion({ question }: UpdateQuestionProps) {
           </DialogDescription>
         </DialogHeader>
 
-        <QuestionForm
-          defaultValues={{
-            text: question.text,
-          }}
-          submitLabel="Update question"
-          isPending={isPending}
-          onSubmit={handleSubmit}
-        />
+        {question && (
+          <QuestionForm
+            key={question.id}
+            defaultValues={{
+              text: question.text,
+            }}
+            submitLabel="Update question"
+            isPending={isPending}
+            onSubmit={handleSubmit}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );

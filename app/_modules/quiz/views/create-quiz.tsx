@@ -1,17 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import { Plus } from "lucide-react";
 import { toast } from "react-toastify";
 
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 
 import { CreateQuizData } from "../dto/create-quiz";
@@ -20,15 +16,23 @@ import { useCreateQuiz } from "../hooks/useCreateQuiz";
 import QuizForm from "./quiz-form";
 
 interface CreateQuizProps {
-  lessonId: string;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  lessonId: string | null;
 }
 
-export default function CreateQuiz({ lessonId }: CreateQuizProps) {
-  const [open, setOpen] = useState(false);
-
+export default function CreateQuiz({
+  open,
+  onOpenChange,
+  lessonId,
+}: CreateQuizProps) {
   const { mutateAsync: createQuiz, isPending } = useCreateQuiz();
 
   const handleSubmit = async (data: CreateQuizData) => {
+    if (!lessonId) {
+      return;
+    }
+
     try {
       await createQuiz({
         lessonId,
@@ -36,7 +40,7 @@ export default function CreateQuiz({ lessonId }: CreateQuizProps) {
       });
 
       toast.success("Quiz created successfully");
-      setOpen(false);
+      onOpenChange(false);
     } catch {
       toast.error("Failed to create quiz");
     }
@@ -47,31 +51,25 @@ export default function CreateQuiz({ lessonId }: CreateQuizProps) {
       open={open}
       onOpenChange={(value) => {
         if (!isPending) {
-          setOpen(value);
+          onOpenChange(value);
         }
       }}
     >
-      <DialogTrigger
-        render={
-          <Button type="button" variant="outline" size="sm">
-            <Plus className="size-4" />
-            Add quiz
-          </Button>
-        }
-      />
-
-      <DialogContent className="sm:max-w-xl">
+      <DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-xl">
         <DialogHeader>
           <DialogTitle>Create quiz</DialogTitle>
 
           <DialogDescription>Add a new quiz to this lesson.</DialogDescription>
         </DialogHeader>
 
-        <QuizForm
-          submitLabel="Create quiz"
-          isPending={isPending}
-          onSubmit={handleSubmit}
-        />
+        {lessonId && (
+          <QuizForm
+            key={lessonId}
+            submitLabel="Create quiz"
+            isPending={isPending}
+            onSubmit={handleSubmit}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );
