@@ -2,6 +2,7 @@ import { CreateCourseData } from "../dto/create-course";
 import { TSearchCoursesParams } from "../dto/search-course";
 import { UpdateCourseData } from "../dto/update-course";
 import { Course } from "../entity/course";
+import { InstructorEnrollmentStats } from "../entity/instructour-users-enrollments";
 import { SearchCoursesResponse } from "../entity/search-response-type";
 import { ICourseAPI } from "./course";
 import { api } from "@/utils/axiosInstance";
@@ -83,4 +84,9 @@ export const resCourse: ICourseAPI = {
     const res = await api.get<Course[]>(`${BASE_URL}/${instructorId}/courses`);
     return res.data;
   },
+  findCourseUserEnrollment:
+    async function (): Promise<InstructorEnrollmentStats> {
+      const res = await api.get("/api/courses/instructor/enrollment-stats");
+      return res.data;
+    },
 };

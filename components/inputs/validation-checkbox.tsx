@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { Field, FieldError } from "@/components/ui/field";
 import { Checkbox } from "@/components/ui/checkbox";

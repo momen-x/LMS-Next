@@ -2,6 +2,7 @@ import { CreateCourseData } from "../dto/create-course";
 import { TSearchCoursesParams } from "../dto/search-course";
 import { UpdateCourseData } from "../dto/update-course";
 import { Course } from "../entity/course";
+import { InstructorEnrollmentStats } from "../entity/instructour-users-enrollments";
 import { SearchCoursesResponse } from "../entity/search-response-type";
 
 export interface ICourseAPI {
@@ -13,4 +14,5 @@ export interface ICourseAPI {
   create: (data: CreateCourseData) => Promise<Course>;
   update: (id: string, data: UpdateCourseData) => Promise<Course>;
   delete: (id: string) => Promise<Course>;
+  findCourseUserEnrollment: () => Promise<InstructorEnrollmentStats>;
 }

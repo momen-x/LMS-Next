@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import { useLogout } from "../hooks/useLogout";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";

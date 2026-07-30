@@ -1,9 +1,11 @@
-import React from 'react'
+import InstructorDashboardView from "@/app/_modules/instructor/views/instructor-dashboard-view";
 
 const InstructorDashboardPage = () => {
   return (
-    <div>InstructorDashboardPage</div>
-  )
-}
+    <div>
+      <InstructorDashboardView />
+    </div>
+  );
+};
 
-export default InstructorDashboardPage
+export default InstructorDashboardPage;

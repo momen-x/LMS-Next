@@ -1,4 +1,3 @@
-import React from "react";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, Home, MessageSquare } from "lucide-react";
 import serverErrorImage from "@/public/assets/server-error.png";
