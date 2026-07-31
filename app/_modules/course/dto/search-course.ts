@@ -4,7 +4,8 @@ export type TSearchCoursesParams = {
   page?: number;
   limit?: number;
   category?: string;
-  price?: number;
+  minPrice?: number;
+  maxPrice?: number;
   level?: CourseLevel,
   language?: string;
 };

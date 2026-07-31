@@ -1,6 +1,6 @@
 import { Metadata } from "next";
-import InstructorDashboard from "../../_modules/instructor/views/instructor-dashboard";
 import RoleGuard from "@/components/guards/RoleGuard";
+import InstructorDashboard from "@/app/_modules/instructor-dashboard/views/instructor-dashboard";
 
 export const metadata: Metadata = {
   title: "Instructor Dashboard",

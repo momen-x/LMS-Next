@@ -53,7 +53,7 @@ function capitalize(value: string): string {
 
   return value.charAt(0).toUpperCase() + value.slice(1);
 }
-
+//todo there more one function the same this function, stop the dry
 function formatDuration(minutes: number = 0): string {
   const hours = Math.floor(minutes / 60);
   const remainingMinutes = minutes % 60;

@@ -2,7 +2,7 @@ import { CreateCourseData } from "../dto/create-course";
 import { TSearchCoursesParams } from "../dto/search-course";
 import { UpdateCourseData } from "../dto/update-course";
 import { Course } from "../entity/course";
-import { InstructorEnrollmentStats } from "../entity/instructour-users-enrollments";
+import { InstructorEnrollmentStats } from "../entity/instructor-users-enrollments";
 import { SearchCoursesResponse } from "../entity/search-response-type";
 import { ICourseAPI } from "./course";
 import { api } from "@/utils/axiosInstance";
@@ -35,7 +35,15 @@ export const resCourse: ICourseAPI = {
   search: async (
     params: TSearchCoursesParams = {},
   ): Promise<SearchCoursesResponse> => {
-    const { page = 1, limit = 10, category, price, level, language } = params;
+    const {
+      page = 1,
+      limit = 10,
+      category,
+      minPrice,
+      maxPrice,
+      level,
+      language,
+    } = params;
 
     const searchParams = new URLSearchParams({
       page: String(page),
@@ -43,7 +51,8 @@ export const resCourse: ICourseAPI = {
     });
 
     if (category) searchParams.set("category", category);
-    if (price !== undefined) searchParams.set("price", String(price));
+    if (minPrice !== undefined) searchParams.set("price", String(minPrice));
+    if (maxPrice !== undefined) searchParams.set("price", String(maxPrice));
     if (level) searchParams.set("level", level);
     if (language) searchParams.set("language", language);
 

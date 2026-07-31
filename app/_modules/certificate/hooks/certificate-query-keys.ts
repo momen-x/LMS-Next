@@ -6,6 +6,9 @@ export const certificateQueryKeys = {
   course: (courseId: string) =>
     [...certificateQueryKeys.all, "course", courseId] as const,
 
+  user: (userId: string) =>
+    [...certificateQueryKeys.all, "user", userId] as const,
+
   student: (courseId: string, studentId: string) =>
     [...certificateQueryKeys.all, "student", courseId, studentId] as const,
 

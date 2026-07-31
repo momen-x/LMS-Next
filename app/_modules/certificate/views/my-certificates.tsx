@@ -2,7 +2,7 @@
 
 import { Award } from "lucide-react";
 
-import {getErrorMessage} from "@/utils/get-axios-error-message";
+import { getErrorMessage } from "@/utils/get-axios-error-message";
 
 import { Certificate } from "../entity/certificate";
 import { useGetMyCertificates } from "../hooks/useGetMyCertificates";
@@ -70,7 +70,7 @@ export default function MyCertificates({
         <CertificateCard
           key={certificate.id}
           certificate={certificate}
-          onView={onViewCertificate}
+          onPreview={onViewCertificate || (() => {})}
         />
       ))}
     </div>

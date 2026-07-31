@@ -163,7 +163,7 @@ export default function ContactPage() {
               </p>
 
               <Link
-                href="mailto:mazenmoabdo@gmail.com"
+                href="mailto:moamenalswafiri@gmail.com"
                 className={cn(
                   buttonVariants({ variant: "default" }),
                   "mt-5 w-full gap-2",

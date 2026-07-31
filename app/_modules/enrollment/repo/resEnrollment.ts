@@ -3,7 +3,7 @@ import { Enrollment } from "../entity/enrollment";
 import { EnrollmentWithCourse } from "../entity/enrollment-course";
 import type { EnrollmentWithStudent } from "../entity/enrollment-student";
 import { GetMyEnrollmentsParams } from "../types/get-my-enrollments";
-import { IEnrollmentAPI } from "./enrollment";
+import { IEnrollmentAPI, UserEnrollmentStats } from "./enrollment";
 import { api } from "@/utils/axiosInstance";
 
 const BASE_URL = "/api/enrollments";
@@ -43,6 +43,10 @@ export const resEnrollment: IEnrollmentAPI = {
   },
   deleteEnrollment: async function (enrollmentId: string): Promise<Enrollment> {
     const res = await api.delete<Enrollment>(`${BASE_URL}/${enrollmentId}`);
+    return res.data;
+  },
+  getUserEnrollmentStats: async function (): Promise<UserEnrollmentStats> {
+    const res = await api.get<UserEnrollmentStats>(`${BASE_URL}/me/stats`);
     return res.data;
   },
 };

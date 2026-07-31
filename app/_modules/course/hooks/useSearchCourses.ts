@@ -7,7 +7,8 @@ export const useSearchCourses = ({
   page = 1,
   limit = 10,
   category,
-  price,
+  minPrice,
+  maxPrice,
   level,
   language,
 }: TSearchCoursesParams = {}) => {
@@ -17,11 +18,20 @@ export const useSearchCourses = ({
       page,
       limit,
       category,
-      price,
+      minPrice,
+      maxPrice,
       level,
       language,
     ],
     queryFn: () =>
-      resCourse.search({ page, limit, category, price, level, language }),
+      resCourse.search({
+        page,
+        limit,
+        category,
+        minPrice,
+        maxPrice,
+        level,
+        language,
+      }),
   });
 };

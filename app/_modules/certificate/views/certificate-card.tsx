@@ -1,79 +1,61 @@
 "use client";
 
-import { Award, CalendarDays, Hash } from "lucide-react";
+import { Award, Calendar, Eye } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 
 import { Certificate } from "../entity/certificate";
+import transformingTheDateToATextString from "@/utils/from-date-to-string";
 
-type CertificateCardProps = {
+interface CertificateCardProps {
   certificate: Certificate;
-  courseTitle?: string;
-  onView?: (certificate: Certificate) => void;
-};
+  onPreview: (certificate: Certificate) => void;
+}
 
 export default function CertificateCard({
   certificate,
-  courseTitle,
-  onView,
+  onPreview,
 }: CertificateCardProps) {
-  const issueDate = new Intl.DateTimeFormat("en", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  }).format(new Date(certificate.issueDate));
+  const issueDate = transformingTheDateToATextString(certificate.issueDate);
 
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center gap-3">
-        <div className="flex size-11 items-center justify-center rounded-full bg-primary/10">
-          <Award className="size-5 text-primary" />
+    <Card className="overflow-hidden border bg-card shadow-sm transition-shadow hover:shadow-md">
+      <CardContent className="space-y-4 p-4">
+        <div className="flex items-start gap-3">
+          <div className="flex size-12 shrink-0 items-center justify-center rounded-xl border bg-primary/10 text-primary">
+            <Award className="size-6" />
+          </div>
+
+          <div className="min-w-0 flex-1">
+            <h3 className="truncate text-sm font-semibold">
+              Course Certificate
+            </h3>
+
+            <p className="mt-1 truncate text-xs text-muted-foreground">
+              Certificate #{certificate.certificateNumber}
+            </p>
+
+            <p className="mt-2 flex items-center gap-1 text-xs text-muted-foreground">
+              <Calendar className="size-3.5" />
+              Issued {issueDate}
+            </p>
+          </div>
         </div>
 
-        <div>
-          <p className="text-sm text-muted-foreground">
-            Certificate of Completion
-          </p>
-
-          <h3 className="font-semibold">{courseTitle ?? "Completed Course"}</h3>
-        </div>
-      </CardHeader>
-
-      <CardContent className="space-y-3">
-        <div className="flex items-center gap-2 text-sm">
-          <Hash className="size-4 text-muted-foreground" />
-
-          <span className="text-muted-foreground">Certificate number:</span>
-
-          <span className="font-medium">{certificate.certificateNumber}</span>
-        </div>
-
-        <div className="flex items-center gap-2 text-sm">
-          <CalendarDays className="size-4 text-muted-foreground" />
-
-          <span className="text-muted-foreground">Issued:</span>
-
-          <span className="font-medium">{issueDate}</span>
-        </div>
-      </CardContent>
-
-      {onView && (
-        <CardFooter>
+        <div className="border-t pt-3">
           <Button
             type="button"
-            className="w-full"
-            onClick={() => onView(certificate)}
+            variant="outline"
+            size="sm"
+            className="w-full gap-2"
+            onClick={() => onPreview(certificate)}
           >
-            View Certificate
+            <Eye className="size-4" />
+            View certificate
           </Button>
-        </CardFooter>
-      )}
+        </div>
+      </CardContent>
     </Card>
   );
 }

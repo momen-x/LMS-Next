@@ -1,4 +1,4 @@
-import { LayoutDashboardIcon } from "lucide-react";
+import { BookOpenCheck, CreditCard, LayoutDashboardIcon, Users } from "lucide-react";
 
 export const dashboardNaves = [
   {
@@ -7,17 +7,17 @@ export const dashboardNaves = [
     path: "/",
   },
   {
-    icon: LayoutDashboardIcon,
+    icon: BookOpenCheck,
     label: "Courses",
     path: "/courses",
   },
   {
-    icon: LayoutDashboardIcon,
+    icon: CreditCard,
     label: "Payments",
     path: "/payments",
   },
   {
-    icon: LayoutDashboardIcon,
+    icon: Users,
     label: "Enrollments",
     path: "/enrollments",
   },

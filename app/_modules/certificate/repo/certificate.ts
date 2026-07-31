@@ -4,6 +4,7 @@ export interface ICertificateAPI {
   createCertificate(courseId: string, studentId: string): Promise<Certificate>;
 
   getCourseCertificates(courseId: string): Promise<Certificate[]>;
+  getUserCertificates(studentId: string): Promise<Certificate[]>;
 
   getMyCertificates(): Promise<Certificate[]>;
 

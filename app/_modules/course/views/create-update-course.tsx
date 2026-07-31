@@ -23,7 +23,7 @@ import { getErrorMessage } from "@/utils/get-axios-error-message";
 import BackBtn from "@/components/sharing/back-btn";
 import Link from "next/link";
 
-const LEVEL_OPTIONS = [
+export const LEVEL_OPTIONS = [
   { id: "beginner", description: "Beginner" },
   { id: "intermediate", description: "Intermediate" },
   { id: "advanced", description: "Advanced" },

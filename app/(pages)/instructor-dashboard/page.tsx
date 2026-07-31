@@ -1,4 +1,4 @@
-import InstructorDashboardView from "@/app/_modules/instructor/views/instructor-dashboard-view";
+import InstructorDashboardView from "@/app/_modules/instructor-dashboard/views/instructor-dashboard-view";
 
 const InstructorDashboardPage = () => {
   return (

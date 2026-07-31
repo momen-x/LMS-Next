@@ -2,7 +2,7 @@ import { CreateCourseData } from "../dto/create-course";
 import { TSearchCoursesParams } from "../dto/search-course";
 import { UpdateCourseData } from "../dto/update-course";
 import { Course } from "../entity/course";
-import { InstructorEnrollmentStats } from "../entity/instructour-users-enrollments";
+import { InstructorEnrollmentStats } from "../entity/instructor-users-enrollments";
 import { SearchCoursesResponse } from "../entity/search-response-type";
 
 export interface ICourseAPI {

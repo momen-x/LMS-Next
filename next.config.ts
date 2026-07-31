@@ -9,11 +9,15 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "res.cloudinary.com", 
+        hostname: "res.cloudinary.com",
       },
       {
         protocol: "https",
-        hostname: "github.com", 
+        hostname: "github.com",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
       },
     ],
   },

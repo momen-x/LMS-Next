@@ -24,6 +24,8 @@ import { CardSkeleton } from "@/components/skeletons/card-skeleton";
 import QueryErrorState from "@/components/sharing/query-error-state";
 import NoData from "@/components/sharing/no-data";
 import BackBtn from "@/components/sharing/back-btn";
+import { useGetUserCertificates } from "../../certificate/hooks/useGetUserCertificates";
+import UserCertificates from "../../certificate/views/user-certificates";
 
 const UsersDetails = ({ userId }: { userId: string }) => {
   const {
@@ -33,6 +35,13 @@ const UsersDetails = ({ userId }: { userId: string }) => {
     refetch,
     isFetching,
   } = useGetUserById(userId);
+  const {
+    data: certificates = [],
+    isPending: isCertificatesPending,
+    isError: isCertificatesError,
+    isFetching: isCertificatesFetching,
+    refetch: refetchCertificates,
+  } = useGetUserCertificates(userId);
 
   if (isLoading) {
     return <CardSkeleton />;
@@ -153,6 +162,19 @@ const UsersDetails = ({ userId }: { userId: string }) => {
             </div>
           </div>
         </CardContent>
+      </Card>
+      <Card>
+        <UserCertificates
+          certificates={certificates}
+          isPending={isCertificatesPending}
+          isError={isCertificatesError}
+          isFetching={isCertificatesFetching}
+          onRetry={() => refetchCertificates()}
+          title="Student Certificates"
+          description="Certificates earned by this student."
+          emptyTitle="No certificates found"
+          emptyDescription="This student has not earned any certificates yet."
+        />
       </Card>
     </div>
   );

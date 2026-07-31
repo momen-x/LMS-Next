@@ -16,15 +16,15 @@ const navLinks = [
 ];
 const studentDashboardLink = {
   href: "/student-dashboard",
-  label: "Student Dashboard",
+  label: "Dashboard",
 };
 const adminDashboardLink = {
   href: "/admin-dashboard",
-  label: "Admin Dashboard",
+  label: "Dashboard",
 };
 const instructorDashboardLink = {
   href: "/instructor-dashboard",
-  label: "Instructor Dashboard",
+  label: "Dashboard",
 };
 
 const Headers = () => {
