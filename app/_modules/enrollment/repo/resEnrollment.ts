@@ -2,6 +2,7 @@ import { CreateEnrollmentInput } from "../dto/create-enrollment";
 import { Enrollment } from "../entity/enrollment";
 import { EnrollmentWithCourse } from "../entity/enrollment-course";
 import type { EnrollmentWithStudent } from "../entity/enrollment-student";
+import { LessonCompletionResult } from "../entity/lesson-completion-result";
 import { GetMyEnrollmentsParams } from "../types/get-my-enrollments";
 import { IEnrollmentAPI, UserEnrollmentStats } from "./enrollment";
 import { api } from "@/utils/axiosInstance";
@@ -48,5 +49,27 @@ export const resEnrollment: IEnrollmentAPI = {
   getUserEnrollmentStats: async function (): Promise<UserEnrollmentStats> {
     const res = await api.get<UserEnrollmentStats>(`${BASE_URL}/me/stats`);
     return res.data;
+  },
+
+  completeLesson: async function (
+    enrollmentId: string,
+    lessonId: string,
+  ): Promise<LessonCompletionResult> {
+    const response = await api.post<LessonCompletionResult>(
+      `${BASE_URL}/${enrollmentId}/lessons/${lessonId}/complete`,
+    );
+
+    return response.data;
+  },
+
+  removeLessonCompletion: async function (
+    enrollmentId: string,
+    lessonId: string,
+  ): Promise<LessonCompletionResult> {
+    const response = await api.delete<LessonCompletionResult>(
+      `${BASE_URL}/${enrollmentId}/lessons/${lessonId}/complete`,
+    );
+
+    return response.data;
   },
 };
