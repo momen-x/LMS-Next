@@ -1,5 +1,9 @@
 export type CourseLevel = "beginner" | "intermediate" | "advanced";
-export type CourseStatus = "draft" | "published" | "archived";
+export type CourseStatus =
+  | "draft"
+  | "published"
+  | "archived"
+  | "pending_review";
 
 export interface Course {
   id: string;

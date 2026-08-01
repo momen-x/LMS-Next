@@ -27,6 +27,9 @@ import Link from "next/link";
 import { CardSkeleton } from "@/components/skeletons/card-skeleton";
 import QueryErrorState from "@/components/sharing/query-error-state";
 import NoData from "@/components/sharing/no-data";
+import { useSubmitCourseForReview } from "../hooks/useSubmitCourseForReview";
+import { toast } from "react-toastify";
+import { getErrorMessage } from "@/utils/get-axios-error-message";
 
 interface CourseDetailsProps {
   onEdit: string;
@@ -58,6 +61,8 @@ export default function CourseDetails({
     refetch,
     isFetching,
   } = useGetCourse(courseId);
+  const { mutate: submitCourseForReview, isPending } =
+    useSubmitCourseForReview();
 
   if (isLoading) {
     return <CardSkeleton />;
@@ -73,7 +78,7 @@ export default function CourseDetails({
     );
   }
   if (!course) {
-    return <NoData/>;
+    return <NoData />;
   }
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6 bg-background text-foreground min-h-screen">
@@ -131,11 +136,37 @@ export default function CourseDetails({
                   ? "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20"
                   : course.status === "draft"
                     ? "bg-amber-500/10 text-amber-500 border border-amber-500/20"
-                    : "bg-gray-500/10 text-gray-500 border border-gray-500/20"
+                    : course.status === "pending_review"
+                      ? "bg-yellow-500/10 text-yellow-500 border border-yellow-500/20"
+                      : "bg-gray-500/10 text-gray-500 border border-gray-500/20"
               }`}
             >
               {capitalize(course.status)}
             </span>
+            {course.status === "draft" && (
+              <Button
+                className="text-sm"
+                variant="default"
+                size="sm"
+                onClick={() =>
+                  submitCourseForReview(course.id, {
+                    onSuccess: () => {
+                      toast.success("Course submitted for review successfully");
+                    },
+                    onError: (err) => {
+                      const errMessage = getErrorMessage(err);
+                      toast.error(
+                        errMessage ??
+                          "Something went wrong, failed to submit course for review",
+                      );
+                    },
+                  })
+                }
+                disabled={isPending}
+              >
+                Submit for Review
+              </Button>
+            )}
 
             <span className="bg-muted px-2.5 py-0.5 rounded-md text-xs font-semibold text-foreground border">
               ${course.price?.toFixed(2) ?? "0.00"}

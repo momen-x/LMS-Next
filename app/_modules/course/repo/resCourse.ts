@@ -1,8 +1,10 @@
 import { CreateCourseData } from "../dto/create-course";
+import { CreateRejectMessageData } from "../dto/create-reject-message";
 import { TSearchCoursesParams } from "../dto/search-course";
 import { UpdateCourseData } from "../dto/update-course";
 import { Course } from "../entity/course";
 import { InstructorEnrollmentStats } from "../entity/instructor-users-enrollments";
+import { CourseWithInstructor } from "../entity/pending-course";
 import { SearchCoursesResponse } from "../entity/search-response-type";
 import { ICourseAPI } from "./course";
 import { api } from "@/utils/axiosInstance";
@@ -62,6 +64,10 @@ export const resCourse: ICourseAPI = {
 
     return res.data;
   },
+  getPendingCourses: async function (): Promise<CourseWithInstructor[]> {
+    const res = await api.get<CourseWithInstructor[]>(`${BASE_URL}/pending`);
+    return res.data;
+  },
   getOne: async function (id: string): Promise<Course> {
     const res = await api.get<Course>(`${BASE_URL}/${id}`);
     return res.data;
@@ -98,4 +104,21 @@ export const resCourse: ICourseAPI = {
       const res = await api.get("/api/courses/instructor/enrollment-stats");
       return res.data;
     },
+  submitForReview: async function (courseId: string): Promise<Course> {
+    const res = await api.patch<Course>(
+      `${BASE_URL}/${courseId}/submit-for-review`,
+    );
+    return res.data;
+  },
+  approveCourse: async function (courseId: string): Promise<Course> {
+    const res = await api.patch<Course>(`${BASE_URL}/${courseId}/approve`);
+    return res.data;
+  },
+  rejectCourse: async function (
+    courseId: string,
+    data: CreateRejectMessageData,
+  ): Promise<Course> {
+    const res = await api.patch<Course>(`${BASE_URL}/${courseId}/reject`, data);
+    return res.data;
+  },
 };

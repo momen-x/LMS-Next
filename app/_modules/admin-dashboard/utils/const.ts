@@ -1,5 +1,6 @@
 import {
   BookOpenCheck,
+  CircleDashed,
   CreditCard,
   LayoutDashboardIcon,
   MessageSquarePlus,
@@ -19,8 +20,7 @@ export const dashboardNaves = [
     path: "/categories",
   },
   { icon: BookOpenCheck, label: "Courses", path: "/courses" },
+  { icon: CircleDashed, label: "Draft Courses", path: "/draft-courses" },
 
   { icon: CreditCard, label: "Payments", path: "/payments" },
 ];
-
-

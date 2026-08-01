@@ -32,23 +32,24 @@ const AdminDashboard = ({ children }: childrenPropsType) => {
         `}
       >
         <div className="p-4 border-b flex items-center justify-between cursor-pointer">
-          <Link href={"/"}>
-            {isSidebarOpen && (
+          {isSidebarOpen && (
+            <Link href={"/"}>
               <div className="flex items-center">
                 <div className="h-8 w-8 bg-indigo-600 rounded-md flex items-center justify-center">
                   <GraduationCap className="h-5 w-5 text-white" />
                 </div>
                 <span className="ml-2 text-xl font-semibold">LMS</span>
               </div>
-            )}
-            {!isSidebarOpen && (
-              <div className="flex justify-center w-full">
-                <div className="h-8 w-8 bg-indigo-600 rounded-md flex items-center justify-center">
-                  <LayoutDashboardIcon className="h-5 w-5 text-white" />
-                </div>
+            </Link>
+          )}
+          {!isSidebarOpen && (
+            <div className="flex justify-center w-full">
+              <div className="h-8 w-8 bg-indigo-600 rounded-md flex items-center justify-center">
+                <LayoutDashboardIcon className="h-5 w-5 text-white" />
               </div>
-            )}
-          </Link>
+            </div>
+          )}
+
           <Button
             variant="ghost"
             size="icon"
