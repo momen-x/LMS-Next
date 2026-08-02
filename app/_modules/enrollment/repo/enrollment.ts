@@ -36,4 +36,5 @@ export interface IEnrollmentAPI {
     enrollmentId: string,
     lessonId: string,
   ) => Promise<LessonCompletionResult>;
+  isUserEnrolledInCourse: (courseId: string) => Promise<boolean>;
 }

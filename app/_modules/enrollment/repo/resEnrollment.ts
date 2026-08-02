@@ -72,4 +72,10 @@ export const resEnrollment: IEnrollmentAPI = {
 
     return response.data;
   },
+  isUserEnrolledInCourse: async function (courseId: string): Promise<boolean> {
+    const response = await api.get<{ isEnrollment: boolean }>(
+      `${BASE_URL}/me/enrolled/${courseId}`,
+    );
+    return response.data.isEnrollment;
+  },
 };

@@ -1,3 +1,5 @@
+import { Enrollment } from "../../enrollment/entity/enrollment";
+
 export type PaymentStatus =
   | "pending"
   | "completed"
@@ -10,7 +12,7 @@ export interface Payment {
   studentId: string;
   courseId: string;
   amount: string;
-  currency: string;
+  currency?: string;
   status: PaymentStatus;
   stripePaymentId: string | null;
   stripeSessionId: string | null;
@@ -23,3 +25,7 @@ export interface CreateCheckoutResponse {
   payment: Payment;
   checkoutUrl: string;
 }
+
+export type EnrollmentCheckoutResult =
+  | Enrollment
+  | CreateCheckoutResponse;

@@ -1,4 +1,3 @@
-
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import type { CreateEnrollmentInput } from "../dto/create-enrollment";
@@ -9,7 +8,10 @@ type CreateEnrollmentVariables = {
   courseId: string;
   input: CreateEnrollmentInput;
 };
-
+/**
+ * @description this route allowed the admin and the instructor owner the course enrollment user without pay
+ * @access UserRole : admin | instructor -> instructor owner the course 
+ */
 export function useCreateEnrollment() {
   const queryClient = useQueryClient();
 

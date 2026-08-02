@@ -22,6 +22,7 @@ const CoursePageView = ({ children }: childrenPropsType) => {
   const [priceType, setPriceType] = useState<"all" | "free" | "premium">("all");
   //   const [sortBy, setSortBy] = useState<string>("newest");
   const [category, setCategory] = useState<string>("all");
+  
 
   const { data: categories } = useGetAllCategories();
 
@@ -150,7 +151,8 @@ const CoursePageView = ({ children }: childrenPropsType) => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
             {filteredCourses.map((course) => (
-              <CourseCard key={course.id} course={course} />
+            
+              <CourseCard key={course.id} course={course}  />
             ))}
           </div>
         )}

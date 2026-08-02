@@ -10,10 +10,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Course, CourseLevel } from "../entity/course";
+import EnrollmentButton from "../../payment/views/enrollment-button.tsx";
 
 interface CourseCardProps {
   course: Course;
-  onEnroll?: (courseId: string) => void;
   className?: string;
 }
 
@@ -47,7 +47,7 @@ function formatDuration(minutes: number = 0): string {
   return `${hours}h ${remainingMinutes}m`;
 }
 
-export function CourseCard({ course, onEnroll, className }: CourseCardProps) {
+export function CourseCard({ course, className }: CourseCardProps) {
   const {
     id,
     title,
@@ -113,14 +113,12 @@ export function CourseCard({ course, onEnroll, className }: CourseCardProps) {
       </CardContent>
 
       <CardFooter className="gap-2">
-        <Link href={`/courses/${id}`}>
-          <Button variant="outline" className="flex-1">
+        <Link href={`/courses/${id}`} className="flex-1 w-[50%]">
+          <Button variant="outline" className="flex-1 w-full">
             View Course
           </Button>
         </Link>
-        <Button className="flex-1" onClick={() => onEnroll?.(id)}>
-          Enroll
-        </Button>
+        <EnrollmentButton courseId={course.id} className="w-[50%]" />
       </CardFooter>
     </Card>
   );
