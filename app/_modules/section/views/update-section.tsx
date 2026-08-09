@@ -21,6 +21,7 @@ import SectionForm from "./section-form";
 import { Section } from "../entity/section";
 import { CreateSectionData } from "../dto/create-section";
 import { useUpdateSection } from "../hooks/useUpdateSection";
+import { getErrorMessage } from "@/utils/get-axios-error-message";
 
 interface UpdateSectionProps {
   section: Section;
@@ -40,8 +41,9 @@ export default function UpdateSection({ section }: UpdateSectionProps) {
 
       toast.success("Section updated successfully");
       setOpen(false);
-    } catch {
-      toast.error("Failed to update section");
+    } catch (error) {
+      const errMessage = getErrorMessage(error);
+      toast.error(errMessage ?? "Failed to update section");
     }
   };
 

@@ -20,6 +20,7 @@ import SectionForm from "./section-form";
 
 import { useCreateSection } from "../hooks/useCreateSection";
 import { CreateSectionData } from "../dto/create-section";
+import { getErrorMessage } from "@/utils/get-axios-error-message";
 
 interface CreateSectionProps {
   courseId: string;
@@ -40,8 +41,9 @@ export default function CreateSection({ courseId, title }: CreateSectionProps) {
 
       toast.success("Section created successfully");
       setOpen(false);
-    } catch {
-      toast.error("Failed to create section");
+    } catch (error) {
+      const errMessage = getErrorMessage(error);
+      toast.error(errMessage ?? "Failed to create section");
     }
   };
 
