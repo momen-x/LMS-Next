@@ -19,6 +19,7 @@ import { useGetLesson } from "../hooks/useGetLesson";
 import { useUpdateLesson } from "../hooks/useUpdateLesson";
 
 import LessonForm from "./lesson-form";
+import { getErrorMessage } from "@/utils/get-axios-error-message";
 
 interface UpdateLessonDialogProps {
   open: boolean;
@@ -54,8 +55,9 @@ export default function UpdateLessonDialog({
 
       toast.success("Lesson updated successfully");
       onOpenChange(false);
-    } catch {
-      toast.error("Failed to update lesson");
+    } catch (error) {
+      const errMessage = getErrorMessage(error);
+      toast.error(errMessage ?? "Failed to update lesson");
     }
   };
 

@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import LessonForm from "./lesson-form";
 import { useCreateLesson } from "../hooks/useCreateLesson";
 import { CreateLessonData } from "../dto/create-lesson";
+import { getErrorMessage } from "@/utils/get-axios-error-message";
 
 interface CreateLessonDialogProps {
   open: boolean;
@@ -37,8 +38,9 @@ export default function CreateLessonDialog({
       await createLesson({ sectionId, data });
       toast.success("Lesson created successfully");
       onOpenChange(false);
-    } catch {
-      toast.error("Failed to create lesson");
+    } catch (error) {
+      const errMessage = getErrorMessage(error);
+      toast.error(errMessage ?? "Failed to create lesson");
     }
   };
 

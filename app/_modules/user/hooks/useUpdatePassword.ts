@@ -17,7 +17,7 @@ export const useUpdatePassword = (): UseMutationResult<
   return useMutation({
     mutationFn: resUserAPI.updatePassword,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [CURRENT_USER_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: CURRENT_USER_QUERY_KEY });
     },
   });
 };

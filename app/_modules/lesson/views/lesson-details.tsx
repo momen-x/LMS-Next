@@ -7,7 +7,6 @@ import {
   Eye,
   EyeOff,
   FileText,
-  HelpCircle,
   Link2,
   Pencil,
 } from "lucide-react";
@@ -44,10 +43,8 @@ function formatDuration(duration: number): string {
 
 export default function LessonDetails({
   manageMedia,
-  manageQuiz,
 }: {
   manageMedia: string;
-  manageQuiz: string;
 }) {
   const router = useRouter();
 
@@ -96,7 +93,7 @@ export default function LessonDetails({
           </h1>
 
           <p className="mt-1 text-sm text-muted-foreground">
-            View and manage the lesson content, media and quiz.
+            View and manage the lesson content and media.
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -198,11 +195,11 @@ export default function LessonDetails({
           <h3 className="text-lg font-semibold">Quick Actions</h3>
 
           <p className="mt-1 text-sm text-muted-foreground">
-            Manage the lesson media and quiz from here.
+            Manage the lesson media from here.
           </p>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4">
           <Link
             href={manageMedia}
             className="group rounded-xl border bg-muted/20 p-5 transition-all hover:border-primary/40 hover:bg-muted/40 hover:shadow-sm"
@@ -227,28 +224,6 @@ export default function LessonDetails({
             </div>
           </Link>
 
-          <Link
-            href={manageQuiz}
-            className="group rounded-xl border bg-muted/20 p-5 transition-all hover:border-primary/40 hover:bg-muted/40 hover:shadow-sm"
-          >
-            <div className="flex items-start gap-4">
-              <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                <HelpCircle className="size-5" />
-              </div>
-
-              <div className="min-w-0 flex-1">
-                <h4 className="font-semibold transition-colors group-hover:text-primary">
-                  Manage Quiz
-                </h4>
-
-                <p className="mt-1 text-sm leading-5 text-muted-foreground">
-                  Create the lesson quiz and manage its questions and choices.
-                </p>
-              </div>
-
-              <ArrowRight className="mt-1 size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
-            </div>
-          </Link>
         </div>
       </div>
       {/* Resources */}
