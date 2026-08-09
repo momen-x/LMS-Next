@@ -10,8 +10,10 @@ export const useLogin = () => {
   return useMutation({
     mutationFn: resAuth.login,
     retry: false,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [CURRENT_USER_QUERY_KEY] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: CURRENT_USER_QUERY_KEY,
+      });
     },
   });
 };

@@ -11,7 +11,7 @@ export const useRefreshToken = () => {
     mutationFn: resAuth.refreshToken,
     retry: false,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [CURRENT_USER_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: CURRENT_USER_QUERY_KEY });
     },
 
   });

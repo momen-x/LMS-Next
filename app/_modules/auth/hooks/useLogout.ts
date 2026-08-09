@@ -8,7 +8,7 @@ export const useLogout = () => {
   return useMutation({
     mutationFn: resAuth.logout,
     onSuccess: () => {
-      queryClient.setQueryData([CURRENT_USER_QUERY_KEY], null);
+      queryClient.setQueryData(CURRENT_USER_QUERY_KEY, null);
 
       queryClient.removeQueries({
         predicate: (query) => query.meta?.requiresAuth === true,

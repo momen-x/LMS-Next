@@ -1,7 +1,12 @@
+import GuestGuard from "@/components/guards/GuestGuard";
+import { childrenPropsType } from "@/types/children-type";
 
-const AuthLayout = ({ children }: { children: React.ReactNode }) => {
-  //in future the authenticated user can't go to these pages
-  return <div>{children}</div>;
+const AuthLayout = ({ children }: childrenPropsType) => {
+  return (
+    <>
+      <GuestGuard redirectTo="/">{children}</GuestGuard>
+    </>
+  );
 };
 
 export default AuthLayout;
