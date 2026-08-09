@@ -15,6 +15,7 @@ import { Quiz } from "../entity/quiz";
 import { useUpdateQuiz } from "../hooks/useUpdateQuiz";
 
 import QuizForm from "./quiz-form";
+import { getErrorMessage } from "@/utils/get-axios-error-message";
 
 interface UpdateQuizProps {
   open: boolean;
@@ -37,14 +38,15 @@ export default function UpdateQuiz({
     try {
       await updateQuiz({
         quizId: quiz.id,
-        lessonId: quiz.lessonId,
+        courseId: quiz.courseId,
         data,
       });
 
       toast.success("Quiz updated successfully");
       onOpenChange(false);
-    } catch {
-      toast.error("Failed to update quiz");
+    } catch (error) {
+      const errMessage = getErrorMessage(error);
+      toast.error(errMessage ?? "Failed to update quiz");
     }
   };
 
@@ -62,17 +64,22 @@ export default function UpdateQuiz({
           <DialogTitle>Update quiz</DialogTitle>
 
           <DialogDescription>
-            Update the quiz title, passing score, or maximum attempts.
+            Update the quiz settings, total mark, and passing percentage.
           </DialogDescription>
         </DialogHeader>
 
         {quiz && (
           <QuizForm
             key={quiz.id}
+            courseId={quiz.courseId}
             defaultValues={{
               title: quiz.title,
               passingScore: quiz.passingScore,
               maxAttempts: quiz.maxAttempts,
+              duration: quiz.duration,
+              questionCount: quiz.questionCount,
+              totalMark: quiz.totalMark,
+              questionBankId: quiz.questionBankId,
             }}
             submitLabel="Update quiz"
             isPending={isPending}

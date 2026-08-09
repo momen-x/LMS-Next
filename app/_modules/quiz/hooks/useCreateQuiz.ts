@@ -5,7 +5,7 @@ import { resQuiz } from "../repo/resQuiz";
 import { QUIZ_KEYS } from "./quiz-keys";
 
 interface CreateQuizVariables {
-  lessonId: string;
+  courseId: string;
   data: CreateQuizData;
 }
 
@@ -13,12 +13,12 @@ export function useCreateQuiz() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ lessonId, data }: CreateQuizVariables) =>
-      resQuiz.create(lessonId, data),
+    mutationFn: ({ courseId, data }: CreateQuizVariables) =>
+      resQuiz.create(courseId, data),
 
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
-        queryKey: QUIZ_KEYS.lesson(variables.lessonId),
+        queryKey: QUIZ_KEYS.course(variables.courseId),
       });
     },
   });

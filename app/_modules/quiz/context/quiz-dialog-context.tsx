@@ -15,7 +15,7 @@ import CreateQuiz from "../views/create-quiz";
 import UpdateQuiz from "../views/update-quiz";
 
 interface QuizDialogContextValue {
-  openCreateQuiz: (lessonId: string) => void;
+  openCreateQuiz: () => void;
   openUpdateQuiz: (quiz: Quiz) => void;
 }
 
@@ -33,18 +33,19 @@ export function useQuizDialog() {
 
 interface QuizDialogProviderProps {
   children: ReactNode;
+  courseId: string;
 }
 
-export function QuizDialogProvider({ children }: QuizDialogProviderProps) {
+export function QuizDialogProvider({
+  children,
+  courseId,
+}: QuizDialogProviderProps) {
   const [createOpen, setCreateOpen] = useState(false);
   const [updateOpen, setUpdateOpen] = useState(false);
 
-  const [activeLessonId, setActiveLessonId] = useState<string | null>(null);
-
   const [activeQuiz, setActiveQuiz] = useState<Quiz | null>(null);
 
-  const openCreateQuiz = useCallback((lessonId: string) => {
-    setActiveLessonId(lessonId);
+  const openCreateQuiz = useCallback(() => {
     setCreateOpen(true);
   }, []);
 
@@ -55,10 +56,6 @@ export function QuizDialogProvider({ children }: QuizDialogProviderProps) {
 
   const handleCreateOpenChange = useCallback((open: boolean) => {
     setCreateOpen(open);
-
-    if (!open) {
-      setActiveLessonId(null);
-    }
   }, []);
 
   const handleUpdateOpenChange = useCallback((open: boolean) => {
@@ -80,20 +77,18 @@ export function QuizDialogProvider({ children }: QuizDialogProviderProps) {
   return (
     <QuizDialogContext.Provider value={contextValue}>
       {children}
-      {activeLessonId && (
-        <CreateQuiz
-          open={createOpen}
-          onOpenChange={handleCreateOpenChange}
-          lessonId={activeLessonId}
-        />
-      )}
+      <CreateQuiz
+        open={createOpen}
+        onOpenChange={handleCreateOpenChange}
+        courseId={courseId}
+      />
       {activeQuiz && (
         <UpdateQuiz
           open={updateOpen}
           onOpenChange={handleUpdateOpenChange}
           quiz={activeQuiz}
         />
-      )}{" "}
+      )}
     </QuizDialogContext.Provider>
   );
 }

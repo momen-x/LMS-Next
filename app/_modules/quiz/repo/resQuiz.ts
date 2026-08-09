@@ -8,18 +8,18 @@ const BASE_URL = "/api/quizzes";
 
 export const resQuiz: IQuizAPI = {
   create: async function (
-    lessonId: string,
+    courseId: string,
     data: CreateQuizData,
   ): Promise<Quiz> {
     const response = await api.post<Quiz>(
-      `/api/lessons/${lessonId}/quizzes`,
+      `/api/courses/${courseId}/quizzes`,
       data,
     );
 
     return response.data;
   },
-  getLessonQuizzes: async function (lessonId: string): Promise<Quiz[]> {
-    const response = await api.get<Quiz[]>(`/api/lessons/${lessonId}/quizzes`);
+  getCourseQuizzes: async function (courseId: string): Promise<Quiz[]> {
+    const response = await api.get<Quiz[]>(`/api/courses/${courseId}/quizzes`);
 
     return response.data;
   },

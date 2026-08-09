@@ -1,17 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
-
+import ValidationInput from "@/components/inputs/validation-input";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+
+import { quizFields as fields } from "../utils/question-bank-fields";
 
 import { CreateQuizData, createQuizSchema } from "../dto/create-quiz";
+import { useGetCourseQuestionBank } from "../../question-bank/hooks/useGetCourseQuestionBank";
+import ValidationSelect from "../../../../components/inputs/validation-select";
 
 interface QuizFormProps {
+  courseId: string;
   defaultValues?: Partial<CreateQuizData>;
   submitLabel: string;
   isPending: boolean;
@@ -19,22 +22,25 @@ interface QuizFormProps {
 }
 
 export default function QuizForm({
+  courseId,
   defaultValues,
   submitLabel,
   isPending,
   onSubmit,
 }: QuizFormProps) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid },
-  } = useForm<CreateQuizData>({
+  const { data: questionBank, isLoading } =
+    useGetCourseQuestionBank(courseId);
+  const form = useForm<CreateQuizData>({
     resolver: zodResolver(createQuizSchema as any),
     mode: "onChange",
     defaultValues: {
       title: defaultValues?.title ?? "",
       passingScore: defaultValues?.passingScore ?? 50,
       maxAttempts: defaultValues?.maxAttempts ?? 1,
+      duration: defaultValues?.duration,
+      questionCount: defaultValues?.questionCount,
+      totalMark: defaultValues?.totalMark,
+      questionBankId: defaultValues?.questionBankId ?? "",
     },
   });
 
@@ -43,86 +49,65 @@ export default function QuizForm({
       title: data.title.trim(),
       passingScore: data.passingScore,
       maxAttempts: data.maxAttempts,
+      duration: data.duration,
+      questionCount: data.questionCount,
+      totalMark: data.totalMark,
+      questionBankId: data.questionBankId,
     };
 
     return onSubmit(normalizedData);
   };
 
   return (
-    <form onSubmit={handleSubmit(submitForm)} className="space-y-6">
-      <div className="space-y-2">
-        <Label htmlFor="quiz-title">Quiz title</Label>
+    <FormProvider {...form}>
+      <form onSubmit={form.handleSubmit(submitForm)} className="space-y-6">
+        {fields.map(({ name, title, placeholder, Icon, type }) => (
+          <div key={name} className="space-y-3 mt-5 mb-5">
+            <ValidationInput<CreateQuizData>
+              fieldTitle={
+                <>
+                  <span className="text-muted-foreground">
+                    <Icon className="h-4 w-4" />
+                  </span>
+                  <span className="text-gray-700 dark:text-gray-200">
+                    {title}
+                  </span>
+                </>
+              }
+              nameInSchema={name as keyof CreateQuizData}
+              placeholder={placeholder}
+              className="h-10 rounded-xl"
+              type={type}
+            />
+          </div>
+        ))}
 
-        <Input
-          id="quiz-title"
-          placeholder="JavaScript fundamentals quiz"
-          disabled={isPending}
-          {...register("title")}
-        />
-
-        {errors.title && (
-          <p className="text-sm text-destructive">{errors.title.message}</p>
+        {isLoading ? (
+          <>
+            <Loader2 className="size-4 animate-spin" />
+          </>
+        ) : questionBank && questionBank.length > 0 ? (
+          <ValidationSelect<CreateQuizData>
+            fieldTitle="Question Bank"
+            nameInSchema="questionBankId"
+            data={questionBank.map(({ questionsBank }) => ({
+              id: questionsBank.id,
+              description: questionsBank.title,
+            }))}
+          />
+        ) : (
+          <p className="mb-4">
+            no Question Bank yet, please create one to add quiz
+          </p>
         )}
-      </div>
 
-      <div className="grid gap-5 sm:grid-cols-2">
-        <div className="space-y-2">
-          <Label htmlFor="quiz-passing-score">Passing score percentage</Label>
-
-          <Input
-            id="quiz-passing-score"
-            type="number"
-            min={0}
-            max={100}
-            step={1}
-            placeholder="50"
-            disabled={isPending}
-            {...register("passingScore")}
-          />
-
-          <p className="text-xs text-muted-foreground">
-            The minimum score required to pass the quiz.
-          </p>
-
-          {errors.passingScore && (
-            <p className="text-sm text-destructive">
-              {errors.passingScore.message}
-            </p>
-          )}
+        <div className="flex justify-end border-t pt-5">
+          <Button type="submit" disabled={isPending || !form.formState.isValid}>
+            {isPending && <Loader2 className="size-4 animate-spin" />}
+            {isPending ? "Saving..." : submitLabel}
+          </Button>
         </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="quiz-max-attempts">Maximum attempts</Label>
-
-          <Input
-            id="quiz-max-attempts"
-            type="number"
-            min={1}
-            step={1}
-            placeholder="1"
-            disabled={isPending}
-            {...register("maxAttempts")}
-          />
-
-          <p className="text-xs text-muted-foreground">
-            The number of times a student can attempt this quiz.
-          </p>
-
-          {errors.maxAttempts && (
-            <p className="text-sm text-destructive">
-              {errors.maxAttempts.message}
-            </p>
-          )}
-        </div>
-      </div>
-
-      <div className="flex justify-end border-t pt-5">
-        <Button type="submit" disabled={isPending || !isValid}>
-          {isPending && <Loader2 className="size-4 animate-spin" />}
-
-          {isPending ? "Saving..." : submitLabel}
-        </Button>
-      </div>
-    </form>
+      </form>
+    </FormProvider>
   );
 }

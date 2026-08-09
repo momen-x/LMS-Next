@@ -2,9 +2,9 @@
 
 import {
   CircleHelp,
+  Award,
   MoreHorizontal,
   Pencil,
-  ReceiptText,
   RotateCcw,
   Target,
   Trash2,
@@ -16,26 +16,34 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLinkItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import QuizQuestions from "@/app/_modules/question/views/quiz-questions";
-
 import { Quiz } from "../entity/quiz";
 import { useQuizDialog } from "../context/quiz-dialog-context";
-import { ChoiceDialogProvider } from "../../choice/context/choice-dialog-context";
-import { QuestionDialogProvider } from "../../question/context/question-dialog-context";
+import { useDeleteQuiz } from "../hooks/useDeleteQuiz";
+import { toast } from "react-toastify";
+import { getErrorMessage } from "@/utils/get-axios-error-message";
 
 interface QuizItemProps {
   quiz: Quiz;
-  onView?: string;
-  onDelete?: string;
 }
 
-export default function QuizCard({ quiz, onView, onDelete }: QuizItemProps) {
+export default function QuizCard({ quiz }: QuizItemProps) {
   const { openUpdateQuiz } = useQuizDialog();
+  const { mutateAsync: deleteQuiz, isPending: isDeleting } = useDeleteQuiz();
+
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this quiz?")) return;
+
+    try {
+      await deleteQuiz({ quizId: quiz.id, courseId: quiz.courseId });
+      toast.success("Quiz deleted successfully");
+    } catch (error) {
+      toast.error(getErrorMessage(error) ?? "Failed to delete quiz");
+    }
+  };
 
   return (
     <article className="rounded-xl border bg-card p-4 shadow-sm">
@@ -64,6 +72,17 @@ export default function QuizCard({ quiz, onView, onDelete }: QuizItemProps) {
             </div>
 
             <div className="flex items-center gap-2">
+              <Award className="size-4" />
+
+              <span>
+                Total mark:
+                <strong className="ml-1 font-medium text-foreground">
+                  {quiz.totalMark}
+                </strong>
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2">
               <RotateCcw className="size-4" />
 
               <span>
@@ -83,7 +102,7 @@ export default function QuizCard({ quiz, onView, onDelete }: QuizItemProps) {
                 variant="ghost"
                 size="icon"
                 className="size-8 "
-                aria-label="Lesson options"
+                aria-label="Quiz options"
               >
                 <MoreHorizontal className="size-4" />
               </Button>
@@ -91,15 +110,6 @@ export default function QuizCard({ quiz, onView, onDelete }: QuizItemProps) {
           />
 
           <DropdownMenuContent align="end" className="z-50 w-40">
-            <>
-              <DropdownMenuLinkItem href={onView}>
-                <ReceiptText className="mr-2 size-3.5" />
-                View
-              </DropdownMenuLinkItem>
-
-              <DropdownMenuSeparator />
-            </>
-
             <DropdownMenuItem
               onClick={() => {
                 openUpdateQuiz(quiz);
@@ -109,27 +119,18 @@ export default function QuizCard({ quiz, onView, onDelete }: QuizItemProps) {
               Edit
             </DropdownMenuItem>
 
-            <>
-              <DropdownMenuSeparator />
+            <DropdownMenuSeparator />
 
-              <DropdownMenuLinkItem
-                href={onDelete}
-                className="text-destructive focus:text-destructive"
-              >
-                <Trash2 className="mr-2 size-3.5" />
-                Delete
-              </DropdownMenuLinkItem>
-            </>
+            <DropdownMenuItem
+              disabled={isDeleting}
+              onClick={handleDelete}
+              className="text-destructive focus:text-destructive"
+            >
+              <Trash2 className="mr-2 size-3.5" />
+              Delete
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      </div>
-
-      <div className="mt-5 border-t pt-5">
-        <QuestionDialogProvider>
-          <ChoiceDialogProvider>
-            <QuizQuestions quizId={quiz.id} />
-          </ChoiceDialogProvider>
-        </QuestionDialogProvider>
       </div>
     </article>
   );

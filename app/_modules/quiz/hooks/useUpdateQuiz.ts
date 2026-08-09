@@ -6,7 +6,7 @@ import { QUIZ_KEYS } from "./quiz-keys";
 
 interface UpdateQuizVariables {
   quizId: string;
-  lessonId: string;
+  courseId: string;
   data: UpdateQuizData;
 }
 
@@ -21,7 +21,7 @@ export function useUpdateQuiz() {
       queryClient.setQueryData(QUIZ_KEYS.detail(variables.quizId), updatedQuiz);
 
       queryClient.invalidateQueries({
-        queryKey: QUIZ_KEYS.lesson(variables.lessonId),
+        queryKey: QUIZ_KEYS.course(variables.courseId),
       });
     },
   });

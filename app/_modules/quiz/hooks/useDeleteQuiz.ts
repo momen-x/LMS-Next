@@ -5,7 +5,7 @@ import { QUIZ_KEYS } from "./quiz-keys";
 
 interface DeleteQuizVariables {
   quizId: string;
-  lessonId: string;
+  courseId: string;
 }
 
 export function useDeleteQuiz() {
@@ -16,7 +16,7 @@ export function useDeleteQuiz() {
 
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
-        queryKey: QUIZ_KEYS.lesson(variables.lessonId),
+        queryKey: QUIZ_KEYS.course(variables.courseId),
       });
 
       queryClient.removeQueries({

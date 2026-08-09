@@ -14,35 +14,33 @@ import { CreateQuizData } from "../dto/create-quiz";
 import { useCreateQuiz } from "../hooks/useCreateQuiz";
 
 import QuizForm from "./quiz-form";
+import { getErrorMessage } from "@/utils/get-axios-error-message";
 
 interface CreateQuizProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  lessonId: string | null;
+  courseId: string;
 }
 
 export default function CreateQuiz({
   open,
   onOpenChange,
-  lessonId,
+  courseId,
 }: CreateQuizProps) {
   const { mutateAsync: createQuiz, isPending } = useCreateQuiz();
 
   const handleSubmit = async (data: CreateQuizData) => {
-    if (!lessonId) {
-      return;
-    }
-
     try {
       await createQuiz({
-        lessonId,
+        courseId,
         data,
       });
 
       toast.success("Quiz created successfully");
       onOpenChange(false);
-    } catch {
-      toast.error("Failed to create quiz");
+    } catch (error) {
+      const errMessage = getErrorMessage(error);
+      toast.error(errMessage ?? "Failed to create quiz");
     }
   };
 
@@ -59,17 +57,16 @@ export default function CreateQuiz({
         <DialogHeader>
           <DialogTitle>Create quiz</DialogTitle>
 
-          <DialogDescription>Add a new quiz to this lesson.</DialogDescription>
+          <DialogDescription>Add a new quiz to this course.</DialogDescription>
         </DialogHeader>
 
-        {lessonId && (
-          <QuizForm
-            key={lessonId}
-            submitLabel="Create quiz"
-            isPending={isPending}
-            onSubmit={handleSubmit}
-          />
-        )}
+        <QuizForm
+          key={courseId}
+          courseId={courseId}
+          submitLabel="Create quiz"
+          isPending={isPending}
+          onSubmit={handleSubmit}
+        />
       </DialogContent>
     </Dialog>
   );

@@ -3,5 +3,5 @@ export const QUIZ_KEYS = {
 
   detail: (quizId: string) => [...QUIZ_KEYS.all, "detail", quizId] as const,
 
-  lesson: (lessonId: string) => [...QUIZ_KEYS.all, "lesson", lessonId] as const,
+  course: (courseId: string) => [...QUIZ_KEYS.all, "course", courseId] as const,
 };

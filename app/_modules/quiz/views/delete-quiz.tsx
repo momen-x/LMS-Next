@@ -6,12 +6,12 @@ import { useDeleteQuiz } from "../hooks/useDeleteQuiz";
 
 interface DeleteQuizProps {
   quizId: string;
-  lessonId: string;
+  courseId: string;
 }
 
 export default function DeleteQuiz({
   quizId,
-  lessonId,
+  courseId,
 }: DeleteQuizProps) {
   const { mutateAsync: deleteQuiz, isPending } = useDeleteQuiz();
 
@@ -28,7 +28,7 @@ export default function DeleteQuiz({
       onDeleteSubmit={() =>
         deleteQuiz({
           quizId,
-          lessonId,
+          courseId,
         })
       }
       successMessage="Quiz deleted successfully"

@@ -13,7 +13,6 @@ const LessonDetailsPage = async ({ params }: TParams) => {
     <div>
       <LessonDetails
         manageMedia={`/instructor-dashboard/lessons/${id}/media`}
-        manageQuiz={`/instructor-dashboard/lessons/${id}/quiz`}
       />
     </div>
   );
