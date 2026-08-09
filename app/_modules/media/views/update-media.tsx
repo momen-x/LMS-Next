@@ -15,6 +15,7 @@ import { useGetMedia } from "../hooks/useGetMedia";
 import { useUpdateMedia } from "../hooks/useUpdateMedia";
 
 import MediaForm from "./media-form";
+import { getErrorMessage } from "@/utils/get-axios-error-message";
 
 interface UpdateMediaProps {
   open: boolean;
@@ -44,8 +45,9 @@ export default function UpdateMedia({
 
       toast.success("Media updated successfully");
       onOpenChange(false);
-    } catch {
-      toast.error("Failed to update media");
+    } catch (error) {
+      const errMessage = getErrorMessage(error);
+      toast.error(errMessage ?? "Failed to update media");
     }
   };
 

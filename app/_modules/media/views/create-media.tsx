@@ -14,6 +14,7 @@ import { TCreateMedia } from "../dto/create-media";
 import { useCreateMedia } from "../hooks/useCreateMedia";
 
 import MediaForm from "./media-form";
+import { getErrorMessage } from "@/utils/get-axios-error-message";
 
 interface CreateMediaProps {
   open: boolean;
@@ -39,8 +40,9 @@ export default function CreateMedia({
 
       toast.success("Media uploaded successfully");
       onOpenChange(false);
-    } catch {
-      toast.error("Failed to upload media");
+    } catch (error) {
+      const errMessage = getErrorMessage(error);
+      toast.error(errMessage ?? "Failed to upload media");
     }
   };
 
