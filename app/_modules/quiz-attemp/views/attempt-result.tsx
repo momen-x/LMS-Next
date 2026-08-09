@@ -1,8 +1,7 @@
 "use client";
 
-import { Award, CheckCircle2, CircleX, RotateCcw, Trophy } from "lucide-react";
+import { Award, CheckCircle2, RotateCcw } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -11,7 +10,7 @@ import { QuizAttempt } from "../entity/quiz-attempt";
 
 type AttemptResultProps = {
   attempt: QuizAttempt;
-  passingScore: number;
+  totalMark: number;
   canTryAgain: boolean;
   onBackToQuiz: () => void;
   onTryAgain: () => void;
@@ -19,88 +18,52 @@ type AttemptResultProps = {
 
 export default function AttemptResult({
   attempt,
-  passingScore,
+  totalMark,
   canTryAgain,
   onBackToQuiz,
   onTryAgain,
 }: AttemptResultProps) {
-  const score = attempt.score ?? 0;
-  const correctAnswers = attempt.correctAnswers ?? 0;
-  const totalQuestions = attempt.totalQuestions ?? 0;
-  const incorrectAnswers = Math.max(totalQuestions - correctAnswers, 0);
-
-  const hasPassed = score >= passingScore;
+  const score = attempt.score;
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
       <Card>
         <CardHeader className="items-center border-b text-center">
-          <div
-            className={
-              hasPassed
-                ? "flex size-16 items-center justify-center rounded-full bg-green-100 text-green-700"
-                : "flex size-16 items-center justify-center rounded-full bg-destructive/10 text-destructive"
-            }
-          >
-            {hasPassed ? (
-              <Trophy className="size-8" />
-            ) : (
-              <Award className="size-8" />
-            )}
+          <div className="flex size-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <Award className="size-8" />
           </div>
 
-          <CardTitle className="mt-3 text-2xl">
-            {hasPassed ? "Great Job!" : "Attempt Completed"}
-          </CardTitle>
-
-          <Badge
-            variant={hasPassed ? "default" : "destructive"}
-            className={
-              hasPassed ? "bg-green-600 hover:bg-green-600" : undefined
-            }
-          >
-            {hasPassed ? "Passed" : "Not Passed"}
-          </Badge>
+          <CardTitle className="mt-3 text-2xl">Attempt Completed</CardTitle>
         </CardHeader>
 
         <CardContent className="space-y-8 p-6">
           <div className="mx-auto max-w-md text-center">
             <p className="text-sm text-muted-foreground">Your score</p>
 
-            <p
-              className={
-                hasPassed
-                  ? "mt-2 text-6xl font-bold text-green-600"
-                  : "mt-2 text-6xl font-bold text-destructive"
-              }
-            >
-              {Math.round(score)}%
+            <p className="mt-2 text-6xl font-bold text-primary">
+              {score !== null ? `${score}%` : "—"}
             </p>
 
-            <Progress value={score} className="mt-5" />
-
-            <p className="mt-3 text-sm text-muted-foreground">
-              Passing score: {passingScore}%
-            </p>
+            <Progress value={score ?? 0} className="mt-5" />
           </div>
 
           <div className="grid gap-4 sm:grid-cols-3">
             <ResultItem
               icon={CheckCircle2}
               label="Correct answers"
-              value={correctAnswers}
+              value={`${attempt.correctAnswers ?? "—"} / ${attempt.totalQuestions ?? "—"}`}
             />
 
             <ResultItem
-              icon={CircleX}
-              label="Incorrect answers"
-              value={incorrectAnswers}
+              icon={Award}
+              label="Mark"
+              value={`${attempt.earnedMark ?? "—"} / ${totalMark}`}
             />
 
             <ResultItem
               icon={Award}
               label="Total questions"
-              value={totalQuestions}
+              value={attempt.totalQuestions ?? "—"}
             />
           </div>
 
@@ -125,7 +88,7 @@ export default function AttemptResult({
 type ResultItemProps = {
   icon: React.ElementType;
   label: string;
-  value: number;
+  value: number | string;
 };
 
 function ResultItem({ icon: Icon, label, value }: ResultItemProps) {

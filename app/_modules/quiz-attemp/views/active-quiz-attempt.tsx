@@ -58,7 +58,7 @@ export default function ActiveQuizAttempt({
       key={attempt.id}
       attempt={attempt}
       quizTitle={quiz.title}
-      passingScore={quiz.passingScore}
+      totalMark={quiz.totalMark}
       maxAttempts={quiz.maxAttempts}
       attemptsCount={attemptsCount}
       questions={questions}

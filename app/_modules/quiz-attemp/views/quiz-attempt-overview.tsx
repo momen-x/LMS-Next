@@ -105,7 +105,7 @@ export default function QuizAttemptOverview({
 
         <AttemptsHistory
           attempts={attempts}
-          passingScore={quiz.passingScore}
+          totalMark={quiz.totalMark}
           isLoading={isLoading}
           isError={isError}
           onContinue={onAttemptReady}

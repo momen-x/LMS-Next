@@ -29,7 +29,7 @@ export type AttemptQuestion = Question & {
 type QuizPlayerProps = {
   attempt: QuizAttempt;
   quizTitle: string;
-  passingScore: number;
+  totalMark: number;
   maxAttempts: number;
   attemptsCount: number;
   questions: AttemptQuestion[];
@@ -40,7 +40,7 @@ type QuizPlayerProps = {
 export default function QuizPlayer({
   attempt,
   quizTitle,
-  passingScore,
+  totalMark,
   maxAttempts,
   attemptsCount,
   questions,
@@ -84,7 +84,7 @@ export default function QuizPlayer({
     return (
       <AttemptResult
         attempt={submittedAttempt}
-        passingScore={passingScore}
+        totalMark={totalMark}
         canTryAgain={attemptsCount < maxAttempts}
         onBackToQuiz={onBackToQuiz}
         onTryAgain={onTryAgain}

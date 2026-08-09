@@ -9,7 +9,7 @@ import AttemptHistoryCard from "./attempt-history-card";
 
 type AttemptsHistoryProps = {
   attempts: QuizAttempt[];
-  passingScore: number;
+  totalMark: number;
   isLoading: boolean;
   isError: boolean;
   onContinue: (attempt: QuizAttempt) => void;
@@ -17,7 +17,7 @@ type AttemptsHistoryProps = {
 
 export default function AttemptsHistory({
   attempts,
-  passingScore,
+  totalMark,
   isLoading,
   isError,
   onContinue,
@@ -58,7 +58,7 @@ export default function AttemptsHistory({
         <AttemptHistoryCard
           key={attempt.id}
           attempt={attempt}
-          passingScore={passingScore}
+          totalMark={totalMark}
           onContinue={onContinue}
         />
       ))}

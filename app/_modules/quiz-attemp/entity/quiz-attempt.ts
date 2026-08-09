@@ -7,6 +7,7 @@ export interface QuizAttempt  {
   attemptNumber: number;
   status: QuizAttemptStatus;
   score: number | null;
+  earnedMark: number | null;
   correctAnswers: number | null;
   totalQuestions: number | null;
   startedAt: string;

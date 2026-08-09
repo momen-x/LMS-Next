@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarClock, CheckCircle2, Clock3, Play } from "lucide-react";
+import { CalendarClock, Clock3, Play } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,17 +11,16 @@ import transformingTheDateToATextString from "@/utils/from-date-to-string";
 
 type AttemptHistoryCardProps = {
   attempt: QuizAttempt;
-  passingScore: number;
+  totalMark: number;
   onContinue: (attempt: QuizAttempt) => void;
 };
 
 export default function AttemptHistoryCard({
   attempt,
-  passingScore,
+  totalMark,
   onContinue,
 }: AttemptHistoryCardProps) {
   const isInProgress = attempt.status === "in_progress";
-  const hasPassed = attempt.score !== null && attempt.score >= passingScore;
 
   return (
     <Card>
@@ -37,12 +36,8 @@ export default function AttemptHistoryCard({
 
               {isInProgress ? (
                 <Badge variant="secondary">In Progress</Badge>
-              ) : hasPassed ? (
-                <Badge className="bg-green-600 hover:bg-green-600">
-                  Passed
-                </Badge>
               ) : (
-                <Badge variant="destructive">Not Passed</Badge>
+                <Badge>Submitted</Badge>
               )}
             </div>
 
@@ -73,7 +68,7 @@ export default function AttemptHistoryCard({
                 <p className="text-xs text-muted-foreground">Score</p>
                 <p className="font-semibold">
                   {attempt.score !== null
-                    ? `${Math.round(attempt.score)}%`
+                    ? `${attempt.score}%`
                     : "—"}
                 </p>
               </div>
@@ -88,13 +83,12 @@ export default function AttemptHistoryCard({
                 </p>
               </div>
 
-              <CheckCircle2
-                className={
-                  hasPassed
-                    ? "size-5 text-green-600"
-                    : "size-5 text-muted-foreground"
-                }
-              />
+              <div className="text-center">
+                <p className="text-xs text-muted-foreground">Mark</p>
+                <p className="font-semibold">
+                  {attempt.earnedMark ?? "—"} / {totalMark}
+                </p>
+              </div>
             </>
           )}
 
