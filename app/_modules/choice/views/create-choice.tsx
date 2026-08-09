@@ -14,6 +14,7 @@ import { CreateChoiceData } from "../dto/create-choice";
 import { useCreateChoice } from "../hooks/useCreateChoice";
 
 import ChoiceForm from "./choice-form";
+import { getErrorMessage } from "@/utils/get-axios-error-message";
 
 interface CreateChoiceProps {
   open: boolean;
@@ -45,8 +46,9 @@ export default function CreateChoice({
 
       toast.success("Choice created successfully");
       onOpenChange(false);
-    } catch {
-      toast.error("Failed to create choice");
+    } catch (error) {
+      const errMessage = getErrorMessage(error);
+      toast.error(errMessage ?? "Failed to create choice");
     }
   };
 

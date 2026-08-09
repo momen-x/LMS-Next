@@ -15,6 +15,7 @@ import { Choice } from "../entity/choice";
 import { useUpdateChoice } from "../hooks/useUpdateChoice";
 
 import ChoiceForm from "./choice-form";
+import { getErrorMessage } from "@/utils/get-axios-error-message";
 
 interface UpdateChoiceProps {
   open: boolean;
@@ -43,8 +44,9 @@ export default function UpdateChoice({
 
       toast.success("Choice updated successfully");
       onOpenChange(false);
-    } catch {
-      toast.error("Failed to update choice");
+    } catch (error){
+      const errMessage = getErrorMessage(error);
+      toast.error(errMessage ?? "Failed to update choice");
     }
   };
 
