@@ -15,6 +15,7 @@ import { Question } from "../entity/question";
 import { useUpdateQuestion } from "../hooks/useUpdateQuestion";
 
 import QuestionForm from "./question-form";
+import { getErrorMessage } from "@/utils/get-axios-error-message";
 
 interface UpdateQuestionProps {
   open: boolean;
@@ -37,14 +38,15 @@ export default function UpdateQuestion({
     try {
       await updateQuestion({
         questionId: question.id,
-        quizId: question.quizId,
+        questionBankId: question.questionBankId,
         data,
       });
 
       toast.success("Question updated successfully");
       onOpenChange(false);
-    } catch {
-      toast.error("Failed to update question");
+    } catch (error) {
+      const errMessage = getErrorMessage(error);
+      toast.error(errMessage ?? "Failed to update question");
     }
   };
 
@@ -62,7 +64,7 @@ export default function UpdateQuestion({
           <DialogTitle>Update question</DialogTitle>
 
           <DialogDescription>
-            Update the selected quiz question.
+            Update the selected question-bank question.
           </DialogDescription>
         </DialogHeader>
 

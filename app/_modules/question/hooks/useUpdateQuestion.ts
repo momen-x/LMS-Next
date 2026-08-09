@@ -6,7 +6,7 @@ import { QUESTION_KEYS } from "./question-keys";
 
 interface UpdateQuestionVariables {
   questionId: string;
-  quizId: string;
+  questionBankId: string;
   data: UpdateQuestionData;
 }
 
@@ -24,7 +24,7 @@ export function useUpdateQuestion() {
       );
 
       queryClient.invalidateQueries({
-        queryKey: QUESTION_KEYS.quiz(variables.quizId),
+        queryKey: QUESTION_KEYS.questionBank(variables.questionBankId),
       });
 
       queryClient.invalidateQueries({

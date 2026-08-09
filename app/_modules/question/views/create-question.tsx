@@ -14,35 +14,37 @@ import { CreateQuestionData } from "../dto/create-question";
 import { useCreateQuestion } from "../hooks/useCreateQuestion";
 
 import QuestionForm from "./question-form";
+import { getErrorMessage } from "@/utils/get-axios-error-message";
 
 interface CreateQuestionProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  quizId: string | null;
+  questionBankId: string | null;
 }
 
 export default function CreateQuestion({
   open,
   onOpenChange,
-  quizId,
+  questionBankId,
 }: CreateQuestionProps) {
   const { mutateAsync: createQuestion, isPending } = useCreateQuestion();
 
   const handleSubmit = async (data: CreateQuestionData) => {
-    if (!quizId) {
+    if (!questionBankId) {
       return;
     }
 
     try {
       await createQuestion({
-        quizId,
+        questionBankId,
         data,
       });
 
       toast.success("Question created successfully");
       onOpenChange(false);
-    } catch {
-      toast.error("Failed to create question");
+    } catch (error) {
+      const errMessage = getErrorMessage(error);
+      toast.error(errMessage ?? "Failed to create question");
     }
   };
 
@@ -60,13 +62,13 @@ export default function CreateQuestion({
           <DialogTitle>Create question</DialogTitle>
 
           <DialogDescription>
-            Add a new question to this quiz.
+            Add a new question to this question bank.
           </DialogDescription>
         </DialogHeader>
 
-        {quizId && (
+        {questionBankId && (
           <QuestionForm
-            key={quizId}
+            key={questionBankId}
             submitLabel="Create question"
             isPending={isPending}
             onSubmit={handleSubmit}

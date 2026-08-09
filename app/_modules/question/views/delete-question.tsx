@@ -5,12 +5,12 @@ import { useDeleteQuestion } from "../hooks/useDeleteQuestion";
 
 interface DeleteQuestionProps {
   questionId: string;
-  quizId: string;
+  questionBankId: string;
 }
 
 export default function DeleteQuestion({
   questionId,
-  quizId,
+  questionBankId,
 }: DeleteQuestionProps) {
   const { mutateAsync: deleteQuestion, isPending } = useDeleteQuestion();
 
@@ -26,7 +26,7 @@ export default function DeleteQuestion({
       onDeleteSubmit={() =>
         deleteQuestion({
           questionId,
-          quizId,
+          questionBankId,
         })
       }
       successMessage="Question deleted successfully"

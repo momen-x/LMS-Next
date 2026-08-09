@@ -3,7 +3,8 @@ export const QUESTION_KEYS = {
 
   list: () => [...QUESTION_KEYS.all, "list"] as const,
 
-  quiz: (quizId: string) => [...QUESTION_KEYS.all, "quiz", quizId] as const,
+  questionBank: (questionBankId: string) =>
+    [...QUESTION_KEYS.all, "question-bank", questionBankId] as const,
 
   detail: (questionId: string) =>
     [...QUESTION_KEYS.all, "detail", questionId] as const,

@@ -1,6 +1,6 @@
 export interface Question {
   id: string;
-  quizId: string;
+  questionBankId: string;
   text: string;
   createdAt: string;
   updatedAt: string;

@@ -15,7 +15,7 @@ import CreateQuestion from "../views/create-question";
 import UpdateQuestion from "../views/update-question";
 
 interface QuestionDialogContextValue {
-  openCreateQuestion: (quizId: string) => void;
+  openCreateQuestion: (questionBankId: string) => void;
   openUpdateQuestion: (question: Question) => void;
 }
 
@@ -44,15 +44,15 @@ export function QuestionDialogProvider({
   const [createOpen, setCreateOpen] = useState(false);
   const [updateOpen, setUpdateOpen] = useState(false);
 
-  const [activeQuizId, setActiveQuizId] = useState<string | null>(
-    null,
-  );
+  const [activeQuestionBankId, setActiveQuestionBankId] = useState<
+    string | null
+  >(null);
 
   const [activeQuestion, setActiveQuestion] =
     useState<Question | null>(null);
 
-  const openCreateQuestion = useCallback((quizId: string) => {
-    setActiveQuizId(quizId);
+  const openCreateQuestion = useCallback((questionBankId: string) => {
+    setActiveQuestionBankId(questionBankId);
     setCreateOpen(true);
   }, []);
 
@@ -69,7 +69,7 @@ export function QuestionDialogProvider({
       setCreateOpen(open);
 
       if (!open) {
-        setActiveQuizId(null);
+        setActiveQuestionBankId(null);
       }
     },
     [],
@@ -101,7 +101,7 @@ export function QuestionDialogProvider({
       <CreateQuestion
         open={createOpen}
         onOpenChange={handleCreateOpenChange}
-        quizId={activeQuizId}
+        questionBankId={activeQuestionBankId}
       />
 
       <UpdateQuestion

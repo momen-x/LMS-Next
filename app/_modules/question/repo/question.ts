@@ -3,9 +3,12 @@ import { UpdateQuestionData } from "../dto/update-question";
 import { Question } from "../entity/question";
 
 export interface IQuestionAPI {
-  create: (quizId: string, data: CreateQuestionData) => Promise<Question>;
+  create: (
+    questionBankId: string,
+    data: CreateQuestionData,
+  ) => Promise<Question>;
 
-  getQuizQuestions: (quizId: string) => Promise<Question[]>;
+  getQuestionBankQuestions: (questionBankId: string) => Promise<Question[]>;
 
   getAll: () => Promise<Question[]>;
 

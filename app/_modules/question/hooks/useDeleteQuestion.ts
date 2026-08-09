@@ -5,7 +5,7 @@ import { QUESTION_KEYS } from "./question-keys";
 
 interface DeleteQuestionVariables {
   questionId: string;
-  quizId: string;
+  questionBankId: string;
 }
 
 export function useDeleteQuestion() {
@@ -21,7 +21,7 @@ export function useDeleteQuestion() {
       });
 
       queryClient.invalidateQueries({
-        queryKey: QUESTION_KEYS.quiz(variables.quizId),
+        queryKey: QUESTION_KEYS.questionBank(variables.questionBankId),
       });
 
       queryClient.invalidateQueries({

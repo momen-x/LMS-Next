@@ -5,7 +5,7 @@ import { resQuestion } from "../repo/resQuestion";
 import { QUESTION_KEYS } from "./question-keys";
 
 interface CreateQuestionVariables {
-  quizId: string;
+  questionBankId: string;
   data: CreateQuestionData;
 }
 
@@ -13,12 +13,12 @@ export function useCreateQuestion() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ quizId, data }: CreateQuestionVariables) =>
-      resQuestion.create(quizId, data),
+    mutationFn: ({ questionBankId, data }: CreateQuestionVariables) =>
+      resQuestion.create(questionBankId, data),
 
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
-        queryKey: QUESTION_KEYS.quiz(variables.quizId),
+        queryKey: QUESTION_KEYS.questionBank(variables.questionBankId),
       });
 
       queryClient.invalidateQueries({

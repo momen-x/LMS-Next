@@ -52,7 +52,7 @@ export default function QuestionForm({
 
         <Textarea
           id="question-text"
-          placeholder="Write the quiz question here..."
+          placeholder="Write the question here..."
           rows={6}
           disabled={isPending}
           {...register("text")}

@@ -21,12 +21,14 @@ interface QuestionCardProps {
   question: Question;
   index: number;
   onDelete?: (question: Question) => void;
+  isDeleting?: boolean;
 }
 
 export default function QuestionCard({
   question,
   index,
   onDelete,
+  isDeleting,
 }: QuestionCardProps) {
   const { openUpdateQuestion } = useQuestionDialog();
 
@@ -75,6 +77,7 @@ export default function QuestionCard({
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem
+                  disabled={isDeleting}
                   onClick={() => onDelete(question)}
                   className="text-destructive focus:text-destructive"
                 >

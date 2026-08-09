@@ -10,20 +10,22 @@ const BASE_URL = "/api/questions";
 
 export const resQuestion: IQuestionAPI = {
   create: async function (
-    quizId: string,
+    questionBankId: string,
     data: CreateQuestionData,
   ): Promise<Question> {
     const response = await api.post<Question>(
-      `/api/quizzes/${quizId}/questions`,
+      `/api/question-banks/${questionBankId}/questions`,
       data,
     );
 
     return response.data;
   },
 
-  getQuizQuestions: async function (quizId: string): Promise<Question[]> {
+  getQuestionBankQuestions: async function (
+    questionBankId: string,
+  ): Promise<Question[]> {
     const response = await api.get<Question[]>(
-      `/api/quizzes/${quizId}/questions`,
+      `/api/question-banks/${questionBankId}/questions`,
     );
 
     return response.data;
