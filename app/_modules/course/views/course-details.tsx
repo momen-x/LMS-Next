@@ -30,6 +30,7 @@ import NoData from "@/components/sharing/no-data";
 import { useSubmitCourseForReview } from "../hooks/useSubmitCourseForReview";
 import { toast } from "react-toastify";
 import { getErrorMessage } from "@/utils/get-axios-error-message";
+import { useQuestionsBankDialog } from "../../question-bank/context/question-bank-dialog-context";
 
 interface CourseDetailsProps {
   onEdit: string;
@@ -37,6 +38,8 @@ interface CourseDetailsProps {
   courseId: string;
   manageSections: string;
   viewStudents: string;
+  manageQuestionBank: string;
+  manageQuizzes: string;
 }
 
 export default function CourseDetails({
@@ -45,12 +48,16 @@ export default function CourseDetails({
   courseId,
   manageSections,
   viewStudents,
+  manageQuestionBank,
+  manageQuizzes,
 }: CourseDetailsProps) {
+  //todo this DRY code
   const formatDuration = (minutes: number = 0) => {
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
     return `${hours}h ${mins}m`;
   };
+  const { openCreateQuestionsBank } = useQuestionsBankDialog();
 
   const capitalize = (str: string) =>
     str ? str.charAt(0).toUpperCase() + str.slice(1) : "";
@@ -297,14 +304,31 @@ export default function CourseDetails({
 
             <div className="bg-card border rounded-2xl p-6 shadow-sm space-y-4">
               <h3 className="text-lg font-semibold">Quick Actions</h3>
-              <div className="h-32 flex flex-col justify-center items-center rounded-xl shadow-sm">
-                <Link href={manageSections} className="mb-5">
-                  <Button className="w-full justify-start" variant="outline">
+              <div className="h-fit p-2 flex flex-col justify-center items-center rounded-xl shadow-sm ">
+                <Link href={manageSections} className="mb-5 w-full ">
+                  <Button className="w-full  text-center" variant="outline">
                     Manage Sections
                   </Button>
                 </Link>
-                <Link href={viewStudents}>
-                  <Button className="w-full justify-start" variant="outline">
+                <Button
+                  className="w-full text-center mb-5"
+                  variant="outline"
+                  onClick={() => openCreateQuestionsBank(course.id)}
+                >
+                  Create Questions Bank for this course
+                </Button>
+                <Link href={manageQuestionBank} className="mb-5 w-full ">
+                  <Button className="w-full  text-center" variant="outline">
+                    Manage Questions Bank for this course
+                  </Button>
+                </Link>
+                <Link href={manageQuizzes} className="mb-5 w-full">
+                  <Button className="w-full text-center" variant="outline">
+                    Manage Quizzes for this course
+                  </Button>
+                </Link>
+                <Link href={viewStudents} className="mb-5 w-full">
+                  <Button className="w-full text-center" variant="outline">
                     View Student List
                   </Button>
                 </Link>
