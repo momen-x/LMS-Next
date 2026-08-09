@@ -5,5 +5,5 @@ export type FormField<T extends string> = {
   title: string;
   placeholder: string;
   Icon: LucideIcon;
-  type: "text" | "email" | "password";
+  type: "text" | "email" | "password" | "number" | "date" | "select";
 };
