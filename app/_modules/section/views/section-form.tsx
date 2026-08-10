@@ -23,7 +23,6 @@ interface SectionFormProps {
 
 const INITIAL_VALUES: CreateSectionData = {
   title: "",
-  order: 0,
 };
 
 export default function SectionForm({
@@ -67,38 +66,6 @@ export default function SectionForm({
             {errors.title?.message && (
               <p className="text-sm text-destructive">
                 {errors.title.message}
-              </p>
-            )}
-          </div>
-        )}
-      />
-
-      <Controller
-        name="order"
-        control={control}
-        render={({ field }) => (
-          <div className="space-y-2">
-            <Label htmlFor="section-order">Section order</Label>
-
-            <Input
-              id="section-order"
-              type="number"
-              min={0}
-              step={1}
-              value={field.value}
-              onBlur={field.onBlur}
-              onChange={(event) => {
-                const value = event.target.value;
-
-                field.onChange(value === "" ? 0 : Number(value));
-              }}
-              disabled={isPending}
-              aria-invalid={Boolean(errors.order)}
-            />
-
-            {errors.order?.message && (
-              <p className="text-sm text-destructive">
-                {errors.order.message}
               </p>
             )}
           </div>

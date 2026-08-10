@@ -63,14 +63,13 @@ export default function UpdateSection({ section }: UpdateSectionProps) {
           <DialogTitle>Update Section</DialogTitle>
 
           <DialogDescription>
-            Update the section title or order.
+            Update the section title.
           </DialogDescription>
         </DialogHeader>
 
         <SectionForm
           defaultValues={{
             title: section.title,
-            order: section.order,
           }}
           submitLabel="Save Changes"
           isPending={isPending}
