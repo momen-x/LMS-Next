@@ -31,7 +31,7 @@ const levelVariant: Record<
   intermediate: "default",
   advanced: "destructive",
 };
-
+//todo dry code
 function formatDuration(minutes: number = 0): string {
   const hours = Math.floor(minutes / 60);
   const remainingMinutes = minutes % 60;

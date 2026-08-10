@@ -156,7 +156,7 @@ export default function CourseForm({
                   }))}
                 />
               ) : (
-                <p className="mb-4">no Categories found </p>
+                <p className="mb-4">no Categories found, you can&apos;t create course right now </p>
               )}
 
               <ValidationSelect<CreateCourseData | UpdateCourseData>
