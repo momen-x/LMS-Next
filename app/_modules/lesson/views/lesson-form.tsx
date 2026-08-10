@@ -2,9 +2,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link2, Loader2, Plus, Trash2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -29,7 +29,6 @@ export default function LessonForm({
 }: LessonFormProps) {
   const {
     register,
-    control,
     handleSubmit,
     setValue,
     watch,
@@ -40,19 +39,8 @@ export default function LessonForm({
     defaultValues: {
       title: defaultValues?.title ?? "",
       description: defaultValues?.description ?? "",
-      duration: defaultValues?.duration ?? 1,
       isPreview: defaultValues?.isPreview ?? false,
-      resources: defaultValues?.resources ?? [],
     },
-  });
-
-  const {
-    fields: resourceFields,
-    append,
-    remove,
-  } = useFieldArray({
-    control,
-    name: "resources",
   });
 
   const isPreview = watch("isPreview");
@@ -61,10 +49,6 @@ export default function LessonForm({
     const normalizedData: CreateLessonData = {
       ...data,
       description: data.description?.trim() || undefined,
-      resources:
-        data.resources && data.resources.length > 0
-          ? data.resources
-          : undefined,
     };
 
     return onSubmit(normalizedData);
@@ -109,28 +93,6 @@ export default function LessonForm({
         )}
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="lesson-duration">Duration in seconds</Label>
-
-        <Input
-          id="lesson-duration"
-          type="number"
-          min={1}
-          step={1}
-          placeholder="600"
-          disabled={isPending}
-          {...register("duration")}
-        />
-
-        <p className="text-xs text-muted-foreground">
-          Example: 600 seconds equals 10 minutes.
-        </p>
-
-        {errors.duration && (
-          <p className="text-sm text-destructive">{errors.duration.message}</p>
-        )}
-      </div>
-
       <div className="flex items-start gap-3 rounded-lg border p-4">
         <Checkbox
           id="lesson-preview"
@@ -152,103 +114,6 @@ export default function LessonForm({
           <p className="text-sm text-muted-foreground">
             Allow users to view this lesson before enrolling.
           </p>
-        </div>
-      </div>
-
-      <div className="space-y-4 rounded-lg border p-4">
-        <div className="flex items-center justify-between gap-4">
-          <div>
-            <h3 className="font-medium">Lesson resources</h3>
-
-            <p className="text-sm text-muted-foreground">
-              Add links to files, documentation or external resources.
-            </p>
-          </div>
-
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            disabled={isPending}
-            onClick={() => {
-              append({
-                title: "",
-                url: "",
-              });
-            }}
-          >
-            <Plus className="size-4" />
-            Add resource
-          </Button>
-        </div>
-
-        {resourceFields.length === 0 && (
-          <div className="rounded-md border border-dashed p-5 text-center">
-            <Link2 className="mx-auto mb-2 size-5 text-muted-foreground" />
-
-            <p className="text-sm text-muted-foreground">No resources added.</p>
-          </div>
-        )}
-
-        <div className="space-y-4">
-          {resourceFields.map((field, index) => (
-            <div
-              key={field.id}
-              className="space-y-3 rounded-md bg-muted/40 p-4"
-            >
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-medium">Resource {index + 1}</p>
-
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  disabled={isPending}
-                  aria-label={`Remove resource ${index + 1}`}
-                  onClick={() => remove(index)}
-                >
-                  <Trash2 className="size-4 text-destructive" />
-                </Button>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor={`resource-title-${index}`}>
-                  Resource title
-                </Label>
-
-                <Input
-                  id={`resource-title-${index}`}
-                  placeholder="Course documentation"
-                  disabled={isPending}
-                  {...register(`resources.${index}.title`)}
-                />
-
-                {errors.resources?.[index]?.title && (
-                  <p className="text-sm text-destructive">
-                    {errors.resources[index]?.title?.message}
-                  </p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor={`resource-url-${index}`}>Resource URL</Label>
-
-                <Input
-                  id={`resource-url-${index}`}
-                  type="url"
-                  placeholder="https://example.com/resource"
-                  disabled={isPending}
-                  {...register(`resources.${index}.url`)}
-                />
-
-                {errors.resources?.[index]?.url && (
-                  <p className="text-sm text-destructive">
-                    {errors.resources[index]?.url?.message}
-                  </p>
-                )}
-              </div>
-            </div>
-          ))}
         </div>
       </div>
 

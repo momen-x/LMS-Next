@@ -75,7 +75,7 @@ export default function UpdateLessonDialog({
           <DialogTitle>Update lesson</DialogTitle>
 
           <DialogDescription>
-            Update the lesson details and resources.
+            Update the editable lesson details.
           </DialogDescription>
         </DialogHeader>
 
@@ -116,9 +116,7 @@ export default function UpdateLessonDialog({
               defaultValues={{
                 title: lesson.title,
                 description: lesson.description ?? "",
-                duration: lesson.duration,
                 isPreview: lesson.isPreview,
-                resources: lesson.resources ?? [],
               }}
               submitLabel="Save changes"
               isPending={isPending}

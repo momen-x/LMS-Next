@@ -1,8 +1,3 @@
-export interface LessonResource {
-  title: string;
-  url: string;
-}
-
 export interface Lesson {
   id: string;
   sectionId: string;
@@ -11,7 +6,6 @@ export interface Lesson {
   duration: number; // in seconds
   order: number;
   isPreview: boolean;
-  resources: LessonResource[] | null;
   createdAt: string;
   updatedAt: string;
 }

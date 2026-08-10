@@ -4,8 +4,6 @@ import {
   Clock3,
   Eye,
   FileText,
-  GripVertical,
-  Link2,
   MoreHorizontal,
   Pencil,
   ReceiptText,
@@ -57,14 +55,8 @@ export default function LessonCard({
 }: LessonItemProps) {
   const { openUpdateLesson } = useLessonDialog();
 
-  const resourcesCount = lesson.resources?.length ?? 0;
-
   return (
     <article className="group relative flex items-center gap-3 rounded-xl border bg-card/60 p-3.5 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-primary/40 hover:bg-card hover:shadow-md">
-      <div className="cursor-grab text-muted-foreground/40 transition-colors group-hover:text-muted-foreground active:cursor-grabbing">
-        <GripVertical className="size-4" />
-      </div>
-
       <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-xs font-semibold text-primary">
         {position}
       </div>
@@ -96,13 +88,6 @@ export default function LessonCard({
           <span className="flex items-center gap-1 font-medium">
             <Clock3 className="size-3.5 text-muted-foreground/70" />
             {formatDuration(lesson.duration)}
-          </span>
-
-          <span className="size-1 rounded-full bg-border" />
-
-          <span className="flex items-center gap-1 font-medium">
-            <Link2 className="size-3.5 text-muted-foreground/70" />
-            {resourcesCount} {resourcesCount === 1 ? "resource" : "resources"}
           </span>
 
           <span className="size-1 rounded-full bg-border" />
