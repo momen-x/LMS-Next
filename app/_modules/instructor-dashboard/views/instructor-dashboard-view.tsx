@@ -93,7 +93,7 @@ export default function InstructorDashboardView() {
             Manage your courses and teaching activity.
           </p>
         </div>
-        <Link href="/instructor/courses/new">
+        <Link href="/instructor-dashboard/courses/create">
           <Button className="gap-2">
             <Plus className="size-4" />
             Create Course
