@@ -11,6 +11,8 @@ import MediaCard from "./media-card";
 import BackBtn from "@/components/sharing/back-btn";
 import { ListSkeleton } from "@/components/skeletons/list-skeleton";
 import QueryErrorState from "@/components/sharing/query-error-state";
+import { useDeleteMedia } from "../hooks/useDeleteMedia";
+import { useDeleteDialog } from "@/components/sharing/delete-dialog-context";
 
 interface LessonMediaProps {
   lessonId: string;
@@ -30,6 +32,8 @@ export default function LessonMedia({
   } = useGetLessonMedia(lessonId);
 
   const { openCreateMedia } = useMediaDialog();
+  const { mutateAsync: deleteMedia } = useDeleteMedia();
+  const { openDeleteDialog } = useDeleteDialog();
 
   if (isLoading) {
     return <ListSkeleton />;
@@ -99,7 +103,13 @@ export default function LessonMedia({
               media={item}
               onView={item.url}
               onDelete={(selectedMedia) => {
-                console.log("Delete media:", selectedMedia.id);
+                openDeleteDialog({
+                  title: "Delete media?",
+                  itemName: "this media item",
+                  description: "Are you sure you want to delete this media item? This action cannot be undone.",
+                  successMessage: "Media deleted successfully",
+                  onConfirm: () => deleteMedia(selectedMedia.id),
+                });
               }}
             />
           ))}

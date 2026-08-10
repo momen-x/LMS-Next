@@ -8,6 +8,8 @@ import { useGetSectionLessons } from "../hooks/useGetSectionLessons";
 
 import LessonCard from "./lesson-card";
 import { useLessonDialog } from "../context/lesson-dialog-context";
+import { useDeleteLesson } from "../hooks/useDeleteLesson";
+import { useDeleteDialog } from "@/components/sharing/delete-dialog-context";
 
 interface SectionLessonsProps {
   sectionId: string;
@@ -21,6 +23,8 @@ export default function SectionLessons({ sectionId }: SectionLessonsProps) {
     refetch,
   } = useGetSectionLessons(sectionId);
   const { openCreateLesson } = useLessonDialog();
+  const { mutateAsync: deleteLesson } = useDeleteLesson();
+  const { openDeleteDialog } = useDeleteDialog();
 
   if (isLoading) {
     return (
@@ -110,7 +114,13 @@ export default function SectionLessons({ sectionId }: SectionLessonsProps) {
               position={index + 1}
               onView={`/instructor-dashboard/lessons/${lesson.id}/details`}
               onDelete={(selectedLesson) => {
-                console.log("Delete lesson:", selectedLesson.id);
+                openDeleteDialog({
+                  title: "Delete lesson?",
+                  itemName: `the lesson “${selectedLesson.title}”`,
+                  description: `Are you sure you want to delete “${selectedLesson.title}”? Its media and related content may also be removed. This action cannot be undone.`,
+                  successMessage: "Lesson deleted successfully",
+                  onConfirm: () => deleteLesson(selectedLesson.id),
+                });
               }}
             />
           ))}
