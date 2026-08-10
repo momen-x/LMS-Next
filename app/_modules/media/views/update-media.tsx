@@ -39,7 +39,7 @@ export default function UpdateMedia({
         id: media.id,
         dto: {
           ...data,
-          duration: data.duration ?? undefined,
+          duration: data.type === "url" ? undefined : data.duration ?? undefined,
         },
       });
 
@@ -81,6 +81,7 @@ export default function UpdateMedia({
             defaultValues={{
               type: media.type,
               duration: media.duration ?? undefined,
+              url: media.type === "url" ? media.url : "",
             }}
             submitLabel="Save changes"
             isPending={isPending}

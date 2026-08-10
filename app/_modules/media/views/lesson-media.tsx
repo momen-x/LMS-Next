@@ -14,9 +14,13 @@ import QueryErrorState from "@/components/sharing/query-error-state";
 
 interface LessonMediaProps {
   lessonId: string;
+  embedded?: boolean;
 }
 
-export default function LessonMedia({ lessonId }: LessonMediaProps) {
+export default function LessonMedia({
+  lessonId,
+  embedded = false,
+}: LessonMediaProps) {
   const {
     data: media,
     isLoading,
@@ -43,20 +47,27 @@ export default function LessonMedia({ lessonId }: LessonMediaProps) {
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between gap-4">
-        <div>
-          <h3 className="font-medium">Lesson Media</h3>
+    <div className={embedded ? "min-w-0 space-y-5 p-5 md:p-6" : "space-y-4"}>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="min-w-0">
+          <h3 className={embedded ? "text-lg font-semibold" : "font-medium"}>
+            Lesson Media
+          </h3>
 
           <p className="text-sm text-muted-foreground">
             {media?.length ?? 0} {(media?.length ?? 0) === 1 ? "file" : "files"}
+            {embedded ? " attached to this lesson" : ""}
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <BackBtn />
-          <Button type="button" onClick={() => openCreateMedia(lessonId)}>
+        <div className="flex shrink-0 items-center gap-3">
+          {!embedded && <BackBtn />}
+          <Button
+            type="button"
+            size={embedded ? "sm" : "default"}
+            onClick={() => openCreateMedia(lessonId)}
+          >
             <Plus className="size-4" />
-            Upload media
+            Add media
           </Button>
         </div>
       </div>
@@ -81,7 +92,7 @@ export default function LessonMedia({ lessonId }: LessonMediaProps) {
           </Button>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="grid min-w-0 gap-3 lg:grid-cols-2">
           {media.map((item) => (
             <MediaCard
               key={item.id}

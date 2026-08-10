@@ -5,6 +5,7 @@ export interface Media  {
   lessonId: string;
   url: string;
   urlPublicId: string | null;
+  cloudinaryResourceType: string | null;
   type: MediaType;
   duration: number | null;
   createdAt: string;

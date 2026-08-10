@@ -57,17 +57,17 @@ export default function CreateMedia({
     >
       <DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-xl">
         <DialogHeader>
-          <DialogTitle>Upload media</DialogTitle>
+          <DialogTitle>Add media</DialogTitle>
 
           <DialogDescription>
-            Upload a new media file for this lesson.
+            Upload a media file or add an external URL to this lesson.
           </DialogDescription>
         </DialogHeader>
 
         {lessonId && (
           <MediaForm
             key={lessonId}
-            submitLabel="Upload media"
+            submitLabel="Add media"
             isPending={isPending}
             onSubmit={handleSubmit}
           />

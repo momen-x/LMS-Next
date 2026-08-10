@@ -11,10 +11,15 @@ export const resMedia: IMediaAPI = {
   create: async function (lessonId: string, dto: TCreateMedia): Promise<Media> {
     const formData = new FormData();
 
-    formData.append("file", dto.file);
     formData.append("type", dto.type);
 
-    if (dto.duration != null) {
+    if (dto.type === "url") {
+      formData.append("url", dto.url!);
+    } else {
+      formData.append("file", dto.file!);
+    }
+
+    if (dto.type !== "url" && dto.duration != null) {
       formData.append("duration", dto.duration.toString());
     }
 
@@ -39,16 +44,22 @@ export const resMedia: IMediaAPI = {
   update: async function (id: string, dto: TUpdateMedia): Promise<Media> {
     const formData = new FormData();
 
-    if (dto.file) {
-      formData.append("file", dto.file);
-    }
-
     if (dto.type) {
       formData.append("type", dto.type);
     }
 
-    if (dto.duration !== undefined) {
-      formData.append("duration", dto.duration.toString());
+    if (dto.type === "url") {
+      if (dto.url !== undefined) {
+        formData.append("url", dto.url);
+      }
+    } else {
+      if (dto.file) {
+        formData.append("file", dto.file);
+      }
+
+      if (dto.duration !== undefined) {
+        formData.append("duration", dto.duration.toString());
+      }
     }
 
     const { data } = await api.patch<Media>(`${BASE_URL}/${id}`, formData);

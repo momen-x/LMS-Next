@@ -42,10 +42,12 @@ export default function MediaForm({
     defaultValues: {
       type: defaultValues?.type ?? "video",
       duration: defaultValues?.duration,
+      url: defaultValues?.url ?? "",
     },
   });
 
   const selectedFile = watch("file");
+  const selectedType = watch("type");
 
   const submit = (data: TCreateMedia) => {
     return onSubmit(data);
@@ -60,7 +62,17 @@ export default function MediaForm({
           id="media-type"
           disabled={isPending}
           className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-          {...register("type")}
+          {...register("type", {
+            onChange: (event) => {
+              const type = event.target.value;
+              setValue("file", undefined, { shouldValidate: true });
+              setValue("url", "", { shouldValidate: type === "url" });
+
+              if (type === "url") {
+                setValue("duration", undefined);
+              }
+            },
+          })}
         >
           {mediaTypes.map((type) => (
             <option key={type} value={type}>
@@ -74,7 +86,7 @@ export default function MediaForm({
         )}
       </div>
 
-      <div className="space-y-2">
+      {selectedType !== "url" && <div className="space-y-2">
         <Label htmlFor="media-duration">Duration (seconds)</Label>
 
         <Input
@@ -90,9 +102,25 @@ export default function MediaForm({
         {errors.duration && (
           <p className="text-sm text-destructive">{errors.duration.message}</p>
         )}
-      </div>
+      </div>}
 
-      <div className="space-y-2">
+      {selectedType === "url" ? (
+        <div className="space-y-2">
+          <Label htmlFor="media-url">External URL</Label>
+
+          <Input
+            id="media-url"
+            type="url"
+            placeholder="https://example.com/resource"
+            disabled={isPending}
+            {...register("url")}
+          />
+
+          {errors.url && (
+            <p className="text-sm text-destructive">{errors.url.message}</p>
+          )}
+        </div>
+      ) : <div className="space-y-2">
         <Label htmlFor="media-file">Media file</Label>
 
         <Input
@@ -122,7 +150,7 @@ export default function MediaForm({
         {errors.file && (
           <p className="text-sm text-destructive">{errors.file.message}</p>
         )}
-      </div>
+      </div>}
 
       <div className="flex justify-end border-t pt-5">
         <Button type="submit" disabled={isPending || !isValid}>
