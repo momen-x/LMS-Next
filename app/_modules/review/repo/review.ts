@@ -1,8 +1,8 @@
 import { CreateReviewDto } from "../dto/create-review";
 import { UpdateReviewDto } from "../dto/update-review";
-import { Review } from "../entity/review";
-import { ReviewWithStudent } from "../entity/review-with-student";
-import { PaginatedReviews } from "../entity/paginated-reviews";
+import { Review } from "../entities/review";
+import { ReviewWithStudent } from "../entities/review-with-student";
+import { PaginatedReviews } from "../entities/paginated-reviews";
 
 export interface IReviewAPI {
   createReview(courseId: string, data: CreateReviewDto): Promise<Review>;

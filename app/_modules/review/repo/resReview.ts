@@ -2,10 +2,10 @@ import { api } from "@/utils/axiosInstance";
 
 import { CreateReviewDto } from "../dto/create-review";
 import { UpdateReviewDto } from "../dto/update-review";
-import { Review } from "../entity/review";
-import { ReviewWithStudent } from "../entity/review-with-student";
+import { Review } from "../entities/review";
+import { ReviewWithStudent } from "../entities/review-with-student";
 import { IReviewAPI } from "./review";
-import { PaginatedReviews } from "../entity/paginated-reviews";
+import { PaginatedReviews } from "../entities/paginated-reviews";
 
 export const resReview: IReviewAPI = {
   createReview: async function (
@@ -39,9 +39,12 @@ export const resReview: IReviewAPI = {
     page = 1,
     limit = 10,
   ): Promise<PaginatedReviews<Review>> {
-    const response = await api.get<PaginatedReviews<Review>>("/api/reviews/me", {
-      params: { page, limit },
-    });
+    const response = await api.get<PaginatedReviews<Review>>(
+      "/api/reviews/me",
+      {
+        params: { page, limit },
+      },
+    );
 
     return response.data;
   },

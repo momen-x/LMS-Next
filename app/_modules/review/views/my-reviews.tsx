@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 import { Button } from "@/components/ui/button";
 
-import { Review } from "../entity/review";
+import { Review } from "../entities/review";
 import { useGetMyReviews } from "../hooks/useGetMyReviews";
 import { useDeleteReview } from "../hooks/useDeleteReview";
 

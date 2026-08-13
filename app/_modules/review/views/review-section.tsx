@@ -11,7 +11,7 @@ interface ReviewSectionProps {
   courseId: string;
   canCreateReview?: boolean;
 }
-
+//todo
 export default function ReviewSection({
   courseId,
   canCreateReview = false,

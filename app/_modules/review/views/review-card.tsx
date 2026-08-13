@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
-import { ReviewWithStudent } from "../entity/review-with-student";
+import { ReviewWithStudent } from "../entities/review-with-student";
 import transformingTheDateToATextString from "@/utils/from-date-to-string";
 
 interface ReviewCardProps {

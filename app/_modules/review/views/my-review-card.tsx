@@ -5,7 +5,7 @@ import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-import { Review } from "../entity/review";
+import { Review } from "../entities/review";
 import transformingTheDateToATextString from "@/utils/from-date-to-string";
 
 interface MyReviewCardProps {
@@ -21,7 +21,7 @@ export default function MyReviewCard({
   onDelete,
   isDeleting = false,
 }: MyReviewCardProps) {
-  const formattedDate =transformingTheDateToATextString(review.createdAt);
+  const formattedDate = transformingTheDateToATextString(review.createdAt);
 
   return (
     <Card>
