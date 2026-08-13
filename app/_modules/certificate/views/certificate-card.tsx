@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendar, Download, Eye, MoreVertical, Share2 } from "lucide-react";
+import { Calendar, Eye, MoreVertical } from "lucide-react";
 import Image from "next/image";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";

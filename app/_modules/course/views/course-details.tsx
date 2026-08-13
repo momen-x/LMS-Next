@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -53,7 +53,7 @@ export default function CourseDetails({
   viewStudents,
   manageQuestionBank,
   manageQuizzes,
-  courseCertificates
+  courseCertificates,
 }: CourseDetailsProps) {
   const { openCreateQuestionsBank } = useQuestionsBankDialog();
 
@@ -294,7 +294,7 @@ export default function CourseDetails({
                 </Link>
                 <Link href={courseCertificates} className="mb-5 w-full">
                   <Button className="w-full text-center" variant="outline">
-                    View Course Certificates 
+                    View Course Certificates
                   </Button>
                 </Link>
               </div>

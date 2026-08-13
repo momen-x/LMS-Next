@@ -24,7 +24,6 @@ import { CardSkeleton } from "@/components/skeletons/card-skeleton";
 import QueryErrorState from "@/components/sharing/query-error-state";
 import NoData from "@/components/sharing/no-data";
 import BackBtn from "@/components/sharing/back-btn";
-import { useGetUserCertificates } from "../../certificate/hooks/useGetUserCertificates";
 import UserCertificates from "../../certificate/views/user-certificates";
 
 const UsersDetails = ({ userId }: { userId: string }) => {
@@ -35,13 +34,7 @@ const UsersDetails = ({ userId }: { userId: string }) => {
     refetch,
     isFetching,
   } = useGetUserById(userId);
-  const {
-    data: certificates = [],
-    isPending: isCertificatesPending,
-    isError: isCertificatesError,
-    isFetching: isCertificatesFetching,
-    refetch: refetchCertificates,
-  } = useGetUserCertificates(userId);
+ 
 
   if (isLoading) {
     return <CardSkeleton />;

@@ -4,7 +4,7 @@ import { Award, ExternalLink, UserRound } from "lucide-react";
 import Link from "next/link";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import QueryErrorState from "@/components/sharing/query-error-state";
 import { cn } from "@/lib/utils";
 import { getErrorMessage } from "@/utils/get-axios-error-message";
