@@ -42,6 +42,7 @@ interface CourseDetailsProps {
   viewStudents: string;
   manageQuestionBank: string;
   manageQuizzes: string;
+  courseCertificates: string;
 }
 
 export default function CourseDetails({
@@ -52,6 +53,7 @@ export default function CourseDetails({
   viewStudents,
   manageQuestionBank,
   manageQuizzes,
+  courseCertificates
 }: CourseDetailsProps) {
   const { openCreateQuestionsBank } = useQuestionsBankDialog();
 
@@ -251,45 +253,6 @@ export default function CourseDetails({
       </div>
 
       <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList className="bg-transparent border-b w-full justify-start rounded-none h-auto p-0 gap-6">
-          <TabsTrigger
-            value="overview"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-0 pb-3 font-semibold text-muted-foreground data-[state=active]:text-foreground"
-          >
-            Overview
-          </TabsTrigger>
-          <TabsTrigger
-            value="curriculum"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-0 pb-3 font-semibold text-muted-foreground data-[state=active]:text-foreground"
-          >
-            Curriculum
-          </TabsTrigger>
-          <TabsTrigger
-            value="students"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-0 pb-3 font-semibold text-muted-foreground data-[state=active]:text-foreground"
-          >
-            Students
-          </TabsTrigger>
-          <TabsTrigger
-            value="reviews"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-0 pb-3 font-semibold text-muted-foreground data-[state=active]:text-foreground"
-          >
-            Reviews
-          </TabsTrigger>
-          <TabsTrigger
-            value="analytics"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-0 pb-3 font-semibold text-muted-foreground data-[state=active]:text-foreground"
-          >
-            Analytics
-          </TabsTrigger>
-          <TabsTrigger
-            value="settings"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-0 pb-3 font-semibold text-muted-foreground data-[state=active]:text-foreground"
-          >
-            Settings
-          </TabsTrigger>
-        </TabsList>
-
         <TabsContent value="overview">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 bg-card border rounded-2xl p-6 shadow-sm space-y-4">
@@ -329,38 +292,13 @@ export default function CourseDetails({
                     View Student List
                   </Button>
                 </Link>
+                <Link href={courseCertificates} className="mb-5 w-full">
+                  <Button className="w-full text-center" variant="outline">
+                    View Course Certificates 
+                  </Button>
+                </Link>
               </div>
             </div>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="curriculum">
-          <div className="bg-card border rounded-2xl p-6 shadow-sm text-center text-muted-foreground py-12">
-            Curriculum content goes here...
-          </div>
-        </TabsContent>
-
-        <TabsContent value="students">
-          <div className="bg-card border rounded-2xl p-6 shadow-sm text-center text-muted-foreground py-12">
-            Enrolled students list goes here...
-          </div>
-        </TabsContent>
-
-        <TabsContent value="reviews">
-          <div className="bg-card border rounded-2xl p-6 shadow-sm text-center text-muted-foreground py-12">
-            Course reviews & feedback go here...
-          </div>
-        </TabsContent>
-
-        <TabsContent value="analytics">
-          <div className="bg-card border rounded-2xl p-6 shadow-sm text-center text-muted-foreground py-12">
-            Course analytics & sales data go here...
-          </div>
-        </TabsContent>
-
-        <TabsContent value="settings">
-          <div className="bg-card border rounded-2xl p-6 shadow-sm text-center text-muted-foreground py-12">
-            Course settings go here...
           </div>
         </TabsContent>
       </Tabs>

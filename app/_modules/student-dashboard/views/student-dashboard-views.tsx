@@ -25,7 +25,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Certificate } from "../../certificate/entity/certificate";
+import { Certificate } from "../../certificate/entities/certificate";
 import { useGetUserEnrollmentStats } from "../../enrollment/hooks/useGetUserEnrollmentStats";
 import { useGetMyEnrollments } from "../../enrollment/hooks/useGetMyEnrollments";
 import { useGetMyCertificates } from "../../certificate/hooks/useGetMyCertificates";

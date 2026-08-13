@@ -3,10 +3,10 @@ import { useQuery } from "@tanstack/react-query";
 import { resCertificate } from "../repo/resCertificate";
 import { certificateQueryKeys } from "./certificate-query-keys";
 
-export function useGetCertificateById(courseId: string, certificateId: string) {
+export function useGetCertificateById(certificateId: string) {
   return useQuery({
-    queryKey: certificateQueryKeys.detail(courseId, certificateId),
-    queryFn: () => resCertificate.getCertificateById(courseId, certificateId),
-    enabled: Boolean(courseId && certificateId),
+    queryKey: certificateQueryKeys.userCertificateDetail(certificateId),
+    queryFn: () => resCertificate.findById(certificateId),
+    enabled: Boolean(certificateId),
   });
 }

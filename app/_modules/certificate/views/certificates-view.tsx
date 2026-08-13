@@ -14,6 +14,7 @@ export default function CertificatesView() {
     isFetching,
     refetch,
   } = useGetMyCertificates();
+  
 
   return (
     <div className="container mx-auto space-y-8 p-4 md:p-6">

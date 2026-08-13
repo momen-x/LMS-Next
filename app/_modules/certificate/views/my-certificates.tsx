@@ -4,7 +4,7 @@ import { Award } from "lucide-react";
 
 import { getErrorMessage } from "@/utils/get-axios-error-message";
 
-import { Certificate } from "../entity/certificate";
+import { Certificate } from "../entities/certificate";
 import { useGetMyCertificates } from "../hooks/useGetMyCertificates";
 
 import CertificateCard from "./certificate-card";

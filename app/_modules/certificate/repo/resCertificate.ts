@@ -1,7 +1,9 @@
 import { api } from "@/utils/axiosInstance";
 
-import { Certificate } from "../entity/certificate";
+import { Certificate } from "../entities/certificate";
 import { ICertificateAPI } from "./certificate";
+import { UserCertificate } from "../entities/user-certificates";
+import { PublicCertificate } from "../entities/public-certificate";
 
 export const resCertificate: ICertificateAPI = {
   createCertificate: async function (
@@ -17,16 +19,16 @@ export const resCertificate: ICertificateAPI = {
 
   getCourseCertificates: async function (
     courseId: string,
-  ): Promise<Certificate[]> {
-    const response = await api.get<Certificate[]>(
+  ): Promise<UserCertificate[]> {
+    const response = await api.get<UserCertificate[]>(
       `/api/courses/${courseId}/certificates`,
     );
 
     return response.data;
   },
 
-  getMyCertificates: async function (): Promise<Certificate[]> {
-    const response = await api.get<Certificate[]>("/api/certificates/me");
+  getMyCertificates: async function (): Promise<UserCertificate[]> {
+    const response = await api.get<UserCertificate[]>("/api/certificates/me");
 
     return response.data;
   },
@@ -79,11 +81,21 @@ export const resCertificate: ICertificateAPI = {
 
     return response.data;
   },
-  getUserCertificates: async function (
-    userId: string,
-  ): Promise<Certificate[]> {
+  getUserCertificates: async function (userId: string): Promise<Certificate[]> {
     const res = await api.get<Certificate[]>(
-      `api/certificates/${userId}/certificates`,
+      `/api/certificates/${userId}/certificates`,
+    );
+    return res.data;
+  },
+  findById: async function (id: string): Promise<UserCertificate> {
+    const res = await api.get<UserCertificate>(`/api/certificates/${id}`);
+    return res.data;
+  },
+  findPublicByCertificateNum: async function (
+    certificateNumber: string,
+  ): Promise<PublicCertificate> {
+    const res = await api.get<PublicCertificate>(
+      `/api/certificates/public/${certificateNumber}`,
     );
     return res.data;
   },

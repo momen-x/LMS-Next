@@ -1,6 +1,6 @@
 import { Award, Calendar } from "lucide-react";
 
-import { Certificate } from "../entity/certificate";
+import { Certificate } from "../entities/certificate";
 import transformingTheDateToATextString from "@/utils/from-date-to-string";
 
 interface CertificateStatsProps {

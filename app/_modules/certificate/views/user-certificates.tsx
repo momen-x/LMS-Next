@@ -1,41 +1,32 @@
 "use client";
 
-import { useState } from "react";
 import { Award } from "lucide-react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import QueryErrorState from "@/components/sharing/query-error-state";
 
-import { Certificate } from "../entity/certificate";
 import CertificateCard from "./certificate-card";
-import CertificatePreviewDialog from "./certificate-preview-dialog";
-
-interface UserCertificatesProps {
-  certificates: Certificate[];
-  isPending: boolean;
-  isError: boolean;
-  isFetching?: boolean;
-  onRetry?: () => void;
-  title?: string;
-  description?: string;
-  emptyTitle?: string;
-  emptyDescription?: string;
-}
+import { useRouter } from "next/navigation";
+import { useGetMyCertificates } from "../hooks/useGetMyCertificates";
 
 export default function UserCertificates({
-  certificates,
-  isPending,
-  isError,
-  isFetching = false,
-  onRetry,
-  title = "Earned Certificates",
+  title,
   description,
-  emptyTitle = "No certificates earned yet",
-  emptyDescription = "This user has not earned any certificates yet.",
-}: UserCertificatesProps) {
-  const [selectedCertificate, setSelectedCertificate] =
-    useState<Certificate | null>(null);
-
+}: {
+  title: string;
+  description: string;
+}) {
+  const router = useRouter();
+  const {
+    data: certificates,
+    isPending,
+    isError,
+    isFetching,
+    refetch: onRetry,
+  } = useGetMyCertificates();
+  const emptyTitle = "No certificates yet";
+  const emptyDescription =
+    "Complete an eligible course to earn your first certificate.";
   return (
     <section className="space-y-4">
       <div>
@@ -77,20 +68,15 @@ export default function UserCertificates({
             <CertificateCard
               key={certificate.id}
               certificate={certificate}
-              onPreview={setSelectedCertificate}
+              onPreview={() => {
+                router.push(
+                  `/student-dashboard/certificates/${certificate.id}`,
+                );
+              }}
             />
           ))}
         </div>
       )}
-
-      <CertificatePreviewDialog
-        certificate={selectedCertificate}
-        onOpenChange={(open) => {
-          if (!open) {
-            setSelectedCertificate(null);
-          }
-        }}
-      />
     </section>
   );
 }

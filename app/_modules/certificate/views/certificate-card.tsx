@@ -1,16 +1,18 @@
 "use client";
 
-import { Award, Calendar, Eye } from "lucide-react";
+import { Calendar, Download, Eye, MoreVertical, Share2 } from "lucide-react";
+import Image from "next/image";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 
-import { Certificate } from "../entity/certificate";
+import { UserCertificate } from "../entities/user-certificates";
 import transformingTheDateToATextString from "@/utils/from-date-to-string";
 
 interface CertificateCardProps {
-  certificate: Certificate;
-  onPreview: (certificate: Certificate) => void;
+  certificate: UserCertificate;
+  onPreview: (certificateId?: string) => void;
 }
 
 export default function CertificateCard({
@@ -18,44 +20,89 @@ export default function CertificateCard({
   onPreview,
 }: CertificateCardProps) {
   const issueDate = transformingTheDateToATextString(certificate.issueDate);
+  const { course } = certificate;
 
   return (
-    <Card className="overflow-hidden border bg-card shadow-sm transition-shadow hover:shadow-md">
-      <CardContent className="space-y-4 p-4">
-        <div className="flex items-start gap-3">
-          <div className="flex size-12 shrink-0 items-center justify-center rounded-xl border bg-primary/10 text-primary">
-            <Award className="size-6" />
-          </div>
+    <Card className="flex flex-col justify-between overflow-hidden rounded-xl border bg-card shadow-xs transition-shadow hover:shadow-md">
+      {/* Top Section: Horizontal Layout */}
+      <div className="flex items-start gap-4 p-4">
+        {/* Thumbnail on the Left */}
+        <div className="relative aspect-4/3 w-32 shrink-0 overflow-hidden rounded-lg border bg-muted">
+          {course.thumbnail ? (
+            <Image
+              src={course.thumbnail}
+              alt={course.title}
+              fill
+              className="object-cover"
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center bg-muted text-xs text-muted-foreground">
+              No Image
+            </div>
+          )}
+        </div>
 
-          <div className="min-w-0 flex-1">
-            <h3 className="truncate text-sm font-semibold">
-              Course Certificate
+        {/* Content on the Right */}
+        <div className="flex min-w-0 flex-1 flex-col justify-between self-stretch">
+          <div className="flex items-start justify-between gap-2">
+            <h3
+              className="line-clamp-2 text-sm font-bold text-card-foreground leading-snug"
+              title={course.title}
+            >
+              {course.title}
             </h3>
 
-            <p className="mt-1 truncate text-xs text-muted-foreground">
-              Certificate #{certificate.certificateNumber}
+            {/* Optional Menu Icon */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="-mr-2 -mt-1 h-7 w-7 text-muted-foreground hover:text-foreground"
+            >
+              <MoreVertical className="size-4" />
+            </Button>
+          </div>
+
+          <div className="mt-2 space-y-2">
+            {/* Issue Date */}
+            <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <Calendar className="size-3.5 shrink-0" />
+              <span>Issued on {issueDate}</span>
             </p>
 
-            <p className="mt-2 flex items-center gap-1 text-xs text-muted-foreground">
-              <Calendar className="size-3.5" />
-              Issued {issueDate}
-            </p>
+            {/* Instructor */}
+            {course.instructor && (
+              <div className="flex items-center gap-2 pt-0.5">
+                <Avatar className="size-5 border">
+                  <AvatarImage
+                    src={course.instructor.avatar}
+                    alt={course.instructor.name}
+                  />
+                  <AvatarFallback className="text-[10px]">
+                    {course.instructor.name?.[0] || "I"}
+                  </AvatarFallback>
+                </Avatar>
+                <span className="truncate text-xs font-medium text-muted-foreground">
+                  {course.instructor.name}
+                </span>
+              </div>
+            )}
           </div>
         </div>
+      </div>
 
-        <div className="border-t pt-3">
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="w-full gap-2"
-            onClick={() => onPreview(certificate)}
-          >
-            <Eye className="size-4" />
-            View certificate
-          </Button>
-        </div>
-      </CardContent>
+      {/* Bottom Action Buttons */}
+      <div className="grid grid-cols-1 gap-2 border-t bg-muted/20 p-2.5">
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className="h-8 gap-1.5 text-xs font-medium text-muted-foreground hover:bg-background hover:text-foreground hover:shadow-xs"
+          onClick={() => onPreview(certificate.id)}
+        >
+          <Eye className="size-3.5" />
+          Preview
+        </Button>
+      </div>
     </Card>
   );
 }

@@ -1,9 +1,9 @@
-import CertificatesView from "@/app/_modules/certificate/views/certificates-view";
+import UserCertificates from "@/app/_modules/certificate/views/user-certificates";
 
 const CertificatesPage = () => {
   return (
     <>
-      <CertificatesView />
+      <UserCertificates title="pla pla pla" description="pla lorem50" />
     </>
   );
 };

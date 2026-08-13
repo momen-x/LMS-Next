@@ -15,11 +15,21 @@ export const certificateQueryKeys = {
   detail: (courseId: string, certificateId: string) =>
     [...certificateQueryKeys.all, "detail", courseId, certificateId] as const,
 
+  userCertificateDetail: (certificateId: string) =>
+    [...certificateQueryKeys.all, "user-certificate", certificateId] as const,
+
   byNumber: (courseId: string, certificateNumber: string) =>
     [
       ...certificateQueryKeys.all,
       "by-number",
       courseId,
+      certificateNumber,
+    ] as const,
+
+  publicByNumber: (certificateNumber: string) =>
+    [
+      ...certificateQueryKeys.all,
+      "public-by-number",
       certificateNumber,
     ] as const,
 };
