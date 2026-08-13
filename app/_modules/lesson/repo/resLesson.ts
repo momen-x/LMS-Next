@@ -2,7 +2,7 @@ import { api } from "@/utils/axiosInstance";
 import { CreateLessonData } from "../dto/create-lesson";
 import { UpdateLessonData } from "../dto/update-lesson";
 import { Lesson } from "../entity/lesson";
-import { ILessonAPI } from "./lesson";
+import { ILessonAPI, LessonsResponse } from "./lesson";
 
 const BASE_URL = "/api/lessons";
 
@@ -34,6 +34,14 @@ export const resLesson: ILessonAPI = {
   },
   delete: async function (lessonId: string): Promise<Lesson> {
     const res = await api.delete<Lesson>(`${BASE_URL}/${lessonId}`);
+    return res.data;
+  },
+  getIsPreviewLessons: async function (
+    courseId: string,
+  ): Promise<LessonsResponse> {
+    const res = await api.get<LessonsResponse>(
+      `/api/courses/${courseId}/preview-lessons`,
+    );
     return res.data;
   },
 };

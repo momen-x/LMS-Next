@@ -23,6 +23,7 @@ import {
 
 import { Lesson } from "../entity/lesson";
 import { useLessonDialog } from "../context/lesson-dialog-context";
+import { formatDuration } from "@/utils/format-duration";
 
 interface LessonItemProps {
   lesson: Lesson;
@@ -31,21 +32,6 @@ interface LessonItemProps {
   onDelete?: (lesson: Lesson) => void;
 }
 
-function formatDuration(duration: number): string {
-  const hours = Math.floor(duration / 3600);
-  const minutes = Math.floor((duration % 3600) / 60);
-  const seconds = duration % 60;
-
-  if (hours > 0) {
-    return `${hours}h ${minutes}m`;
-  }
-
-  if (minutes > 0) {
-    return seconds > 0 ? `${minutes}m ${seconds}s` : `${minutes}m`;
-  }
-
-  return `${seconds}s`;
-}
 
 export default function LessonCard({
   lesson,

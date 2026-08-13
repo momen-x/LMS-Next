@@ -21,21 +21,9 @@ import NoData from "@/components/sharing/no-data";
 import transformingTheDateToATextString from "@/utils/from-date-to-string";
 import LessonMedia from "../../media/views/lesson-media";
 
-function formatDuration(duration: number): string {
-  const hours = Math.floor(duration / 3600);
-  const minutes = Math.floor((duration % 3600) / 60);
-  const seconds = duration % 60;
+import { formatDuration } from "@/utils/format-duration";
 
-  if (hours > 0) {
-    return minutes > 0 ? `${hours}h ${minutes}m` : `${hours}h`;
-  }
 
-  if (minutes > 0) {
-    return seconds > 0 ? `${minutes}m ${seconds}s` : `${minutes}m`;
-  }
-
-  return `${seconds}s`;
-}
 
 export default function LessonDetails() {
   const router = useRouter();

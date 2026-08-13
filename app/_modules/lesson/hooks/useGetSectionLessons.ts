@@ -7,6 +7,9 @@ export const Lesson_KEYS = {
   sectionList: (sectionId: string) =>
     [...Lesson_KEYS.all, "section", sectionId] as const,
 
+  previewList: (courseId: string) =>
+    [...Lesson_KEYS.all, "preview", courseId] as const,
+
   detail: (lessonId: string) =>
     [...Lesson_KEYS.all, "detail", lessonId] as const,
 };
