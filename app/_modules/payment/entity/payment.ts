@@ -1,4 +1,4 @@
-import { Enrollment } from "../../enrollment/entity/enrollment";
+import { Enrollment } from "../../enrollment/entities/enrollment";
 
 export type PaymentStatus =
   | "pending"
@@ -26,6 +26,4 @@ export interface CreateCheckoutResponse {
   checkoutUrl: string;
 }
 
-export type EnrollmentCheckoutResult =
-  | Enrollment
-  | CreateCheckoutResponse;
+export type EnrollmentCheckoutResult = Enrollment | CreateCheckoutResponse;

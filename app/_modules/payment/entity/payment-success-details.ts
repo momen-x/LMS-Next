@@ -1,4 +1,4 @@
-import { Course } from "../../course/entity/course";
+import { Course } from "../../course/entities/course";
 import { PaymentStatus } from "./payment";
 
 export type PaymentSuccessDetails = {

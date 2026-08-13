@@ -8,25 +8,33 @@ import { Button } from "@/components/ui/button";
 import { getErrorMessage } from "@/utils/get-axios-error-message";
 import { useEnrollInCourse } from "../hooks/useEnrollInCourse";
 import { useIsUserEnrolledInCourse } from "../../enrollment/hooks/useIsUserEnrolledInCourse";
+import { useGetCurrentUser } from "../../user/hooks/useGetCurrentUser";
 
 type EnrollmentButtonProps = {
   courseId: string;
   className?: string;
+  size?: "sm" | "md" | "lg";
 };
 
 export default function EnrollmentButton({
   courseId,
   className,
+  size,
 }: EnrollmentButtonProps) {
   const router = useRouter();
   const { data: isAlreadyEnrolled } = useIsUserEnrolledInCourse(courseId);
-console.log("isAlreadyEnrolled : ", isAlreadyEnrolled);
+  const { data: currentUser, isLoading: isCurrentUserLoading } =
+    useGetCurrentUser();
 
   const { mutate: enrollInCourse, isPending } = useEnrollInCourse();
 
   const handleEnrollment = () => {
+    if (!isCurrentUserLoading && !currentUser) {
+      toast.info("please log in to continue enrolling in this course");
+      return;
+    }
     if (isAlreadyEnrolled) {
-      router.push(`/student-dashboard/courses/${courseId}`);
+      router.push(`/courses/${courseId}/learning`);
 
       return;
     }
@@ -53,6 +61,7 @@ console.log("isAlreadyEnrolled : ", isAlreadyEnrolled);
       className={className}
       disabled={isPending}
       onClick={handleEnrollment}
+      size={size === "md" ? "default" : size || "default"}
     >
       {isPending ? (
         <>

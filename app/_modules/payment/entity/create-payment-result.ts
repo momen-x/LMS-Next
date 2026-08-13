@@ -1,4 +1,4 @@
-import type { Enrollment } from "@/app/_modules/enrollment/entity/enrollment";
+import type { Enrollment } from "@/app/_modules/enrollment/entities/enrollment";
 
 export type StripeCheckoutResult = {
   payment: {
