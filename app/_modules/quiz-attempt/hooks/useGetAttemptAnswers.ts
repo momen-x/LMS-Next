@@ -7,7 +7,7 @@ export function useGetAttemptAnswers(attemptId: string, enabled = true) {
   return useQuery({
     queryKey: QUIZ_ATTEMPT_KEYS.answers(attemptId),
 
-    queryFn: () => resQuizAttempt.getAttemptAnswers(attemptId),
+    queryFn: () => resQuizAttempt.getAttempt(attemptId),
 
     enabled: Boolean(attemptId) && enabled,
   });

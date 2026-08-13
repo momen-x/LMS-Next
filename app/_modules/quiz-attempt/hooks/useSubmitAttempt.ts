@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { QuizAttempt } from "../entity/quiz-attempt";
+import { QuizAttempt } from "../entities/quiz-attempt";
 import { resQuizAttempt } from "../repo/resQuizAttempt";
 import { QUIZ_ATTEMPT_KEYS } from "./quiz-attempt-keys";
 

@@ -1,4 +1,4 @@
-import { SavedAttemptAnswer } from "../entity/saved-attempt-answer";
+import { SavedAttemptAnswer } from "../entities/saved-attempt-answer";
 
 export default function mapAttemptAnswers(
   answers: SavedAttemptAnswer[],

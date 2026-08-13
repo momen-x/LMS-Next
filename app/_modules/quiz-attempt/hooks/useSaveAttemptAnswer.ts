@@ -5,12 +5,13 @@ import { resQuizAttempt } from "../repo/resQuizAttempt";
 
 type SaveAttemptAnswerVariables = {
   attemptId: string;
+  questionId: string;
   data: TSaveAttemptAnswer;
 };
 
 export const useSaveAttemptAnswer = () => {
   return useMutation({
-    mutationFn: ({ attemptId, data }: SaveAttemptAnswerVariables) =>
-      resQuizAttempt.saveAnswer(attemptId, data),
+    mutationFn: ({ attemptId, questionId, data }: SaveAttemptAnswerVariables) =>
+      resQuizAttempt.saveAnswer(attemptId, questionId, data),
   });
 };
