@@ -27,14 +27,27 @@ const NavButton = ({
 }: NavButtonProps) => {
   const pathname = usePathname();
 
-  const isActive = exact
-    ? pathname === path
-    : pathname === path || pathname.startsWith(`${path}/`);
+  const normalizedPath =
+    path.replace(/\/{2,}/g, "/").replace(/\/$/, "") || "/";
+  const normalizedPathname =
+    pathname.replace(/\/{2,}/g, "/").replace(/\/$/, "") || "/";
+  const isDashboardRoot = /^\/(student|instructor|admin)-dashboard$/.test(
+    normalizedPath,
+  );
+
+  const isActive =
+    exact || isDashboardRoot
+      ? normalizedPathname === normalizedPath
+      : normalizedPathname === normalizedPath ||
+        normalizedPathname.startsWith(`${normalizedPath}/`);
 
   const variantConfig = {
     sidebar: {
-      className: "w-full justify-start",
-      iconClass: isSidebarOpen ? "mr-3" : "mr-0",
+      className: cn(
+        "w-full px-3 py-2.5",
+        isSidebarOpen ? "justify-start" : "justify-center",
+      ),
+      iconClass: isSidebarOpen ? "mr-3" : "mx-auto",
       showLabel: isSidebarOpen,
       size: "sm" as const,
     },
@@ -55,12 +68,18 @@ const NavButton = ({
   const config = variantConfig[variant];
 
   const buttonContent = (
-    <div className="w-full flex items-center mb-5">
-      <Icon className={cn("h-4 w-4 shrink-0", config.iconClass)} />
+    <div className="flex w-full items-center">
+      <Icon
+        className={cn(
+          "h-4 w-4 shrink-0 transition-colors",
+          config.iconClass,
+          isActive && "text-primary",
+        )}
+      />
       {config.showLabel && (
         <span
           className={cn(
-            "whitespace-nowrap",
+            "whitespace-nowrap transition-colors",
             variant === "header" || variant === "mobile"
               ? "text-xs"
               : "text-sm",
@@ -73,11 +92,11 @@ const NavButton = ({
   );
 
   const buttonClasses = cn(
-    "transition-all duration-200 relative",
+    "group relative flex min-h-10 items-center outline-none transition-all duration-200 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
     config.className,
     isActive
-      ? "bg-accent text-accent-foreground font-medium"
-      : "text-muted-foreground hover:text-foreground hover:bg-accent/50",
+      ? "bg-primary/10 font-semibold text-primary shadow-sm ring-1 ring-primary/20 dark:bg-primary/20 dark:text-primary dark:ring-primary/30"
+      : "text-muted-foreground hover:bg-muted hover:text-foreground dark:hover:bg-muted/70",
     // Different hover effects based on variant
     variant === "sidebar" && "rounded-lg",
     variant === "header" && "rounded-md hover:bg-accent/30",
@@ -106,9 +125,10 @@ const NavButton = ({
 
   return (
     <Link
-      href={path}
+      href={normalizedPath}
       className={buttonClasses}
       title={!config.showLabel ? label : undefined}
+      aria-current={isActive ? "page" : undefined}
     >
       {buttonContent}
 

@@ -32,7 +32,6 @@ import { getErrorMessage } from "@/utils/get-axios-error-message";
 import { AUTH_ROUTES } from "../../auth/utils/constants";
 
 export function ProfileDropdown() {
-  //todo add is loading and compleat the logic
   const { data: user } = useGetCurrentUser();
   const { theme, setTheme } = useTheme();
   const { mutate: logout } = useLogout();
