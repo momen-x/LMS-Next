@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { resEnrollment } from "../repo/resEnrollment";
 import { enrollmentQueryKeys } from "./enrollment-query-keys";
+import { COURSE_KEY } from "../../course/hooks/useGetAllCourses";
 
 type CompleteLessonVariables = {
   enrollmentId: string;
@@ -31,6 +32,10 @@ export function useCompleteLesson() {
 
         queryClient.invalidateQueries({
           queryKey: enrollmentQueryKeys.course(result.enrollment.courseId),
+        }),
+
+        queryClient.invalidateQueries({
+          queryKey: [COURSE_KEY, "learning", result.enrollment.courseId],
         }),
       ]);
     },

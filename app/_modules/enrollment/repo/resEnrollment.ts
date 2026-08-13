@@ -1,10 +1,14 @@
 import { CreateEnrollmentInput } from "../dto/create-enrollment";
-import { Enrollment } from "../entity/enrollment";
-import { EnrollmentWithCourse } from "../entity/enrollment-course";
-import type { EnrollmentWithStudent } from "../entity/enrollment-student";
-import { LessonCompletionResult } from "../entity/lesson-completion-result";
+import { Enrollment } from "../entities/enrollment";
+import { EnrollmentWithCourse } from "../entities/enrollment-course";
+import type { EnrollmentWithStudent } from "../entities/enrollment-student";
+import { LessonCompletionResult } from "../entities/lesson-completion-result";
 import { GetMyEnrollmentsParams } from "../types/get-my-enrollments";
-import { IEnrollmentAPI, UserEnrollmentStats } from "./enrollment";
+import {
+  IEnrollmentAPI,
+  UpdateLearningPositionInput,
+  UserEnrollmentStats,
+} from "./enrollment";
 import { api } from "@/utils/axiosInstance";
 
 const BASE_URL = "/api/enrollments";
@@ -70,6 +74,16 @@ export const resEnrollment: IEnrollmentAPI = {
       `${BASE_URL}/${enrollmentId}/lessons/${lessonId}/complete`,
     );
 
+    return response.data;
+  },
+  updateLearningPosition: async function (
+    enrollmentId: string,
+    input: UpdateLearningPositionInput,
+  ): Promise<Enrollment> {
+    const response = await api.patch<Enrollment>(
+      `${BASE_URL}/${enrollmentId}/learning-position`,
+      input,
+    );
     return response.data;
   },
   isUserEnrolledInCourse: async function (courseId: string): Promise<boolean> {

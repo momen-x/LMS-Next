@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 
-import type { EnrollmentWithCourse } from "../entity/enrollment-course";
+import type { EnrollmentWithCourse } from "../entities/enrollment-course";
 
 type EnrollmentCardProps = {
   enrollment: EnrollmentWithCourse;

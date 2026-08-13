@@ -6,6 +6,8 @@ export interface Enrollment {
   completed: boolean;
   enrolledAt: string;
   completedAt: string | null;
+  lastLearningType: "lesson" | "quiz" | null;
+  lastLearningItemId: string | null;
   createdAt: string;
   updatedAt: string;
 }

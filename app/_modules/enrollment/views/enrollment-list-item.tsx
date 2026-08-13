@@ -5,7 +5,7 @@ import { CalendarDays, CheckCircle2, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 
-import type { EnrollmentWithStudent } from "../entity/enrollment-student";
+import type { EnrollmentWithStudent } from "../entities/enrollment-student";
 import transformingTheDateToATextString from "@/utils/from-date-to-string";
 
 type EnrollmentListItemProps = {

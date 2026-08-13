@@ -1,11 +1,7 @@
-import type {
-  CourseLevel,
-  CourseStatus,
-} from "@/app/_modules/course/entity/course";
-
+import { CourseLevel, CourseStatus } from "../../course/entities/course";
 import type { Enrollment } from "./enrollment";
 
-export type EnrollmentInstructor = {
+export type EnrollmentCourseInstructor = {
   id: string;
   name: string;
   avatar: string | null;
@@ -14,10 +10,10 @@ export type EnrollmentInstructor = {
 export type EnrollmentCourse = {
   id: string;
   title: string;
-  thumbnail: string | null;
+  thumbnail: string;
   level: CourseLevel;
   status: CourseStatus;
-  instructor: EnrollmentInstructor;
+  instructor?: EnrollmentCourseInstructor;
 };
 
 export type EnrollmentWithCourse = Enrollment & {
