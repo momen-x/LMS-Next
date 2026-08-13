@@ -19,19 +19,21 @@ import {
   DropdownMenuLinkItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-import defaultCourseImage from "@/public/assets/default-course.png";
-import { useGetCourse } from "../hooks/useGetCourse";
 import BackBtn from "@/components/sharing/back-btn";
 import Link from "next/link";
 import { CardSkeleton } from "@/components/skeletons/card-skeleton";
 import QueryErrorState from "@/components/sharing/query-error-state";
 import NoData from "@/components/sharing/no-data";
-import { useSubmitCourseForReview } from "../hooks/useSubmitCourseForReview";
-import { toast } from "react-toastify";
-import { getErrorMessage } from "@/utils/get-axios-error-message";
-import { useQuestionsBankDialog } from "../../question-bank/context/question-bank-dialog-context";
 
+import { useGetCourse } from "../hooks/useGetCourse";
+import { useQuestionsBankDialog } from "../../question-bank/context/question-bank-dialog-context";
+import { toast } from "react-toastify";
+import { useSubmitCourseForReview } from "../hooks/useSubmitCourseForReview";
+
+import { getErrorMessage } from "@/utils/get-axios-error-message";
+import { formatDuration } from "@/utils/format-duration";
+
+import defaultCourseImage from "@/public/assets/default-course.png";
 interface CourseDetailsProps {
   onEdit: string;
   onDelete: string;
@@ -51,12 +53,6 @@ export default function CourseDetails({
   manageQuestionBank,
   manageQuizzes,
 }: CourseDetailsProps) {
-  //todo this DRY code
-  const formatDuration = (minutes: number = 0) => {
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    return `${hours}h ${mins}m`;
-  };
   const { openCreateQuestionsBank } = useQuestionsBankDialog();
 
   const capitalize = (str: string) =>
@@ -182,16 +178,17 @@ export default function CourseDetails({
             <div className="flex items-center gap-1 text-xs font-medium text-amber-500">
               <Star className="w-4 h-4 fill-amber-500 text-amber-500" />
               <span>{course.averageRating ?? 0}</span>
-              <span className="text-muted-foreground font-normal">
-                {/* todo */}
-                (not found reviews)
-              </span>
+              {course.averageRating === 0 && (
+                <span className="text-muted-foreground font-normal">
+                  ( there no reviews yet )
+                </span>
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Stats KPI Cards Grid */}
+      {/* todo not important  */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
         {/* Students */}
         <div className="bg-card border rounded-xl p-4 flex items-center gap-3 shadow-sm">

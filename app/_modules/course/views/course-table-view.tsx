@@ -19,7 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { Course, CourseStatus } from "../entity/course";
+import { Course, CourseStatus } from "../entities/course";
 import defaultCourseImage from "@/public/assets/default-course.png";
 
 type CoursesTableViewProps = {

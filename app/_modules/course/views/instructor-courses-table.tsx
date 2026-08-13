@@ -6,7 +6,7 @@ import { CoursesTableView } from "./course-table-view";
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Course } from "../entity/course";
+import { Course } from "../entities/course";
 
 export default function InstructorCoursesTable() {
   const router = useRouter();

@@ -78,7 +78,7 @@ export default function ExploreCourses() {
                     </span>
                   </div>
                   {/* todo create this course and this page */}
-                  <Link href="/courses/featured">
+                  <Link href={`/student-dashboard/courses/id/trend`}>
                     <Button className="gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium">
                       Explore featured course
                       <ChevronRight className="size-4" />

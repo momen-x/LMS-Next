@@ -6,7 +6,7 @@ import {
 import { resCourse } from "../repo/resCourse";
 import { COURSE_KEY } from "../hooks/useGetAllCourses";
 import { UpdateCourseData } from "../dto/update-course";
-import { Course } from "../entity/course";
+import { Course } from "../entities/course";
 
 export const useUpdateCourse = (): UseMutationResult<
   Course,

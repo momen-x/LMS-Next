@@ -1,4 +1,4 @@
-import { CourseLevel } from "../entity/course";
+import { CourseLevel } from "../entities/course";
 
 export type TSearchCoursesParams = {
   page?: number;
@@ -6,6 +6,6 @@ export type TSearchCoursesParams = {
   category?: string;
   minPrice?: number;
   maxPrice?: number;
-  level?: CourseLevel,
+  level?: CourseLevel;
   language?: string;
 };

@@ -38,6 +38,7 @@ import { CardSkeleton } from "@/components/skeletons/card-skeleton";
 
 import { useGetCourse } from "../hooks/useGetCourse";
 import transformingTheDateToATextString from "@/utils/from-date-to-string";
+import { formatDuration } from "@/utils/format-duration";
 
 interface AdminCourseDetailsProps {
   courseId: string;
@@ -53,21 +54,7 @@ function capitalize(value: string): string {
 
   return value.charAt(0).toUpperCase() + value.slice(1);
 }
-//todo there more one function the same this function, stop the dry
-function formatDuration(minutes: number = 0): string {
-  const hours = Math.floor(minutes / 60);
-  const remainingMinutes = minutes % 60;
 
-  if (hours === 0) {
-    return `${remainingMinutes}m`;
-  }
-
-  if (remainingMinutes === 0) {
-    return `${hours}h`;
-  }
-
-  return `${hours}h ${remainingMinutes}m`;
-}
 
 function formatLanguage(language: string): string {
   const languages: Record<string, string> = {

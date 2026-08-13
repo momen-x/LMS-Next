@@ -22,7 +22,7 @@ import {
 
 import { useSearchCourses } from "../hooks/useSearchCourses";
 import { useGetAllCategories } from "../../category/hooks/useGetAllCategories";
-import { Course, CourseLevel } from "../entity/course";
+import { Course, CourseLevel } from "../entities/course";
 import { CoursesTableView } from "./course-table-view";
 import { useRouter } from "next/navigation";
 import Link from "next/link";

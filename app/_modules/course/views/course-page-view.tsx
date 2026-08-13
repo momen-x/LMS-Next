@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Course, CourseLevel } from "../entity/course";
+import { Course, CourseLevel } from "../entities/course";
 import { useGetAllCategories } from "../../category/hooks/useGetAllCategories";
 import { useSearchCourses } from "../hooks/useSearchCourses";
 import {
@@ -22,7 +22,6 @@ const CoursePageView = ({ children }: childrenPropsType) => {
   const [priceType, setPriceType] = useState<"all" | "free" | "premium">("all");
   //   const [sortBy, setSortBy] = useState<string>("newest");
   const [category, setCategory] = useState<string>("all");
-  
 
   const { data: categories } = useGetAllCategories();
 
@@ -151,8 +150,7 @@ const CoursePageView = ({ children }: childrenPropsType) => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
             {filteredCourses.map((course) => (
-            
-              <CourseCard key={course.id} course={course}  />
+              <CourseCard key={course.id} course={course} />
             ))}
           </div>
         )}

@@ -9,8 +9,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { Course, CourseLevel } from "../entity/course";
+import { Course, CourseLevel } from "../entities/course";
 import EnrollmentButton from "../../payment/views/enrollment-button.tsx";
+
+import { formatDuration } from "@/utils/format-duration";
 
 interface CourseCardProps {
   course: Course;
@@ -31,21 +33,6 @@ const levelVariant: Record<
   intermediate: "default",
   advanced: "destructive",
 };
-//todo dry code
-function formatDuration(minutes: number = 0): string {
-  const hours = Math.floor(minutes / 60);
-  const remainingMinutes = minutes % 60;
-
-  if (hours === 0) {
-    return `${remainingMinutes}m`;
-  }
-
-  if (remainingMinutes === 0) {
-    return `${hours}h`;
-  }
-
-  return `${hours}h ${remainingMinutes}m`;
-}
 
 export function CourseCard({ course, className }: CourseCardProps) {
   const {
@@ -113,12 +100,12 @@ export function CourseCard({ course, className }: CourseCardProps) {
       </CardContent>
 
       <CardFooter className="gap-2">
-        <Link href={`/courses/${id}`} className="flex-1 w-[50%]">
+        <Link href={`/courses/${id}`} className="flex-1 w-[40%]">
           <Button variant="outline" className="flex-1 w-full">
             View Course
           </Button>
         </Link>
-        <EnrollmentButton courseId={course.id} className="w-[50%]" />
+        <EnrollmentButton courseId={course.id} className="w-[60%]" />
       </CardFooter>
     </Card>
   );

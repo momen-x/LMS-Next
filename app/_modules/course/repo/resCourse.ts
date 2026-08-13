@@ -2,10 +2,11 @@ import { CreateCourseData } from "../dto/create-course";
 import { CreateRejectMessageData } from "../dto/create-reject-message";
 import { TSearchCoursesParams } from "../dto/search-course";
 import { UpdateCourseData } from "../dto/update-course";
-import { Course } from "../entity/course";
-import { InstructorEnrollmentStats } from "../entity/instructor-users-enrollments";
-import { CourseWithInstructor } from "../entity/pending-course";
-import { SearchCoursesResponse } from "../entity/search-response-type";
+import { Course } from "../entities/course";
+import { CourseLearning } from "../entities/course-learning";
+import { InstructorEnrollmentStats } from "../entities/instructor-users-enrollments";
+import { CourseWithInstructor } from "../entities/pending-course";
+import { SearchCoursesResponse } from "../entities/search-response-type";
 import { ICourseAPI } from "./course";
 import { api } from "@/utils/axiosInstance";
 
@@ -121,4 +122,11 @@ export const resCourse: ICourseAPI = {
     const res = await api.patch<Course>(`${BASE_URL}/${courseId}/reject`, data);
     return res.data;
   },
-};
+  getCourseLearning: async function (id: string): Promise<CourseLearning> {
+    const res = await api.get<CourseLearning>(`${BASE_URL}/${id}/learning`);
+    return res.data;
+  },
+  getHighRatingCourses(count?: number): Promise<Course[]> {
+    return api.get<Course[]>(`/api/courses/high-rating?count=${count ?? 1}`).then((res) => res.data);
+},
+}
