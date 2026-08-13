@@ -14,6 +14,9 @@ export const enrollmentQueryKeys = {
   isUserEnrolled: (courseId: string) =>
     [...enrollmentQueryKeys.all, "me", "enrolled", courseId] as const,
 
+  mineByCourse: (courseId: string) =>
+    [...enrollmentQueryKeys.all, "mine", "course", courseId] as const,
+
   detail: (enrollmentId: string) =>
     [...enrollmentQueryKeys.all, "detail", enrollmentId] as const,
 };

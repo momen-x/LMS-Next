@@ -6,6 +6,9 @@ export const reviewQueryKeys = {
   mine: (query?: ReviewQueryDto) =>
     [...reviewQueryKeys.all, "mine", query] as const,
 
+  mineByCourse: (courseId: string) =>
+    [...reviewQueryKeys.all, "mine", "course", courseId] as const,
+
   course: (courseId: string, query?: ReviewQueryDto) =>
     [...reviewQueryKeys.all, "course", courseId, query] as const,
 

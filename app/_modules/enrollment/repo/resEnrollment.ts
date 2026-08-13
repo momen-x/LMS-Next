@@ -92,4 +92,10 @@ export const resEnrollment: IEnrollmentAPI = {
     );
     return response.data.isEnrollment;
   },
+  myEnrollmentByCourse: async (courseId: string) => {
+    const response = await api.get<Enrollment>(
+      `/api/courses/${courseId}/enrollments/me`,
+    );
+    return response.data;
+  },
 };

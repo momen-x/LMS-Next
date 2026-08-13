@@ -1,6 +1,12 @@
 "use client";
 
-import { CheckCircle2, Circle, FileQuestion, PlayCircle } from "lucide-react";
+import {
+  CheckCircle2,
+  Circle,
+  FileQuestion,
+  MessageSquareText,
+  PlayCircle,
+} from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { CourseLearning } from "../../entities/course-learning";
@@ -10,19 +16,23 @@ interface LearningSidebarProps {
 
   activeLessonId: string | null;
   activeQuizId: string | null;
+  reviewsActive: boolean;
 
   completedLessonIds: Set<string>;
 
   onLessonSelect: (lessonId: string) => void;
   onQuizSelect: (quizId: string) => void;
+  onReviewsSelect: () => void;
 }
 export default function LearningSidebar({
   course,
   activeLessonId,
   activeQuizId,
+  reviewsActive,
   completedLessonIds,
   onLessonSelect,
   onQuizSelect,
+  onReviewsSelect,
 }: LearningSidebarProps) {
   return (
     <aside className="border-r bg-card">
@@ -170,6 +180,38 @@ export default function LearningSidebar({
                 </div>
               </section>
             )}
+
+            <section className="border-t pt-6">
+              <div className="px-2">
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  Reviews
+                </p>
+              </div>
+
+              <div className="mt-2">
+                <button
+                  type="button"
+                  onClick={onReviewsSelect}
+                  className={cn(
+                    "flex w-full items-start gap-3 rounded-lg px-3 py-3 text-left transition-colors",
+                    reviewsActive
+                      ? "bg-muted text-foreground"
+                      : "text-muted-foreground hover:bg-muted/60 hover:text-foreground",
+                  )}
+                >
+                  <MessageSquareText className="mt-0.5 size-4 shrink-0" />
+
+                  <p
+                    className={cn(
+                      "text-sm leading-5",
+                      reviewsActive && "font-medium text-foreground",
+                    )}
+                  >
+                    Course Reviews
+                  </p>
+                </button>
+              </div>
+            </section>
           </div>
         </div>
       </div>

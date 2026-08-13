@@ -1,9 +1,9 @@
 import type { CourseLearning } from "../../entities/course-learning";
 
-export type SelectedLearningItem = {
-  type: "lesson" | "quiz";
-  id: string;
-};
+export type SelectedLearningItem =
+  | { type: "lesson"; id: string }
+  | { type: "quiz"; id: string }
+  | { type: "reviews" };
 
 export function getInitialLearningItem(
   course: CourseLearning,

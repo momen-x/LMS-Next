@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import EnrollmentButton from "../../payment/views/enrollment-button.tsx";
 import BackBtn from "@/components/sharing/back-btn";
+import ReviewSection from "../../review/views/review-section";
 import { toast } from "react-toastify";
 
 import { Button } from "@/components/ui/button";
@@ -27,6 +28,8 @@ import { formatDuration } from "@/utils/format-duration";
 import { getErrorMessage } from "@/utils/get-axios-error-message";
 import { useGetPreviewLessons } from "../../lesson/hooks/useGetPreviewLessons";
 import CoursePreviewLessons from "../../lesson/views/course-preview-lessons";
+import { useGetMyEnrollmentByCourse } from "../../enrollment/hooks/useGetMyEnrollmentByCourse";
+import { useGetMyCourseReview } from "../../review/hooks/useGetMyCourseReview";
 
 type CourseTab = "overview" | "curriculum" | "instructor" | "reviews";
 
@@ -39,6 +42,12 @@ export default function CourseInfo({ id }: CourseInfoProps) {
     useGetPreviewLessons(id);
   const [activeTab, setActiveTab] = useState<CourseTab>("overview");
   const [showPreview, setShowPreview] = useState(false);
+  const { data: enrollment } = useGetMyEnrollmentByCourse(id);
+  const { data: reviews } = useGetMyCourseReview(id);
+  const hasExistingReview = Boolean(reviews);
+
+  const canCreateReview =
+    enrollment && enrollment.progress >= 50 && !hasExistingReview;
   const shareCourse = useCallback(async () => {
     const url = window.location.href;
 
@@ -359,28 +368,7 @@ export default function CourseInfo({ id }: CourseInfoProps) {
             )}
 
             {activeTab === "reviews" && (
-              <section className="rounded-2xl border bg-card p-6 sm:p-8">
-                <div className="flex items-center gap-4">
-                  <div className="text-4xl font-bold">
-                    {Number(course.averageRating).toFixed(1)}
-                  </div>
-
-                  <div>
-                    <div className="flex gap-1">
-                      {Array.from({ length: 5 }).map((_, index) => (
-                        <Star
-                          key={index}
-                          className="size-4 fill-amber-400 text-amber-400"
-                        />
-                      ))}
-                    </div>
-
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      Course rating
-                    </p>
-                  </div>
-                </div>
-              </section>
+              <ReviewSection courseId={id} canCreateReview={canCreateReview} />
             )}
           </main>
 

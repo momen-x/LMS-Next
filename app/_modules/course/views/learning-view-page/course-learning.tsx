@@ -9,6 +9,7 @@ import LearningContent from "./learning-content";
 import LearningNavigation from "./learning-navigation";
 import { useCompleteLesson } from "@/app/_modules/enrollment/hooks/useCompleteLesson";
 import QuizLearningContent from "@/app/_modules/quiz-attempt/views/learning-view-quizzes/quiz-learning-content";
+import ReviewSection from "@/app/_modules/review/views/review-section";
 import { useUpdateLearningPosition } from "@/app/_modules/enrollment/hooks/useUpdateLearningPosition";
 import {
   getInitialLearningItem,
@@ -54,12 +55,12 @@ export default function CourseLearning({ courseId }: CourseLearningProps) {
     currentItem?.type === "lesson" ? currentItem.id : null;
 
   const activeLesson =
-    currentItem?.type === "quiz"
-      ? null
-      : (lessons.find((lesson) => lesson.id === selectedLessonId) ??
+    currentItem?.type === "lesson"
+      ? (lessons.find((lesson) => lesson.id === selectedLessonId) ??
         firstIncompleteLesson ??
         lessons[0] ??
-        null);
+        null)
+      : null;
   const activeQuiz =
     currentItem?.type === "quiz"
       ? (course?.quizzes.find((quiz) => quiz.id === currentItem.id) ?? null)
@@ -68,6 +69,9 @@ export default function CourseLearning({ courseId }: CourseLearningProps) {
   const selectLearningItem = (item: SelectedLearningItem) => {
     if (!course?.enrollment) return;
     setSelectedItem(item);
+
+    if (item.type === "reviews") return;
+
     updateLearningPosition.mutate({
       enrollmentId: course.enrollment.id,
       type: item.type,
@@ -173,6 +177,7 @@ export default function CourseLearning({ courseId }: CourseLearningProps) {
         course={course}
         activeLessonId={activeLesson?.id ?? null}
         activeQuizId={activeQuiz?.id ?? null}
+        reviewsActive={currentItem?.type === "reviews"}
         completedLessonIds={completedLessonIds}
         onLessonSelect={(lessonId) =>
           selectLearningItem({
@@ -186,10 +191,18 @@ export default function CourseLearning({ courseId }: CourseLearningProps) {
             id: quizId,
           })
         }
+        onReviewsSelect={() => selectLearningItem({ type: "reviews" })}
       />
 
       <main className="min-w-0">
-        {activeQuiz ? (
+        {currentItem?.type === "reviews" ? (
+          <div className="mx-auto w-full max-w-5xl px-6 py-8 lg:px-10">
+            <ReviewSection
+              courseId={course.id}
+              canCreateReview={course.enrollment.progress >= 50}
+            />
+          </div>
+        ) : activeQuiz ? (
           <QuizLearningContent quiz={activeQuiz} />
         ) : (
           <>

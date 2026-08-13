@@ -46,4 +46,5 @@ export interface IEnrollmentAPI {
     input: UpdateLearningPositionInput,
   ) => Promise<Enrollment>;
   isUserEnrolledInCourse: (courseId: string) => Promise<boolean>;
+  myEnrollmentByCourse: (courseId: string) => Promise<Enrollment>;
 }

@@ -69,4 +69,10 @@ export const resReview: IReviewAPI = {
 
     return response.data;
   },
+  getMyCourseReview: async function (
+    courseId: string): Promise<Review> {
+    const response = await api.get<Review>(`/api/courses/${courseId}/reviews/me`);
+
+    return response.data;
+  },
 };

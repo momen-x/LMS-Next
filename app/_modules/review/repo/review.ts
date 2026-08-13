@@ -23,4 +23,5 @@ export interface IReviewAPI {
   updateReview(reviewId: string, data: UpdateReviewDto): Promise<Review>;
 
   deleteReview(reviewId: string): Promise<Review>;
+  getMyCourseReview(courseId: string): Promise<Review>;
 }
