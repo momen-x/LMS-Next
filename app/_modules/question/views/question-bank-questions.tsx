@@ -1,6 +1,14 @@
 "use client";
 
-import { AlertCircle, CircleHelp, Loader2, Plus } from "lucide-react";
+import {
+  AlertCircle,
+  ChevronsDownUp,
+  ChevronsUpDown,
+  CircleHelp,
+  Loader2,
+  Plus,
+} from "lucide-react";
+import { useState } from "react";
 import { toast } from "react-toastify";
 
 import { Button } from "@/components/ui/button";
@@ -31,6 +39,22 @@ export default function QuestionBankQuestions({
   const { openCreateQuestion } = useQuestionDialog();
   const { mutateAsync: deleteQuestion, isPending: isDeleting } =
     useDeleteQuestion();
+  const [expandedQuestionIds, setExpandedQuestionIds] = useState<Set<string>>(
+    new Set(),
+  );
+
+  const allQuestionsExpanded =
+    Boolean(questions?.length) &&
+    questions!.every((question) => expandedQuestionIds.has(question.id));
+
+  const toggleQuestion = (questionId: string) => {
+    setExpandedQuestionIds((current) => {
+      const next = new Set(current);
+      if (next.has(questionId)) next.delete(questionId);
+      else next.add(questionId);
+      return next;
+    });
+  };
 
   const handleDelete = async (questionId: string) => {
     if (!window.confirm("Are you sure you want to delete this question?")) {
@@ -105,11 +129,38 @@ export default function QuestionBankQuestions({
 
       {!isPending && !isError && Boolean(questions?.length) && (
         <div className="space-y-3">
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-sm text-muted-foreground">
+              Click a question to show or hide its answer choices.
+            </p>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() =>
+                setExpandedQuestionIds(
+                  allQuestionsExpanded
+                    ? new Set()
+                    : new Set(questions?.map((question) => question.id)),
+                )
+              }
+            >
+              {allQuestionsExpanded ? (
+                <ChevronsDownUp className="size-4" />
+              ) : (
+                <ChevronsUpDown className="size-4" />
+              )}
+              {allQuestionsExpanded ? "Collapse all" : "Expand all"}
+            </Button>
+          </div>
+
           {questions?.map((question, index) => (
             <QuestionCard
               key={question.id}
               question={question}
               index={index}
+              isExpanded={expandedQuestionIds.has(question.id)}
+              onToggle={() => toggleQuestion(question.id)}
               isDeleting={isDeleting}
               onDelete={() => handleDelete(question.id)}
             />

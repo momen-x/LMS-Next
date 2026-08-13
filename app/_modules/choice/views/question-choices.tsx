@@ -119,7 +119,7 @@ export default function QuestionChoices({ questionId }: QuestionChoicesProps) {
       )}
 
       {!isPending && !isError && choicesCount > 0 && (
-        <div className="space-y-2">
+        <div className="">
           {choices?.map((choice, index) => (
             <ChoiceCard key={choice.id} choice={choice} index={index} />
           ))}

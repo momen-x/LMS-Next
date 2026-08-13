@@ -36,7 +36,7 @@ export default function ChoiceCard({ choice, index, onDelete }: ChoiceCardProps)
   const { openUpdateChoice } = useChoiceDialog();
 
   return (
-    <article className="rounded-lg border bg-background p-3">
+    <article className="rounded-lg  bg-background p-3">
       <div className="flex items-start justify-between gap-3">
         <div className="flex min-w-0 flex-1 items-start gap-3">
           <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-muted text-sm font-medium">

@@ -1,6 +1,13 @@
 "use client";
 
-import { CircleHelp, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronRight,
+  CircleHelp,
+  MoreHorizontal,
+  Pencil,
+  Trash2,
+} from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -22,6 +29,8 @@ interface QuestionCardProps {
   index: number;
   onDelete?: (question: Question) => void;
   isDeleting?: boolean;
+  isExpanded: boolean;
+  onToggle: () => void;
 }
 
 export default function QuestionCard({
@@ -29,70 +38,95 @@ export default function QuestionCard({
   index,
   onDelete,
   isDeleting,
+  isExpanded,
+  onToggle,
 }: QuestionCardProps) {
   const { openUpdateQuestion } = useQuestionDialog();
 
   return (
-    <article className="rounded-xl border bg-card p-4 shadow-sm">
+    <article className="overflow-hidden rounded-xl border bg-card shadow-sm transition-colors hover:border-primary/30">
       <div className="flex items-start justify-between gap-4">
-        <div className="flex min-w-0 flex-1 items-start gap-3">
-          <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted">
-            <CircleHelp className="size-5 text-muted-foreground" />
-          </div>
+        <button
+          type="button"
+          onClick={onToggle}
+          aria-expanded={isExpanded}
+          aria-controls={`question-content-${question.id}`}
+          className="flex min-w-0 flex-1 items-center gap-3 p-4 text-left outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+        >
+          <span className="flex size-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted">
+            {isExpanded ? (
+              <ChevronDown className="size-4" />
+            ) : (
+              <ChevronRight className="size-4" />
+            )}
+          </span>
 
-          <div className="min-w-0 flex-1 space-y-3">
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge variant="secondary">Question {index + 1}</Badge>
-            </div>
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted">
+            <CircleHelp className="size-4 text-muted-foreground" />
+          </span>
 
-            <p className="whitespace-pre-wrap text-sm leading-6 text-foreground">
+          <span className="flex min-w-0 flex-1 items-center gap-3">
+            <Badge variant="secondary" className="shrink-0">
+              Question {index + 1}
+            </Badge>
+            <span className="truncate text-sm font-medium text-foreground">
+              {question.text}
+            </span>
+          </span>
+        </button>
+
+        <div className="p-3">
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="size-8"
+                  aria-label={`Open actions for question ${index + 1}`}
+                >
+                  <MoreHorizontal className="size-4" />
+                </Button>
+              }
+            />
+
+            <DropdownMenuContent align="end" className="z-50 w-40">
+              <DropdownMenuItem onClick={() => openUpdateQuestion(question)}>
+                <Pencil className="mr-2 size-3.5" />
+                Edit question
+              </DropdownMenuItem>
+
+              {onDelete && (
+                <>
+                  <DropdownMenuSeparator />
+
+                  <DropdownMenuItem
+                    disabled={isDeleting}
+                    onClick={() => onDelete(question)}
+                    className="text-destructive focus:text-destructive"
+                  >
+                    <Trash2 className="mr-2 size-3.5" />
+                    Delete question
+                  </DropdownMenuItem>
+                </>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+
+      {isExpanded && (
+        <div id={`question-content-${question.id}`} className="px-4 pb-4">
+          <div className="border-t pt-4">
+            <p className="mb-4 whitespace-pre-wrap text-sm leading-6 text-foreground">
               {question.text}
             </p>
+
+            <QuestionChoices questionId={question.id} />
           </div>
         </div>
-
-        <DropdownMenu>
-          <DropdownMenuTrigger
-            render={
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="size-8"
-                aria-label={`Open actions for question ${index + 1}`}
-              >
-                <MoreHorizontal className="size-4" />
-              </Button>
-            }
-          />
-
-          <DropdownMenuContent align="end" className="z-50 w-40">
-            <DropdownMenuItem onClick={() => openUpdateQuestion(question)}>
-              <Pencil className="mr-2 size-3.5" />
-              Edit question
-            </DropdownMenuItem>
-
-            {onDelete && (
-              <>
-                <DropdownMenuSeparator />
-
-                <DropdownMenuItem
-                  disabled={isDeleting}
-                  onClick={() => onDelete(question)}
-                  className="text-destructive focus:text-destructive"
-                >
-                  <Trash2 className="mr-2 size-3.5" />
-                  Delete question
-                </DropdownMenuItem>
-              </>
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-
-      <div className="mt-4 border-t pt-4">
-        <QuestionChoices questionId={question.id} />
-      </div>
+      )}
     </article>
   );
 }

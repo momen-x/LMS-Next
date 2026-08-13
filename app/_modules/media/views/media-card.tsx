@@ -25,29 +25,12 @@ import {
 
 import { Media } from "../entity/media";
 import { useMediaDialog } from "../context/media-dialog-context";
+import { formatDuration } from "@/utils/format-duration";
 
 interface MediaItemProps {
   media: Media;
   onView: string;
   onDelete?: (media: Media) => void;
-}
-
-function formatDuration(duration: number | null) {
-  if (duration === null) return "-";
-
-  const hours = Math.floor(duration / 3600);
-  const minutes = Math.floor((duration % 3600) / 60);
-  const seconds = duration % 60;
-
-  if (hours > 0) {
-    return `${hours}h ${minutes}m`;
-  }
-
-  if (minutes > 0) {
-    return seconds > 0 ? `${minutes}m ${seconds}s` : `${minutes}m`;
-  }
-
-  return `${seconds}s`;
 }
 
 function MediaIcon({ type }: { type: Media["type"] }) {
@@ -70,7 +53,9 @@ function getMediaDetails(url: string) {
   try {
     const parsedUrl = new URL(url);
     const encodedName = parsedUrl.pathname.split("/").filter(Boolean).at(-1);
-    const fileName = encodedName ? decodeURIComponent(encodedName) : "Media file";
+    const fileName = encodedName
+      ? decodeURIComponent(encodedName)
+      : "Media file";
 
     return { fileName, host: parsedUrl.hostname };
   } catch {
@@ -114,12 +99,14 @@ export default function MediaCard({ media, onView, onDelete }: MediaItemProps) {
             </span>
           </a>
 
-          {media.type !== "url" && <div className="mt-3 flex items-center gap-4 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1">
-              <Clock3 className="size-3.5" />
-              {formatDuration(media.duration)}
-            </span>
-          </div>}
+          {media.type !== "url" && (
+            <div className="mt-3 flex items-center gap-4 text-xs text-muted-foreground">
+              <span className="flex items-center gap-1">
+                <Clock3 className="size-3.5" />
+                {media.duration ? formatDuration(media.duration) : "-"}
+              </span>
+            </div>
+          )}
         </div>
 
         <DropdownMenu>
