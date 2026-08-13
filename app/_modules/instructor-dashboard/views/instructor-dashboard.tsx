@@ -63,7 +63,7 @@ const InstructorDashboard = ({ children }: childrenPropsType) => {
           </Button>
         </div>
 
-        <nav className="flex-1 p-4 space-y-2">
+        <nav className="flex-1 space-y-2 bg-muted/20 p-3 dark:bg-muted/10">
           {dashboardNaves.map((page) => (
             <NavButton
               key={page.path}

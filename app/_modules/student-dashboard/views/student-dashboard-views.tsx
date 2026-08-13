@@ -75,7 +75,7 @@ export default function StudentDashboardView() {
                 </p>
                 <div className="pt-2">
                   {latestCourse ? (
-                    <Link href={`/learn/${latestCourse.courseId}`}>
+                    <Link href={`/student-dashboard/courses`}>
                       <Button className="bg-blue-600 hover:bg-blue-700 text-white gap-2 text-xs font-medium h-9 px-4">
                         Continue learning
                         <ChevronRight className="size-4" />
@@ -331,7 +331,7 @@ export default function StudentDashboardView() {
 
                       {/* Action */}
                       <div className="p-3.5 pt-0">
-                        <Link href={`/learn/${enrollment.courseId}`}>
+                        <Link href={`/courses/${enrollment.courseId}/learning`}>
                           <Button
                             size="sm"
                             className="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs h-8 gap-1"
