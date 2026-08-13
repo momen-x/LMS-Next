@@ -430,7 +430,7 @@ export default function StudentDashboardView() {
                     <CertificateCard
                       key={cert.id}
                       certificate={cert}
-                      onPreview={(certificate) => setSelectedCert(certificate)}
+                      onPreview={() => {}}
                     />
                   ))}
                 </div>

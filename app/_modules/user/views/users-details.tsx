@@ -165,15 +165,8 @@ const UsersDetails = ({ userId }: { userId: string }) => {
       </Card>
       <Card>
         <UserCertificates
-          certificates={certificates}
-          isPending={isCertificatesPending}
-          isError={isCertificatesError}
-          isFetching={isCertificatesFetching}
-          onRetry={() => refetchCertificates()}
           title="Student Certificates"
           description="Certificates earned by this student."
-          emptyTitle="No certificates found"
-          emptyDescription="This student has not earned any certificates yet."
         />
       </Card>
     </div>

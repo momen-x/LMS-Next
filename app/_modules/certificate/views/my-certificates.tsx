@@ -4,24 +4,19 @@ import { Award } from "lucide-react";
 
 import { getErrorMessage } from "@/utils/get-axios-error-message";
 
-import { Certificate } from "../entities/certificate";
 import { useGetMyCertificates } from "../hooks/useGetMyCertificates";
 
 import CertificateCard from "./certificate-card";
+import { useRouter } from "next/navigation";
 
-type MyCertificatesProps = {
-  onViewCertificate?: (certificate: Certificate) => void;
-};
-
-export default function MyCertificates({
-  onViewCertificate,
-}: MyCertificatesProps) {
+export default function MyCertificates() {
   const {
     data: certificates,
     isPending,
     isError,
     error,
   } = useGetMyCertificates();
+  const router = useRouter();
 
   if (isPending) {
     return (
@@ -70,7 +65,9 @@ export default function MyCertificates({
         <CertificateCard
           key={certificate.id}
           certificate={certificate}
-          onPreview={onViewCertificate || (() => {})}
+          onPreview={() => {
+            router.push(`/student-dashboard/certificates/${certificate.id}`);
+          }}
         />
       ))}
     </div>

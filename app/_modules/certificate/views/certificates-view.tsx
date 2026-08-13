@@ -11,10 +11,7 @@ export default function CertificatesView() {
     data: certificates = [],
     isPending,
     isError,
-    isFetching,
-    refetch,
   } = useGetMyCertificates();
-  
 
   return (
     <div className="container mx-auto space-y-8 p-4 md:p-6">
@@ -34,12 +31,8 @@ export default function CertificatesView() {
 
       <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
         <UserCertificates
-          certificates={certificates}
-          isPending={isPending}
-          isError={isError}
-          isFetching={isFetching}
-          onRetry={() => refetch()}
-          emptyDescription="Complete an eligible course to earn your first certificate."
+          description="Complete an eligible course to earn your first"
+          title="My Certificates"
         />
 
         <CertificateInformation />
