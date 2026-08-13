@@ -71,13 +71,13 @@ export default function MyLearningView() {
               <BookOpen className="size-4.5" />
             </div>
             <div>
-              <p className="text-lg font-bold text-foreground leading-none">
+              <div className="text-lg font-bold text-foreground leading-none">
                 {isStatsLoading ? (
                   <Skeleton className="h-5 w-6" />
                 ) : (
                   (stats?.totalCourses ?? enrollments.length)
                 )}
-              </p>
+              </div>
               <p className="text-[11px] text-muted-foreground mt-1">Enrolled</p>
             </div>
           </div>
@@ -88,13 +88,13 @@ export default function MyLearningView() {
               <Clock className="size-4.5" />
             </div>
             <div>
-              <p className="text-lg font-bold text-foreground leading-none">
+              <div className="text-lg font-bold text-foreground leading-none">
                 {isStatsLoading ? (
                   <Skeleton className="h-5 w-6" />
                 ) : (
                   (stats?.inProgressCourses ?? 0)
                 )}
-              </p>
+              </div>
               <p className="text-[11px] text-muted-foreground mt-1">
                 In Progress
               </p>
@@ -107,13 +107,13 @@ export default function MyLearningView() {
               <CheckCircle2 className="size-4.5" />
             </div>
             <div>
-              <p className="text-lg font-bold text-foreground leading-none">
+              <div className="text-lg font-bold text-foreground leading-none">
                 {isStatsLoading ? (
                   <Skeleton className="h-5 w-6" />
                 ) : (
                   (stats?.completedCourses ?? 0)
                 )}
-              </p>
+              </div>
               <p className="text-[11px] text-muted-foreground mt-1">
                 Completed
               </p>
@@ -207,7 +207,7 @@ export default function MyLearningView() {
 
                 {/* Right Action */}
                 <div className="flex items-center gap-2 w-full sm:w-auto">
-                  <Link href={`/learn/${continueCourse.courseId}`}>
+                  <Link href={`/courses/${continueCourse.courseId}/learning`}>
                     <Button className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white gap-2 font-medium h-10 px-6 text-xs">
                       <Play className="size-3.5 fill-current" />
                       Resume lesson
@@ -363,7 +363,7 @@ export default function MyLearningView() {
                         </Button>
                       </Link>
                     ) : (
-                      <Link href={`/learn/${enrollment.courseId}`}>
+                      <Link href={`/courses/${enrollment.courseId}/learning`}>
                         <Button
                           size="sm"
                           className="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium h-9"
