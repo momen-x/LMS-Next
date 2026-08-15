@@ -54,8 +54,8 @@ export const resCourse: ICourseAPI = {
     });
 
     if (category) searchParams.set("category", category);
-    if (minPrice !== undefined) searchParams.set("price", String(minPrice));
-    if (maxPrice !== undefined) searchParams.set("price", String(maxPrice));
+    if (minPrice !== undefined) searchParams.set("minPrice", String(minPrice));
+    if (maxPrice !== undefined) searchParams.set("maxPrice", String(maxPrice));
     if (level) searchParams.set("level", level);
     if (language) searchParams.set("language", language);
 
