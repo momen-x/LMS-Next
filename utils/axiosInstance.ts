@@ -3,7 +3,6 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import { API_DOMAIN } from "./constance";
 
 export const api = axios.create({
-  baseURL: API_DOMAIN,
   withCredentials: true,
 });
 
