@@ -1,6 +1,5 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 
-import { API_DOMAIN } from "./constance";
 
 export const api = axios.create({
   withCredentials: true,
@@ -119,7 +118,7 @@ async function requestCsrfToken(): Promise<string> {
   }
 
   csrfRequest = axios
-    .get<CsrfResponse>(`${API_DOMAIN}/api/auth/csrf-token`, {
+    .get<CsrfResponse>("/api/auth/csrf-token", {
       withCredentials: true,
     })
     .then((response) => {
@@ -151,7 +150,7 @@ export function clearCsrfToken(): void {
 
 async function executeRefreshRequest(token: string): Promise<void> {
   await axios.post(
-    `${API_DOMAIN}/api/auth/refresh`,
+    `/api/auth/refresh`,
     {},
     {
       withCredentials: true,
