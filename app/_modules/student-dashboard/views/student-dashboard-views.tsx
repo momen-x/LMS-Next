@@ -11,7 +11,6 @@ import {
   ChevronRight,
   Flame,
   Quote,
-  MoreVertical,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -25,13 +24,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import CertificateCard from "../../certificate/views/certificate-card";
+
 import { Certificate } from "../../certificate/entities/certificate";
+// Hooks
 import { useGetUserEnrollmentStats } from "../../enrollment/hooks/useGetUserEnrollmentStats";
 import { useGetMyEnrollments } from "../../enrollment/hooks/useGetMyEnrollments";
 import { useGetMyCertificates } from "../../certificate/hooks/useGetMyCertificates";
-import CertificateCard from "../../certificate/views/certificate-card";
-
-// Hooks
 
 export default function StudentDashboardView() {
   const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
@@ -294,9 +293,6 @@ export default function StudentDashboardView() {
                             >
                               {enrollment.course.title}
                             </h3>
-                            <button className="text-muted-foreground hover:text-foreground">
-                              <MoreVertical className="size-4" />
-                            </button>
                           </div>
 
                           {/* Instructor */}
@@ -380,26 +376,6 @@ export default function StudentDashboardView() {
 
             {/* <p className="text-xs text-muted-foreground">Keep it going! 🔥</p> */}
             <p className="text-xs text-muted-foreground">Coming soon ⏳</p>
-
-            {/* Days Circle Strip */}
-            {/* <div className="flex items-center justify-between pt-1">
-              {["M", "T", "W", "T", "F"].map((day, idx) => (
-                <div key={idx} className="flex flex-col items-center gap-1">
-                  <div className="flex size-7 items-center justify-center rounded-full bg-blue-600 text-white">
-                    <Check className="size-3.5" />
-                  </div>
-                  <span className="text-[10px] text-muted-foreground font-medium">
-                    {day}
-                  </span>
-                </div>
-              ))}
-              <div className="flex flex-col items-center gap-1">
-                <div className="flex size-7 items-center justify-center rounded-full bg-amber-500 text-white shadow-sm">
-                  <Flame className="size-3.5 fill-white" />
-                </div>
-                <span className="text-[10px] font-bold text-foreground">S</span>
-              </div>
-            </div> */}
           </div>
 
           {/* Recent Certificates */}
@@ -430,7 +406,7 @@ export default function StudentDashboardView() {
                     <CertificateCard
                       key={cert.id}
                       certificate={cert}
-                      onPreview={() => {}}
+                      onPreviewLink={`/student-dashboard/certificates/${cert.id}`}
                     />
                   ))}
                 </div>

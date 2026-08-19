@@ -6,7 +6,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import QueryErrorState from "@/components/sharing/query-error-state";
 
 import CertificateCard from "./certificate-card";
-import { useRouter } from "next/navigation";
 import { useGetMyCertificates } from "../hooks/useGetMyCertificates";
 
 export default function UserCertificates({
@@ -16,7 +15,6 @@ export default function UserCertificates({
   title: string;
   description: string;
 }) {
-  const router = useRouter();
   const {
     data: certificates,
     isPending,
@@ -68,11 +66,7 @@ export default function UserCertificates({
             <CertificateCard
               key={certificate.id}
               certificate={certificate}
-              onPreview={() => {
-                router.push(
-                  `/student-dashboard/certificates/${certificate.id}`,
-                );
-              }}
+              onPreviewLink={`/student-dashboard/certificates/${certificate.id}`}
             />
           ))}
         </div>

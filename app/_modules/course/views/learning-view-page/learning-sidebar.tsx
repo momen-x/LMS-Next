@@ -35,9 +35,9 @@ export default function LearningSidebar({
   onReviewsSelect,
 }: LearningSidebarProps) {
   return (
-    <aside className="border-r bg-card">
-      <div className="sticky top-0 flex h-screen flex-col">
-        <div className="border-b px-5 py-5">
+    <aside className="min-w-0 border-b bg-card lg:border-r lg:border-b-0">
+      <div className="flex max-h-[55svh] flex-col lg:sticky lg:top-0 lg:h-screen lg:max-h-none">
+        <div className="shrink-0 border-b px-4 py-4 sm:px-5 sm:py-5">
           <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
             Course
           </p>

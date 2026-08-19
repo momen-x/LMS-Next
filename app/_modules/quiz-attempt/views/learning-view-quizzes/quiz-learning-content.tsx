@@ -22,6 +22,7 @@ import { useStartAttempt } from "@/app/_modules/quiz-attempt/hooks/useStartAttem
 import { StudentAttemptView } from "../../entities/start-quiz";
 import { QuizAttempt } from "../../entities/quiz-attempt";
 import QuizAttemptView from "./quiz-attempt-view";
+import Link from "next/link";
 
 type LearningQuiz = CourseLearning["quizzes"][number];
 
@@ -122,8 +123,8 @@ export default function QuizLearningContent({
   }
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-6 py-8 lg:px-10">
-      <div className="rounded-2xl border bg-card p-6 sm:p-8">
+    <div className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 sm:py-8 lg:px-10">
+      <div className="rounded-2xl border bg-card p-4 sm:p-8">
         <div className="flex items-start gap-4">
           <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
             <FileQuestion className="size-6" />
@@ -132,7 +133,7 @@ export default function QuizLearningContent({
           <div className="min-w-0">
             <p className="text-sm font-medium text-primary">Quiz</p>
 
-            <h1 className="mt-1 text-2xl font-bold tracking-tight">
+            <h1 className="mt-1 break-words text-xl font-bold tracking-tight sm:text-2xl">
               {quiz.title}
             </h1>
           </div>
@@ -279,8 +280,8 @@ function QuizResultView({
   const canTryAgain = !perfectScore && attemptsRemaining > 0;
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-6 py-8 lg:px-10">
-      <div className="rounded-2xl border bg-card p-6 sm:p-8">
+    <div className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 sm:py-8 lg:px-10">
+      <div className="rounded-2xl border bg-card p-4 sm:p-8">
         <div className="flex flex-col items-center text-center">
           <div className="flex size-16 items-center justify-center rounded-full bg-primary/10 text-primary">
             {perfectScore ? (
@@ -366,6 +367,7 @@ function QuizResultView({
               )}
             </div>
           </div>
+  
         </div>
 
         {canTryAgain && (
@@ -397,19 +399,27 @@ function QuizResultView({
 
 function PerfectScoreState({ bestScore }: { bestScore: number }) {
   return (
-    <div className="mt-8 rounded-xl border bg-muted/40 p-6">
-      <div className="flex items-start gap-4">
+    <div className="mt-8 rounded-xl border bg-muted/40 p-4 sm:p-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
         <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
           <Trophy className="size-5" />
         </div>
 
-        <div>
+        <div className="min-w-0 flex-1">
           <p className="font-semibold">Perfect Score Achieved</p>
 
           <p className="mt-1 text-sm text-muted-foreground">
             You scored {bestScore}% on this quiz. No additional attempts are
             available or needed.
           </p>
+        </div>
+        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:justify-end sm:gap-3">
+          <Link href="/student-dashboard/certificates" className="w-full sm:w-auto">
+            <Button className="w-full">Certificates</Button>
+          </Link>
+          <Link href="/student-dashboard/courses" className="w-full sm:w-auto">
+            <Button className="w-full">Learning</Button>
+          </Link>
         </div>
       </div>
     </div>

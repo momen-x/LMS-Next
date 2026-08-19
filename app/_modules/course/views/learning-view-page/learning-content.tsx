@@ -31,8 +31,8 @@ export default function LearningContent({ lesson }: LearningContentProps) {
   }
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-6 py-8 lg:px-10">
-      <div className="w-full flex justify-end">
+    <div className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 sm:py-8 lg:px-10">
+      <div className="flex w-full justify-end">
         <Link href={"/student-dashboard/courses"}>
           <Button variant={"default"}>Back to Learning</Button>
         </Link>

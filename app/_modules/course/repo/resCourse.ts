@@ -127,6 +127,8 @@ export const resCourse: ICourseAPI = {
     return res.data;
   },
   getHighRatingCourses(count?: number): Promise<Course[]> {
-    return api.get<Course[]>(`/api/courses/high-rating?count=${count ?? 1}`).then((res) => res.data);
-},
-}
+    return api
+      .get<Course[]>(`${BASE_URL}/high-rating?count=${count ?? 1}`)
+      .then((res) => res.data);
+  },
+};

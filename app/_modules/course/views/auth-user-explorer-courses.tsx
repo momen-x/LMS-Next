@@ -18,10 +18,13 @@ import { useGetAllCourses } from "../hooks/useGetAllCourses";
 
 import CoursePageView from "./course-page-view";
 import { useGetAllCategories } from "../../category/hooks/useGetAllCategories";
+import { useGetHighRatingCourses } from "../hooks/useGetHighRatingCourses";
+import { formatDuration } from "@/utils/format-duration";
 
 export default function ExploreCourses() {
   const { data: categories } = useGetAllCategories();
   const { data: coursesData } = useGetAllCourses(1, 5);
+  const { data: course } = useGetHighRatingCourses(1);
 
   return (
     <div className="container mx-auto p-4 md:p-6 space-y-8">
@@ -38,68 +41,77 @@ export default function ExploreCourses() {
       <CoursePageView>
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-4 mt-5 mb-5">
           {/* Left / Center Main Area */}
-          <div className="space-y-8 lg:col-span-3">
-            {/* Featured Hero Banner */}
-            <div className="relative overflow-hidden rounded-2xl border bg-linear-to-r from-blue-50/80 via-indigo-50/50 to-background dark:from-blue-950/30 dark:via-indigo-950/20 dark:to-background p-6 md:p-8">
-              <div className="grid items-center gap-6 md:grid-cols-2">
-                <div className="space-y-4">
-                  <Badge className="bg-blue-600/10 text-blue-600 dark:bg-blue-400/20 dark:text-blue-300 hover:bg-blue-600/10 border-0 gap-1.5 px-3 py-1 font-semibold text-xs">
-                    <Sparkles className="size-3.5 fill-blue-600 dark:fill-blue-300" />
-                    Featured Course
-                  </Badge>
-                  <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
-                    Full Stack Web Development Bootcamp
-                  </h2>
-                  <p className="text-sm text-muted-foreground line-clamp-2">
-                    Become a full stack developer by building real-world
-                    projects and mastering in-demand technologies.
-                  </p>
+          {course && course.length > 0 && (
+            <div className="space-y-8 lg:col-span-3">
+              {/* Featured Hero Banner */}
+              <div className="relative overflow-hidden rounded-2xl border bg-linear-to-r from-blue-50/80 via-indigo-50/50 to-background dark:from-blue-950/30 dark:via-indigo-950/20 dark:to-background p-6 md:p-8">
+                <div className="grid items-center gap-6 md:grid-cols-2">
+                  <div className="space-y-4">
+                    <Badge className="bg-blue-600/10 text-blue-600 dark:bg-blue-400/20 dark:text-blue-300 hover:bg-blue-600/10 border-0 gap-1.5 px-3 py-1 font-semibold text-xs">
+                      <Sparkles className="size-3.5 fill-blue-600 dark:fill-blue-300" />
+                      Featured Course
+                    </Badge>
+                    <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
+                      {course[0].title}
+                    </h2>
+                    <p className="text-sm text-muted-foreground line-clamp-2">
+                      {course[0].description}
+                    </p>
 
-                  <div className="space-y-2 pt-1 text-xs text-muted-foreground">
-                    <div className="flex items-center gap-2">
-                      <CheckCircle2 className="size-4 text-emerald-500" />
-                      <span>Beginner Friendly</span>
+                    <div className="space-y-2 pt-1 text-xs text-muted-foreground">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="size-4 text-emerald-500" />
+                        <span>{course[0].level}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Clock className="size-4 text-blue-500" />
+                        <span>
+                          {course[0].duration * 60 > 0
+                            ? formatDuration(course[0].duration)
+                            : "+10 hours"}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Award className="size-4 text-amber-500" />
+                        <span>Certificate Included</span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Clock className="size-4 text-blue-500" />
-                      <span>10.5 Hours of Content</span>
+
+                    <div className="flex items-center gap-2 pt-1 text-xs">
+                      <Star className="size-4 fill-amber-400 text-amber-400" />
+                      <span className="font-bold text-foreground">
+                        {course[0].averageRating}
+                      </span>
+                      <span className="text-muted-foreground">
+                        ({course[0].totalStudents})
+                      </span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Award className="size-4 text-amber-500" />
-                      <span>Certificate Included</span>
-                    </div>
+                    {/* todo create this course and this page */}
+                    <Link href={`/student-dashboard/courses/id`}>
+                      <Button className="gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium">
+                        Explore featured course
+                        <ChevronRight className="size-4" />
+                      </Button>
+                    </Link>
                   </div>
 
-                  <div className="flex items-center gap-2 pt-1 text-xs">
-                    <Star className="size-4 fill-amber-400 text-amber-400" />
-                    <span className="font-bold text-foreground">4.8</span>
-                    <span className="text-muted-foreground">
-                      (2.4K students)
-                    </span>
-                  </div>
-                  {/* todo create this course and this page */}
-                  <Link href={`/student-dashboard/courses/id/trend`}>
-                    <Button className="gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium">
-                      Explore featured course
-                      <ChevronRight className="size-4" />
-                    </Button>
-                  </Link>
-                </div>
-
-                {/* Banner Mockup Image */}
-                <div className="relative flex justify-center">
-                  <div className="relative aspect-video w-full max-w-sm rounded-xl overflow-hidden shadow-lg border">
-                    <Image
-                      src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80"
-                      alt="Featured Course"
-                      fill
-                      className="object-cover"
-                    />
+                  {/* Banner Mockup Image */}
+                  <div className="relative flex justify-center">
+                    <div className="relative aspect-video w-full max-w-sm rounded-xl overflow-hidden shadow-lg border">
+                      {course[0].thumbnail && (
+                        <Image
+                          src={course[0].thumbnail}
+                          alt="Featured Course"
+                          fill
+                          className="object-cover"
+                        />
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* Right Sidebar */}
           <div className="space-y-6">

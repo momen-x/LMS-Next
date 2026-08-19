@@ -8,7 +8,6 @@ import {
   Clock,
   CheckCircle2,
   PlayCircle,
-  MoreVertical,
   Play,
   Check,
 } from "lucide-react";
@@ -49,6 +48,11 @@ export default function MyLearningView() {
   // Last accessed course for top hero card
   const continueCourse =
     enrollments.find((e) => (e.progress ?? 0) < 100) || enrollments[0];
+
+  const continueLearHref =
+    continueCourse && continueCourse
+      ? `/courses/${continueCourse.courseId}/learning`
+      : " ";
 
   return (
     <div className="container mx-auto p-4 md:p-6 space-y-8">
@@ -166,7 +170,7 @@ export default function MyLearningView() {
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                   {/* Media Thumbnail with Overlay Play Button */}
                   <Link
-                    href={`/learn/${continueCourse.courseId}`}
+                    href={`${continueLearHref}`}
                     className="relative aspect-video w-full sm:w-48 rounded-xl overflow-hidden bg-muted group shrink-0 border"
                   >
                     <Image
@@ -207,19 +211,12 @@ export default function MyLearningView() {
 
                 {/* Right Action */}
                 <div className="flex items-center gap-2 w-full sm:w-auto">
-                  <Link href={`/courses/${continueCourse.courseId}/learning`}>
+                  <Link href={`${continueLearHref}`}>
                     <Button className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white gap-2 font-medium h-10 px-6 text-xs">
                       <Play className="size-3.5 fill-current" />
                       Resume lesson
                     </Button>
                   </Link>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="size-10 text-muted-foreground shrink-0"
-                  >
-                    <MoreVertical className="size-4" />
-                  </Button>
                 </div>
               </div>
             </CardContent>
@@ -253,6 +250,7 @@ export default function MyLearningView() {
             {filteredEnrollments.map((enrollment) => {
               const progress = Math.round(enrollment.progress ?? 0);
               const isCompleted = progress === 100;
+              const continueLearHref = `/courses/${enrollment.courseId}/learning`;
 
               return (
                 <Card
@@ -262,7 +260,7 @@ export default function MyLearningView() {
                   <div>
                     {/* Media Thumbnail Container (Clickable -> Opens Course) */}
                     <Link
-                      href={`/learn/${enrollment.courseId}`}
+                      href={`${continueLearHref}`}
                       className="relative aspect-video w-full bg-muted block overflow-hidden"
                     >
                       <Image
@@ -294,15 +292,12 @@ export default function MyLearningView() {
                       <div className="flex items-start justify-between gap-2">
                         {/* Course Title Clickable */}
                         <Link
-                          href={`/learn/${enrollment.courseId}`}
+                          href={`${continueLearHref}`}
                           className="font-bold text-sm text-foreground hover:text-blue-600 dark:hover:text-blue-400 line-clamp-1 transition-colors"
                           title={enrollment.course.title}
                         >
                           {enrollment.course.title}
                         </Link>
-                        <button className="text-muted-foreground hover:text-foreground shrink-0">
-                          <MoreVertical className="size-4" />
-                        </button>
                       </div>
 
                       {/* Instructor & Category */}
@@ -352,7 +347,7 @@ export default function MyLearningView() {
                   {/* Card Footer Button */}
                   <div className="p-4 pt-0">
                     {isCompleted ? (
-                      <Link href={`/learn/${enrollment.courseId}`}>
+                      <Link href={`${continueLearHref}`}>
                         <Button
                           variant="outline"
                           size="sm"
@@ -363,7 +358,7 @@ export default function MyLearningView() {
                         </Button>
                       </Link>
                     ) : (
-                      <Link href={`/courses/${enrollment.courseId}/learning`}>
+                      <Link href={`${continueLearHref}`}>
                         <Button
                           size="sm"
                           className="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium h-9"

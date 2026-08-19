@@ -227,7 +227,7 @@ export default function PaymentSuccess() {
 
           <div className="mt-8 flex flex-col justify-center gap-3 border-t pt-7 sm:flex-row">
             <Link
-              href="/student-dashboard/my-learning"
+              href="/student-dashboard/courses"
               className={cn(buttonVariants({ size: "lg" }), "gap-2")}
             >
               Go to My Learning
@@ -337,7 +337,6 @@ function formatMoney(
     }).format(numericAmount);
   }
 }
-
 
 function maskValue(value: string): string {
   if (value.length <= 18) {

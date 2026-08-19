@@ -7,7 +7,6 @@ import { getErrorMessage } from "@/utils/get-axios-error-message";
 import { useGetMyCertificates } from "../hooks/useGetMyCertificates";
 
 import CertificateCard from "./certificate-card";
-import { useRouter } from "next/navigation";
 
 export default function MyCertificates() {
   const {
@@ -16,8 +15,6 @@ export default function MyCertificates() {
     isError,
     error,
   } = useGetMyCertificates();
-  const router = useRouter();
-
   if (isPending) {
     return (
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -65,9 +62,7 @@ export default function MyCertificates() {
         <CertificateCard
           key={certificate.id}
           certificate={certificate}
-          onPreview={() => {
-            router.push(`/student-dashboard/certificates/${certificate.id}`);
-          }}
+          onPreviewLink={`/student-dashboard/certificates/${certificate.id}`}
         />
       ))}
     </div>

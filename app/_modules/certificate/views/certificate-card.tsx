@@ -1,8 +1,9 @@
 "use client";
 
-import { Calendar, Eye, MoreVertical } from "lucide-react";
+import { Calendar, Eye } from "lucide-react";
 import Image from "next/image";
 
+import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -12,12 +13,12 @@ import transformingTheDateToATextString from "@/utils/from-date-to-string";
 
 interface CertificateCardProps {
   certificate: UserCertificate;
-  onPreview: (certificateId?: string) => void;
+  onPreviewLink: string;
 }
 
 export default function CertificateCard({
   certificate,
-  onPreview,
+  onPreviewLink,
 }: CertificateCardProps) {
   const issueDate = transformingTheDateToATextString(certificate.issueDate);
   const { course } = certificate;
@@ -51,15 +52,6 @@ export default function CertificateCard({
             >
               {course.title}
             </h3>
-
-            {/* Optional Menu Icon */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="-mr-2 -mt-1 h-7 w-7 text-muted-foreground hover:text-foreground"
-            >
-              <MoreVertical className="size-4" />
-            </Button>
           </div>
 
           <div className="mt-2 space-y-2">
@@ -92,16 +84,15 @@ export default function CertificateCard({
 
       {/* Bottom Action Buttons */}
       <div className="grid grid-cols-1 gap-2 border-t bg-muted/20 p-2.5">
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
+        <Link
+          href={onPreviewLink}
           className="h-8 gap-1.5 text-xs font-medium text-muted-foreground hover:bg-background hover:text-foreground hover:shadow-xs"
-          onClick={() => onPreview(certificate.id)}
         >
-          <Eye className="size-3.5" />
-          Preview
-        </Button>
+          <Button type="button" variant="ghost" size="sm" className="w-full m-auto">
+            <Eye className="size-3.5" />
+            Preview
+          </Button>
+        </Link>
       </div>
     </Card>
   );

@@ -27,13 +27,13 @@ export default function LearningNavigation({
 }: LearningNavigationProps) {
   return (
     <div className="border-t">
-      <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-6 py-6 lg:px-10">
+      <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-2 px-4 py-5 sm:gap-4 sm:px-6 sm:py-6 lg:px-10">
         <Button
           type="button"
           variant="outline"
           disabled={!previousLesson}
           onClick={onPrevious}
-          className="gap-2"
+          className="gap-1.5 sm:gap-2"
         >
           <ArrowLeft className="size-4" />
           Previous
@@ -45,7 +45,7 @@ export default function LearningNavigation({
             (!nextLesson && !isLastRemainingUncompletedLesson) || isCompleting
           }
           onClick={onNext}
-          className="gap-2"
+          className="gap-1.5 sm:gap-2"
         >
           {isCompleting ? (
             <Loader2 className="size-4 animate-spin" />

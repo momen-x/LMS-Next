@@ -3,7 +3,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { BookOpen, Clock, Star, Users } from "lucide-react";
+import { BookOpen, Star, Users } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,6 @@ import { cn } from "@/lib/utils";
 import { Course, CourseLevel } from "../entities/course";
 import EnrollmentButton from "../../payment/views/enrollment-button.tsx";
 
-import { formatDuration } from "@/utils/format-duration";
 
 interface CourseCardProps {
   course: Course;
@@ -43,7 +42,6 @@ export function CourseCard({ course, className }: CourseCardProps) {
     level,
     averageRating,
     totalStudents,
-    duration,
     lessonsCount,
   } = course;
 
@@ -84,10 +82,10 @@ export function CourseCard({ course, className }: CourseCardProps) {
         <h3 className="line-clamp-2 font-semibold leading-snug">{title}</h3>
 
         <div className="flex items-center gap-4 text-sm text-muted-foreground">
-          <div className="flex items-center gap-1">
+          {/* <div className="flex items-center gap-1">
             <Clock className="size-4" />
             <span>{formatDuration(duration)}</span>
-          </div>
+          </div> */}
           <div className="flex items-center gap-1">
             <BookOpen className="size-4" />
             <span>{lessonsCount} lessons</span>

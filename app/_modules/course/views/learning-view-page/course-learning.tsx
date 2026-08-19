@@ -172,7 +172,7 @@ export default function CourseLearning({ courseId }: CourseLearningProps) {
   }
 
   return (
-    <div className="grid min-h-screen lg:grid-cols-[320px_minmax(0,1fr)]">
+    <div className="grid min-h-screen min-w-0 lg:grid-cols-[320px_minmax(0,1fr)]">
       <LearningSidebar
         course={course}
         activeLessonId={activeLesson?.id ?? null}
@@ -196,7 +196,7 @@ export default function CourseLearning({ courseId }: CourseLearningProps) {
 
       <main className="min-w-0">
         {currentItem?.type === "reviews" ? (
-          <div className="mx-auto w-full max-w-5xl px-6 py-8 lg:px-10">
+          <div className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 sm:py-8 lg:px-10">
             <ReviewSection
               courseId={course.id}
               canCreateReview={course.enrollment.progress >= 50}
