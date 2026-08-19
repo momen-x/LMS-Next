@@ -58,7 +58,7 @@ export function Footer() {
               </li> */}
               <li>
                 <Link
-                  href="/Privacy"
+                  href="/privacy"
                   className="hover:text-foreground transition-colors"
                 >
                   Privacy Policy
