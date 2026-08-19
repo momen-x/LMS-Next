@@ -43,11 +43,6 @@ export function Footer() {
                   Contact us
                 </Link>
               </li>
-              <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Settings
-                </a>
-              </li>
             </ul>
           </div>
 
@@ -63,7 +58,7 @@ export function Footer() {
               </li> */}
               <li>
                 <Link
-                  href="/policy"
+                  href="/Privacy"
                   className="hover:text-foreground transition-colors"
                 >
                   Privacy Policy
@@ -101,7 +96,7 @@ export function Footer() {
               </a>
 
               <a
-                href="https://whatsapp.com/+970598817322"
+                href="https://wa.me/970598817322"
                 target="_blank"
                 rel="noreferrer"
                 className="w-9 h-9 rounded-full border border-border flex items-center justify-center hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"

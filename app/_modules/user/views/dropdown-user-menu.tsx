@@ -2,7 +2,6 @@
 import {
   User,
   ChevronDown,
-  Settings,
   SunMoon,
   LogOut,
   Check,
@@ -108,14 +107,6 @@ export function ProfileDropdown() {
           >
             <User className="h-4 w-4" />
             <span>Profile</span>
-          </DropdownMenuLinkItem>
-
-          <DropdownMenuLinkItem
-            href="/settings"
-            className="flex cursor-pointer items-center gap-2"
-          >
-            <Settings className="h-4 w-4" />
-            <span>Settings</span>
           </DropdownMenuLinkItem>
 
           {/* Real submenu, opens as a flyout like image 2 */}
