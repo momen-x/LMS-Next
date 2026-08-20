@@ -1,14 +1,7 @@
 "use client";
 
-import {
-  BookOpen,
-  Clock3,
-  Eye,
-  EyeOff,
-  FileText,
-  Pencil,
-} from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
+import { BookOpen, Clock3, Eye, EyeOff, FileText, Pencil } from "lucide-react";
+import { useParams } from "next/navigation";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -22,12 +15,13 @@ import transformingTheDateToATextString from "@/utils/from-date-to-string";
 import LessonMedia from "../../media/views/lesson-media";
 
 import { formatDuration } from "@/utils/format-duration";
-
-
+import {
+  LessonDialogProvider,
+  useLessonDialog,
+} from "../context/lesson-dialog-context";
 
 export default function LessonDetails() {
-  const router = useRouter();
-
+  const { openUpdateLesson } = useLessonDialog();
   const params = useParams<{
     id: string;
   }>();
@@ -74,19 +68,21 @@ export default function LessonDetails() {
             View and manage the lesson content and media.
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <BackBtn />
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() =>
-              router.push(`/instructor-dashboard/lessons/${lesson.id}/update`)
-            }
-          >
-            <Pencil className="size-4" />
-            Edit lesson
-          </Button>
-        </div>
+        <LessonDialogProvider>
+          <div className="flex items-center gap-3">
+            <BackBtn />
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                openUpdateLesson(lesson.id);
+              }}
+            >
+              <Pencil className="size-4" />
+              Edit lesson
+            </Button>
+          </div>
+        </LessonDialogProvider>
       </div>
 
       {/* Lesson overview */}
