@@ -16,7 +16,6 @@ import LessonMedia from "../../media/views/lesson-media";
 
 import { formatDuration } from "@/utils/format-duration";
 import {
-  LessonDialogProvider,
   useLessonDialog,
 } from "../context/lesson-dialog-context";
 
@@ -68,21 +67,19 @@ export default function LessonDetails() {
             View and manage the lesson content and media.
           </p>
         </div>
-        <LessonDialogProvider>
-          <div className="flex items-center gap-3">
-            <BackBtn />
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => {
-                openUpdateLesson(lesson.id);
-              }}
-            >
-              <Pencil className="size-4" />
-              Edit lesson
-            </Button>
-          </div>
-        </LessonDialogProvider>
+        <div className="flex items-center gap-3">
+          <BackBtn />
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => {
+              openUpdateLesson(lesson.id);
+            }}
+          >
+            <Pencil className="size-4" />
+            Edit lesson
+          </Button>
+        </div>
       </div>
 
       {/* Lesson overview */}

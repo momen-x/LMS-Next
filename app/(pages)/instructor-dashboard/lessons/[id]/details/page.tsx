@@ -1,7 +1,9 @@
-import LessonDetails from "@/app/_modules/lesson/views/lesson-details";
-import { MediaDialogProvider } from "@/app/_modules/media/context/media-dialog-context";
-
 import { Metadata } from "next";
+
+import { LessonDialogProvider } from "@/app/_modules/lesson/context/lesson-dialog-context";
+import { MediaDialogProvider } from "@/app/_modules/media/context/media-dialog-context";
+import LessonDetails from "@/app/_modules/lesson/views/lesson-details";
+
 
 export const metadata: Metadata = {
   title: "Lesson details page",
@@ -10,9 +12,11 @@ export const metadata: Metadata = {
 
 const LessonDetailsPage = () => {
   return (
-    <MediaDialogProvider>
-      <LessonDetails />
-    </MediaDialogProvider>
+    <LessonDialogProvider>
+      <MediaDialogProvider>
+        <LessonDetails />
+      </MediaDialogProvider>
+    </LessonDialogProvider>
   );
 };
 export default LessonDetailsPage;
