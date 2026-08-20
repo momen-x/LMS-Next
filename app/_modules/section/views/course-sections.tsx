@@ -9,12 +9,18 @@ import { useGetCourseSections } from "../hooks/useGetCourseSections";
 import BackBtn from "@/components/sharing/back-btn";
 import { ListSkeleton } from "@/components/skeletons/list-skeleton";
 import QueryErrorState from "@/components/sharing/query-error-state";
+import { Button } from "@/components/ui/button";
+import { ChevronsDownUp, ChevronsUpDown } from "lucide-react";
+import { useState } from "react";
 
 interface CourseSectionsProps {
   courseId: string;
 }
 
 export default function CourseSections({ courseId }: CourseSectionsProps) {
+  const [expandedSectionIds, setExpandedSectionIds] = useState<Set<string>>(
+    new Set(),
+  );
   const {
     data: sections,
     isLoading,
@@ -22,6 +28,19 @@ export default function CourseSections({ courseId }: CourseSectionsProps) {
     refetch,
     isFetching,
   } = useGetCourseSections(courseId);
+
+  const allSectionsExpanded =
+    Boolean(sections?.length) &&
+    sections!.every((section) => expandedSectionIds.has(section.id));
+
+  const toggleSection = (sectionId: string) => {
+    setExpandedSectionIds((current) => {
+      const next = new Set(current);
+      if (next.has(sectionId)) next.delete(sectionId);
+      else next.add(sectionId);
+      return next;
+    });
+  };
 
   if (isLoading) {
     return <ListSkeleton />;
@@ -65,10 +84,40 @@ export default function CourseSections({ courseId }: CourseSectionsProps) {
             </div>
           ) : (
             <div className="space-y-3">
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-sm text-muted-foreground">
+                  Click a section to show or hide its lessons.
+                </p>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() =>
+                    setExpandedSectionIds(
+                      allSectionsExpanded
+                        ? new Set()
+                        : new Set(sections.map((section) => section.id)),
+                    )
+                  }
+                >
+                  {allSectionsExpanded ? (
+                    <ChevronsDownUp className="size-4" />
+                  ) : (
+                    <ChevronsUpDown className="size-4" />
+                  )}
+                  {allSectionsExpanded ? "Collapse all" : "Expand all"}
+                </Button>
+              </div>
+
               {[...sections]
                 .sort((a, b) => a.order - b.order)
                 .map((section) => (
-                  <SectionCard key={section.id} section={section} />
+                  <SectionCard
+                    key={section.id}
+                    section={section}
+                    isExpanded={expandedSectionIds.has(section.id)}
+                    onToggle={() => toggleSection(section.id)}
+                  />
                 ))}
             </div>
           )}

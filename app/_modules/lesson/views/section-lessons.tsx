@@ -65,7 +65,7 @@ export default function SectionLessons({ sectionId }: SectionLessonsProps) {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center justify-between w-[65vw]">
+        <div className="flex w-full flex-wrap items-center justify-between gap-3">
           <div>
             <h3 className="font-medium">Lessons</h3>
 
@@ -75,7 +75,7 @@ export default function SectionLessons({ sectionId }: SectionLessonsProps) {
               section
             </p>
           </div>
-          <div className="mt-4 flex justify-center">
+          <div className="flex justify-center">
             <Button onClick={() => openCreateLesson(sectionId)}>
               {" "}
               <Plus className="w-4 h-4" />
