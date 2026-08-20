@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  CirclePlay,
   Clock3,
   Eye,
   FileText,
@@ -24,6 +25,7 @@ import {
 import { Lesson } from "../entity/lesson";
 import { useLessonDialog } from "../context/lesson-dialog-context";
 import { formatDuration } from "@/utils/format-duration";
+import { useMediaDialog } from "../../media/context/media-dialog-context";
 
 interface LessonItemProps {
   lesson: Lesson;
@@ -32,7 +34,6 @@ interface LessonItemProps {
   onDelete?: (lesson: Lesson) => void;
 }
 
-
 export default function LessonCard({
   lesson,
   position,
@@ -40,6 +41,7 @@ export default function LessonCard({
   onDelete,
 }: LessonItemProps) {
   const { openUpdateLesson } = useLessonDialog();
+  const { openCreateMedia } = useMediaDialog();
 
   return (
     <article className="group relative flex items-center gap-3 rounded-xl border bg-card/60 p-3.5 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-primary/40 hover:bg-card hover:shadow-md">
@@ -101,14 +103,17 @@ export default function LessonCard({
         />
 
         <DropdownMenuContent align="end" className="z-50 w-40">
-          <>
+            <DropdownMenuItem onClick={() => openCreateMedia(lesson.id)}>
+              <CirclePlay className="mr-2 size-3.5" />
+              Add Media
+            </DropdownMenuItem>
+              <DropdownMenuSeparator />
             <DropdownMenuLinkItem href={onView}>
               <ReceiptText className="mr-2 size-3.5" />
               View
             </DropdownMenuLinkItem>
 
             <DropdownMenuSeparator />
-          </>
 
           <DropdownMenuItem
             onClick={() => {

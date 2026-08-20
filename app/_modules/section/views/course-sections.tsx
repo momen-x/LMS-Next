@@ -12,6 +12,7 @@ import QueryErrorState from "@/components/sharing/query-error-state";
 import { Button } from "@/components/ui/button";
 import { ChevronsDownUp, ChevronsUpDown } from "lucide-react";
 import { useState } from "react";
+import { MediaDialogProvider } from "../../media/context/media-dialog-context";
 
 interface CourseSectionsProps {
   courseId: string;
@@ -59,6 +60,7 @@ export default function CourseSections({ courseId }: CourseSectionsProps) {
 
   return (
     <LessonDialogProvider>
+      <MediaDialogProvider>
       <Card>
         <CardHeader className="flex flex-row items-center justify-between gap-4">
           <div>
@@ -123,6 +125,7 @@ export default function CourseSections({ courseId }: CourseSectionsProps) {
           )}
         </CardContent>
       </Card>
+      </MediaDialogProvider>
     </LessonDialogProvider>
   );
 }
