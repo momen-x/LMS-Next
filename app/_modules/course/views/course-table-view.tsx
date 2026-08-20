@@ -167,7 +167,17 @@ function StatusBadge({ status }: { status: CourseStatus }) {
           Archived
         </span>
       );
+    case "pending_review":
+      return (
+        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-500/10 text-amber-500 border border-amber-500/20">
+          Pending Review
+        </span>
+      );
     default:
-      return null;
+      return (
+        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-500/10 text-gray-500 border border-gray-500/20">
+          this case not saved
+        </span>
+      );
   }
 }
